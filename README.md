@@ -18,8 +18,8 @@ When you select `sonnet`, you get pure reasoning and high-level project planning
 * **Top Models:** NVIDIA Nemotron-3 Super (120B), NVIDIA Nemotron-3 Ultra (550B), and DeepSeek V3.2.
 * **Note:** We explicitly strip `<think>` tags via system prompts to ensure terminal output remains clean.
 
-### 3. HIGH-Q (Haiku) TIER: Ultra-Fast (~50M+ Tokens / Day)
-Built for rapid-fire answers, syntax checking, and basic debugging.
+### 3. HAIKU TIER: The Ultra-Fast Fleet (50M+ Tokens / Day)
+For rapid-fire answers, syntax checking, and basic debugging.
 * **Top Models:** Cohere North-Mini-Code, NVIDIA Nemotron-3 Super, and GPT-OSS-120B.
 
 ---
@@ -47,7 +47,9 @@ Give the AI the following prompt:
 > "Read this repository. I have already configured my providers in OmniRoute. Please clone this repo and run `node setup.js` to autonomously inject the exact Combos, Models, and strict Identity System Messages directly into my OmniRoute database. Then, configure my `~/.claude/settings.json` to point to `http://localhost:20128`."
 
 ### Step 4: The Magic (Fully Automated)
-The `setup.js` script you just ran doesn't just configure your databases—it also autonomously locates your Claude Code installation (`~/.claude/settings.json`), wires it up to your local OmniRoute server, and bypasses Claude Code's hardcoded model validation checks so you never get a "model does not exist" error. You are instantly ready to code!
+The `setup.js` script you just ran doesn't just configure your databases—it also autonomously locates your Claude Code installation (`~/.claude/settings.json`), wires it up to your local OmniRoute server, and bypasses Claude Code's hardcoded model validation checks so you never get a "model does not exist" error. 
+
+Finally, it drops a completely safe VBScript into your Windows Startup folder. This guarantees that OmniRoute will silently boot in the background every single time you turn on your laptop, so you are always instantly ready to code!
 
 **Pro Tip:** Run `claude config set theme dark-ansi` for the best visual experience!
 

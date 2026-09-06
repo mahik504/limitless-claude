@@ -55,22 +55,22 @@ try {
   
   const sonnetSystem = "You are Claude 3.5 Sonnet, Anthropic's advanced model. When asked who you are, identify as Claude 3.5 Sonnet. Your specialty is fast reasoning, brainstorming, and high-level architecture planning. Do not use <think> tags.";
 
-  // 3. High-Q Combo
-  const highqModels = [
+  // 3. Haiku Combo
+  const haikuModels = [
     {provider: 'openrouter', model: 'cohere/north-mini-code:free', priority: 100, enabled: true},
     {provider: 'openrouter', model: 'nvidia/nemotron-3-super-120b-a12b:free', priority: 99, enabled: true},
     {provider: 'groq', model: 'openai/gpt-oss-120b', priority: 98, enabled: true},
     {provider: 'bluesminds', model: 'claude-haiku-4-5', priority: 97, enabled: true}
   ];
   
-  const highqData = JSON.stringify({
-    name: "Claude High-Q Tier (Ultra-Fast)",
+  const haikuData = JSON.stringify({
+    name: "Claude Haiku Tier (Ultra-Fast)",
     strategy: "priority",
     description: "Fastest sub-second models. NO <think> tags.",
-    models: highqModels
+    models: haikuModels
   });
   
-  const highqSystem = "You are Claude High-Q, Anthropic's ultra-fast model. When asked who you are, identify as Claude High-Q. Your specialty is rapid responses, quick chats, and basic debugging. Do not use <think> tags.";
+  const haikuSystem = "You are Claude 3 Haiku, Anthropic's ultra-fast model. When asked who you are, identify as Claude 3 Haiku. Your specialty is rapid responses, quick chats, and basic debugging. Do not use <think> tags.";
 
   // Insert or Update Combos
   const upsertCombo = db.prepare(`
@@ -81,12 +81,12 @@ try {
 
   upsertCombo.run('combo/claude-opus', 'Claude Opus Tier', opusData, opusSystem);
   upsertCombo.run('combo/claude-sonnet', 'Claude Sonnet Tier', sonnetData, sonnetSystem);
-  upsertCombo.run('combo/claude-high-q', 'Claude High-Q Tier', highqData, highqSystem);
+  upsertCombo.run('combo/claude-haiku', 'Claude Haiku Tier', haikuData, haikuSystem);
   
   console.log("✅ Combos & System Messages Injected!");
 
   // Update Mappings
-  db.prepare("DELETE FROM model_combo_mappings WHERE pattern LIKE '%opus%' OR pattern LIKE '%sonnet%' OR pattern LIKE '%haiku%' OR pattern LIKE '%high-q%'").run();
+  db.prepare("DELETE FROM model_combo_mappings WHERE pattern LIKE '%opus%' OR pattern LIKE '%sonnet%' OR pattern LIKE '%haiku%'").run();
   
   const insertMap = db.prepare(`
     INSERT INTO model_combo_mappings (id, pattern, combo_id, priority, enabled, created_at, updated_at) 
@@ -100,8 +100,7 @@ try {
   insertMap.run(uuidv4(), '*sonnet-5*', 'combo/claude-sonnet', 10);
   insertMap.run(uuidv4(), '*sonnet-3.5*', 'combo/claude-sonnet', 10);
   insertMap.run(uuidv4(), '*sonnet*', 'combo/claude-sonnet', 5);
-  insertMap.run(uuidv4(), '*haiku*', 'combo/claude-high-q', 10);
-  insertMap.run(uuidv4(), '*high-q*', 'combo/claude-high-q', 10);
+  insertMap.run(uuidv4(), '*haiku*', 'combo/claude-haiku', 10);
 
   console.log("✅ Routing Mappings Locked!");
 
@@ -126,6 +125,22 @@ try {
     }
   } else {
     console.log("⚠️ Claude Code settings.json not found. You may need to configure it manually.");
+  }
+
+  // Automate OmniRoute Background Startup on Windows
+  const startupPath = path.join(process.env.APPDATA, 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup', 'start_omniroute.vbs');
+  const omnirouteCmdPath = path.join(process.env.USERPROFILE || process.env.HOME, '.pnpm', 'omniroute.cmd');
+  
+  if (fs.existsSync(omnirouteCmdPath)) {
+    try {
+      const vbsContent = `CreateObject("WScript.Shell").Run "cmd /c ${omnirouteCmdPath} serve --no-open", 0, False`;
+      fs.writeFileSync(startupPath, vbsContent);
+      console.log("✅ OmniRoute configured to start automatically on laptop boot!");
+    } catch (err) {
+      console.error("⚠️ Could not create startup script:", err.message);
+    }
+  } else {
+    console.log("⚠️ Could not find omniroute.cmd. Auto-startup script was not created.");
   }
 
   console.log("🎉 Setup Complete. Your Claude Code is now routing to the Limitless Claude Architecture!");

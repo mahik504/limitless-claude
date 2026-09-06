@@ -85,6 +85,15 @@ Try out this raw `Limitless Claude` setup first. Once you see how fast and free 
 
 ---
 
+## ⚠️ Troubleshooting & Common Errors
+
+**Error: "There's an issue with the selected model (claude-opus-5[1m]). It may not exist..."**
+If you ever see this error in Claude Code, it means **another application has hijacked OmniRoute's port (20128).**
+* **Why it happens:** Web frameworks like Next.js, Vite, or React sometimes aggressively search for open ports or read global `PORT` environment variables. If you start a React/Next.js app without explicitly defining a port, it might accidentally bind to `20128`, blocking Claude Code from communicating with OmniRoute.
+* **The Fix:** Always explicitly assign ports to your web servers (e.g., `npx next dev -p 3000`). If port 20128 gets hijacked, simply kill the rogue Node.js process to restore OmniRoute.
+
+---
+
 ## 📞 Support & Contact
 If you encounter any issues while setting this up, configuring providers, or if you just want to talk AI architecture, feel free to reach out to me!
 **Email:** `gehlot.mahisingh2006.102@gmail.com`

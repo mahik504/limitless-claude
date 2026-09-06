@@ -46,16 +46,10 @@ You do not need to configure the database manually. Simply copy this entire repo
 Give the AI the following prompt:
 > "Read this repository. I have already configured my providers in OmniRoute. Please clone this repo and run `node setup.js` to autonomously inject the exact Combos, Models, and strict Identity System Messages directly into my OmniRoute database. Then, configure my `~/.claude/settings.json` to point to `http://localhost:20128`."
 
-### Step 4: Link Claude Code to OmniRoute
-If you prefer to link it manually, update your Claude Code `settings.json` (located in `~/.claude/settings.json`) to point to the local server:
-```json
-{
-  "env": {
-    "ANTHROPIC_BASE_URL": "http://localhost:20128",
-    "ANTHROPIC_AUTH_TOKEN": "sk-dummy-key"
-  }
-}
-```
+### Step 4: The Magic (Fully Automated)
+The `setup.js` script you just ran doesn't just configure your databases—it also autonomously locates your Claude Code installation (`~/.claude/settings.json`), wires it up to your local OmniRoute server, and bypasses Claude Code's hardcoded model validation checks so you never get a "model does not exist" error. You are instantly ready to code!
+
+**Pro Tip:** Run `claude config set theme dark-ansi` for the best visual experience!
 
 ---
 

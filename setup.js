@@ -104,6 +104,30 @@ try {
   insertMap.run(uuidv4(), '*high-q*', 'combo/claude-high-q', 10);
 
   console.log("✅ Routing Mappings Locked!");
+
+  // Automate Claude Code Settings to prevent "issue with selected model" errors
+  const claudeSettingsPath = path.join(process.env.USERPROFILE || process.env.HOME, '.claude', 'settings.json');
+  if (fs.existsSync(claudeSettingsPath)) {
+    try {
+      let settings = JSON.parse(fs.readFileSync(claudeSettingsPath, 'utf8'));
+      if (!settings.env) settings.env = {};
+      
+      // Force the base URL to OmniRoute
+      settings.env.ANTHROPIC_BASE_URL = "http://localhost:20128";
+      
+      // Force a valid Anthropic model name to bypass Claude Code's hardcoded CLI validation
+      // (OmniRoute's *opus* mapping will still catch this and route it to GLM)
+      settings.model = "claude-3-opus-20240229";
+      
+      fs.writeFileSync(claudeSettingsPath, JSON.stringify(settings, null, 2));
+      console.log("✅ Claude Code settings.json automatically configured! (Model validation bypass applied)");
+    } catch (err) {
+      console.error("⚠️ Could not automatically update Claude Code settings.json:", err.message);
+    }
+  } else {
+    console.log("⚠️ Claude Code settings.json not found. You may need to configure it manually.");
+  }
+
   console.log("🎉 Setup Complete. Your Claude Code is now routing to the Limitless Claude Architecture!");
   
 } catch (error) {

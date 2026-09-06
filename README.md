@@ -2,7 +2,7 @@
 
 If you are a developer, a student, or someone tired of hitting API limits on premium AI tools, this setup is going to change the way you write software. 
 
-This repository allows you to configure your local environment to run an **Enterprise-Grade Autonomous AI Agent** directly inside your terminal using Claude Code—**completely for free, forever.** 
+This repository provides an automated installation prompt that you can feed into **Antigravity, Claude, or Codex**. The AI will autonomously configure your local environment to run an **Enterprise-Grade Autonomous AI Agent** using **Claude Code** (both in your terminal and as a VS Code extension)—**completely for free, forever.** 
 
 Instead of relying on a single expensive subscription, this architecture hooks into a massive, load-balanced free-tier fleet of the world’s most powerful open-weights and frontier models via OmniRoute.
 
@@ -10,21 +10,21 @@ Instead of relying on a single expensive subscription, this architecture hooks i
 
 ## 🧠 The Three Custom AI Fleets
 
-### 1. OPUS TIER: The Elite Coding Fleet (260M+ Tokens / Day)
+### 1. OPUS TIER: The Elite Coding Fleet (100M+ Tokens / Day)
 When you ask Claude Code for `opus`, it routes to this heavy-duty algorithmic coding fleet. 
-* **The GLM Priority:** We put the Chinese frontier GLM models at the absolute front because they shred complex logic. You get **GLM-5**, **GLM-5.3-Flash**, and **GLM-4.7-Flash**. (These providers alone give over **60+ Million tokens per day**).
-* **The Backup Coders:** If GLM is busy, it cascades to **DeepSeek 3.2**, **Qwen3-Coder-Next**, and **Claude Sonnet 5**.
-* **Total Capacity:** A staggering **~260,000,000+ tokens** pooled every single day exclusively for heavy coding tasks.
+* **The GLM Priority:** We put the Chinese frontier GLM models at the absolute front because they shred complex logic. You get **GLM-5**, **GLM-5.3-Flash**, and **GLM-5.2**.
+* **The Backup Coders:** If GLM is busy, it instantly cascades to **DeepSeek 3.2**, **Qwen3-Coder-Next**, and **Claude Sonnet 5**.
+* **Total Capacity:** An estimated **~100,000,000+ tokens** pooled every single day exclusively for heavy coding tasks.
 
-### 2. SONNET TIER: The Architecture & Reasoning Fleet (100M+ Tokens / Day)
+### 2. SONNET TIER: The Architecture & Reasoning Fleet (50M+ Tokens / Day)
 When you select `sonnet`, you get pure reasoning, brainstorming, and high-level project planning. (We explicitly stripped out all the messy `<think>` tags so the terminal output stays perfectly clean).
 * **Top Models:** **NVIDIA Nemotron-3 Super (120B)**, **NVIDIA Nemotron-3 Ultra (550B)**, and **DeepSeek 3.2**.
-* **Total Capacity:** **~100,000,000+ tokens per day**.
+* **Total Capacity:** **~50,000,000+ tokens per day**.
 
-### 3. HIGH-Q (Haiku) TIER: The Ultra-Fast Fleet (150M+ Tokens / Day)
+### 3. HIGH-Q (Haiku) TIER: The Ultra-Fast Fleet (50M+ Tokens / Day)
 For rapid-fire answers, syntax checking, and basic debugging.
 * **Top Models:** **Cohere North-Mini-Code**, **NVIDIA Nemotron-3 Super**, and **GPT-OSS-120B**.
-* **Total Capacity:** **~150,000,000+ tokens per day** of sub-second responses.
+* **Total Capacity:** **~50,000,000+ tokens per day** of sub-second responses.
 
 ---
 
@@ -36,7 +36,7 @@ For rapid-fire answers, syntax checking, and basic debugging.
 
 ## 🛠️ Installation & Setup (Master Configuration)
 
-You can set this up instantly using our pre-built master setup script. Anyone who clones this repository will get my exact workflow working flawlessly on their machine!
+You can set this up instantly. You don't even have to do it manually—just give the instructions to your current AI assistant!
 
 ### 1. Prerequisites
 Ensure you have the following installed:
@@ -48,8 +48,8 @@ Ensure you have the following installed:
 Open your OmniRoute dashboard and add free API keys for the following providers:
 * `kiro`, `cloudflare-ai`, `openrouter`, `groq`, `bluesminds`
 
-### 3. Run the Master Configuration Script
-Clone this repository and run the setup script. It will autonomously inject the exact Combos, Models, and strict Identity System Messages directly into your OmniRoute database to perfectly mirror my setup.
+### 3. The Autonomous Setup
+Simply feed this repository link to your **Antigravity, Claude, or Codex** assistant, and ask it to clone the repo and run the setup. The AI will autonomously inject the exact Combos, Models, and strict Identity System Messages directly into your OmniRoute database to perfectly mirror my setup.
 
 ```bash
 git clone https://github.com/mahik504/limitless-claude.git
@@ -59,7 +59,7 @@ node setup.js
 ```
 
 ### 4. Link Claude Code to OmniRoute
-Configure your Claude Code `settings.json` (located in `~/.claude/settings.json`) to point to the local server. Add these variables to your `"env"` section:
+Your AI assistant will automatically configure your Claude Code `settings.json` (located in `~/.claude/settings.json`) to point to the local server:
 ```json
 {
   "env": {

@@ -1,8 +1,18 @@
 # 🚀 Limitless Claude
 
-> Transform your terminal and VS Code into an enterprise-grade, autonomous AI software engineer—completely free of API costs.
+<div align="center">
+  
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+  [![GitHub Repo Stars](https://img.shields.io/github/stars/mahik504/limitless-claude?style=social)](https://github.com/mahik504/limitless-claude)
+  [![GitHub Forks](https://img.shields.io/github/forks/mahik504/limitless-claude?style=social)](https://github.com/mahik504/limitless-claude)
 
-Limitless Claude bypasses expensive Anthropic API subscriptions by hooking your local Claude Code environment into a load-balanced, free-tier fleet of the world's most powerful open-weights and frontier models via OmniRoute. 
+  **🔗 Repository Link:** [github.com/mahik504/limitless-claude](https://github.com/mahik504/limitless-claude)
+</div>
+
+## 📌 About This Project
+**Limitless Claude** is a master configuration script that transforms your terminal and VS Code into an enterprise-grade, autonomous AI software engineer—completely free of API costs. 
+
+Instead of paying for expensive Anthropic API credits, this architecture hooks your local Claude Code environment directly into a load-balanced, free-tier fleet of the world's most powerful open-weights and frontier models (including GLM-5, Nemotron, and DeepSeek) via OmniRoute. 
 
 Your data stays secure: the local routing server runs continuously in the background, is strictly locked to your `localhost`, and cannot be accessed externally. It runs flawlessly in the CLI and VS Code extension without throwing errors.
 

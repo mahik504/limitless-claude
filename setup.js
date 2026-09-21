@@ -1,154 +1,672 @@
-const fs = require('fs');
-const path = require('path');
-const Database = require('better-sqlite3');
+#!/usr/bin/env node
+"use strict";
 
-const dbPath = path.join(process.env.USERPROFILE || process.env.HOME, '.omniroute', 'storage.sqlite');
+/**
+ * Limitless Claude installer.
+ * Writes OmniRoute combos/mappings and merges Claude Code gateway settings.
+ * Safe to run repeatedly. Does not overwrite unrelated Claude settings.
+ */
 
-if (!fs.existsSync(dbPath)) {
-  console.error("❌ OmniRoute database not found.");
-  console.error("Please ensure you have installed OmniRoute and started it at least once before running this script.");
-  console.error(`Expected path: ${dbPath}`);
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
+const { spawnSync } = require("child_process");
+
+const MIN_NODE_MAJOR = 22;
+const GATEWAY_ORIGIN = "http://localhost:20128";
+const COMBO_IDS = {
+  opus: "combo/claude-opus",
+  sonnet: "combo/claude-sonnet",
+  haiku: "combo/claude-haiku",
+};
+const MAPPING_IDS = {
+  opus: "mapping/limitless-opus",
+  sonnet: "mapping/limitless-sonnet",
+  haiku: "mapping/limitless-haiku",
+};
+const STARTUP_VBS_NAME = "start_omniroute.vbs";
+const BACKUP_PREFIX = "limitless-claude-";
+
+const REQUIRED_COMBO_COLUMNS = [
+  "id",
+  "name",
+  "data",
+  "sort_order",
+  "created_at",
+  "updated_at",
+  "system_message",
+];
+const REQUIRED_MAPPING_COLUMNS = [
+  "id",
+  "pattern",
+  "combo_id",
+  "priority",
+  "enabled",
+  "created_at",
+  "updated_at",
+];
+
+/**
+ * Array order is OmniRoute priority-strategy failover.
+ * Opus: GLM first (Kiro glm-5, then OpenRouter/Cloudflare GLM), then coding models.
+ * Optional targets are added only when that provider is connected.
+ * Catalog-checked 2026-09-21 against OpenRouter /api/v1/models and local OmniRoute sync.
+ */
+const COMBO_DEFS = [
+  {
+    id: COMBO_IDS.opus,
+    name: "Claude Opus Tier",
+    mappingId: MAPPING_IDS.opus,
+    pattern: "*opus*",
+    mappingPriority: 10,
+    description: "Coding and implementation. GLM first, then elite coding fallbacks.",
+    systemMessage:
+      "You are a coding assistant reached through Limitless Claude (OmniRoute Opus tier). Implement and debug software. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
+    targets: [
+      { provider: "kiro", model: "glm-5", optional: true },
+      { provider: "openrouter", model: "z-ai/glm-5.2:free" },
+      { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash", optional: true },
+      { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
+      { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
+      { provider: "kiro", model: "qwen3-coder-next", optional: true },
+      { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
+      { provider: "openrouter", model: "poolside/laguna-xs-2.1:free" },
+      { provider: "openrouter", model: "thinkingmachines/inkling:free" },
+      { provider: "openrouter", model: "nex-agi/nex-n2.5-pro:free" }
+    ],
+  },
+  {
+    id: COMBO_IDS.sonnet,
+    name: "Claude Sonnet Tier",
+    mappingId: MAPPING_IDS.sonnet,
+    pattern: "*sonnet*",
+    mappingPriority: 10,
+    description: "Reasoning and architecture. OpenRouter Nemotron first, then optional Kiro.",
+    systemMessage:
+      "You are a software-architecture assistant reached through Limitless Claude (OmniRoute Sonnet tier). Prefer clear plans and tradeoffs. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
+    targets: [
+      { provider: "openrouter", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
+      { provider: "openrouter", model: "nvidia/nemotron-3-super-120b-a12b:free" },
+      { provider: "kiro", model: "deepseek-3.2", optional: true },
+      { provider: "kiro", model: "claude-sonnet-5", optional: true },
+      { provider: "openrouter", model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free" },
+      { provider: "openrouter", model: "google/gemma-4-31b-it:free" },
+      { provider: "openrouter", model: "google/gemma-4-26b-a4b-it:free" },
+      { provider: "openrouter", model: "inclusionai/ling-3.0-flash-vl:free" },
+      { provider: "openrouter", model: "inclusionai/ling-3.0-flash-sante:free" },
+      { provider: "openrouter", model: "dots-studio/dots-3-note-preview:free" }
+    ],
+  },
+  {
+    id: COMBO_IDS.haiku,
+    name: "Claude Haiku Tier",
+    mappingId: MAPPING_IDS.haiku,
+    pattern: "*haiku*",
+    mappingPriority: 10,
+    description: "Fast replies and small edits. OpenRouter free models first, then optional Groq.",
+    systemMessage:
+      "You are a fast coding assistant reached through Limitless Claude (OmniRoute Haiku tier). Keep answers short. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
+    targets: [
+      { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
+      { provider: "openrouter", model: "cohere/north-mini-code:free" },
+      { provider: "groq", model: "openai/gpt-oss-120b", optional: true },
+      { provider: "openrouter", model: "thinkingmachines/inkling-small:free" },
+      { provider: "openrouter", model: "nex-agi/nex-n2.5-mini:free" },
+      { provider: "openrouter", model: "inclusionai/ling-3.0-flash-fin:free" },
+      { provider: "openrouter", model: "nvidia/nemotron-3.5-content-safety:free" },
+      { provider: "openrouter", model: "openrouter/free" },
+      { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast", optional: true },
+      { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct", optional: true }
+    ],
+  },
+];
+
+function homeDir() {
+  return os.homedir();
+}
+
+function resolveDbPath() {
+  if (process.env.OMNIROUTE_DB) return path.resolve(process.env.OMNIROUTE_DB);
+  if (process.env.DATA_DIR) return path.resolve(process.env.DATA_DIR, "storage.sqlite");
+  return path.join(homeDir(), ".omniroute", "storage.sqlite");
+}
+
+function claudeSettingsPath() {
+  return path.join(homeDir(), ".claude", "settings.json");
+}
+
+function omnirouteBackupDir() {
+  return path.join(homeDir(), ".omniroute", "backups");
+}
+
+function claudeBackupDir() {
+  return path.join(homeDir(), ".claude", "backups");
+}
+
+function windowsStartupDir() {
+  return process.env.APPDATA
+    ? path.join(process.env.APPDATA, "Microsoft", "Windows", "Start Menu", "Programs", "Startup")
+    : null;
+}
+
+function nodeMajor() {
+  return Number.parseInt(String(process.versions.node).split(".")[0], 10);
+}
+
+function commandExists(command) {
+  const finder = process.platform === "win32" ? "where" : "which";
+  const result = spawnSync(finder, [command], { encoding: "utf8", windowsHide: true });
+  if (result.status !== 0) return null;
+  const line = String(result.stdout || "")
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .find(Boolean);
+  return line || null;
+}
+
+function findOmnirouteCli() {
+  const names =
+    process.platform === "win32"
+      ? ["omniroute.cmd", "omniroute.exe", "omniroute.ps1", "omniroute"]
+      : ["omniroute"];
+  for (const name of names) {
+    const found = commandExists(name);
+    if (found) return found;
+  }
+  return null;
+}
+
+function fail(message, extra) {
+  console.error(`ERROR: ${message}`);
+  if (extra) console.error(extra);
   process.exit(1);
 }
 
-const db = new Database(dbPath);
+function parseArgs(argv) {
+  const flags = new Set(argv.slice(2));
+  const unknown = [...flags].filter(
+    (f) =>
+      ![
+        "--rollback",
+        "--install-startup",
+        "--uninstall-startup",
+        "--help",
+        "-h",
+      ].includes(f)
+  );
+  return {
+    rollback: flags.has("--rollback"),
+    installStartup: flags.has("--install-startup"),
+    uninstallStartup: flags.has("--uninstall-startup"),
+    help: flags.has("--help") || flags.has("-h"),
+    unknown,
+  };
+}
 
-console.log("🚀 Starting Limitless Claude Master Architecture Configuration...");
+function printHelp() {
+  console.log(`Limitless Claude setup
 
-try {
-  // 1. Opus Combo
-  const opusModels = [
-    {provider: 'kiro', model: 'glm-5', priority: 100, enabled: true},
-    {provider: 'openrouter', model: 'z-ai/glm-5.3-flash', priority: 99, enabled: true},
-    {provider: 'openrouter', model: 'qwen/qwen3.8-27b:free', priority: 98, enabled: true},
-    {provider: 'cloudflare-ai', model: '@cf/zai-org/glm-4.7-flash', priority: 97, enabled: true},
-    {provider: 'openrouter', model: 'z-ai/glm-5.2:free', priority: 96, enabled: true},
-    {provider: 'kiro', model: 'deepseek-3.2', priority: 95, enabled: true},
-    {provider: 'kiro', model: 'qwen3-coder-next', priority: 94, enabled: true},
-    {provider: 'kiro', model: 'claude-sonnet-5', priority: 93, enabled: true},
-    {provider: 'openrouter', model: 'cohere/north-mini-code:free', priority: 92, enabled: true},
-    {provider: 'openrouter', model: 'poolside/laguna-s-2.1:free', priority: 91, enabled: true}
-  ];
-  
-  const opusData = JSON.stringify({
-    name: "Claude Opus Tier (GLM Fleet + Elite Coding)",
-    strategy: "priority",
-    description: "ALL GLM models first, followed by elite coding models across all providers",
-    models: opusModels
-  });
-  
-  const opusSystem = "You are Claude Opus 5, Anthropic's most capable model. When asked who you are, identify as Claude Opus 5 (1M context). Your specialty is elite-tier software engineering, deep logic, and complex architectural problem-solving.";
+Usage:
+  node setup.js
+  node setup.js --rollback
+  node setup.js --install-startup
+  node setup.js --uninstall-startup
 
-  // 2. Sonnet Combo
-  const sonnetModels = [
-    {provider: 'openrouter', model: 'nvidia/nemotron-3-super-120b-a12b:free', priority: 100, enabled: true},
-    {provider: 'openrouter', model: 'nvidia/nemotron-3-ultra-550b-a55b:free', priority: 99, enabled: true},
-    {provider: 'kiro', model: 'deepseek-3.2', priority: 98, enabled: true},
-    {provider: 'kiro', model: 'claude-sonnet-5', priority: 97, enabled: true}
-  ];
-  
-  const sonnetData = JSON.stringify({
-    name: "Claude Sonnet Tier (Reasoning & Architecture)",
-    strategy: "priority",
-    description: "Top reasoning models. NO <think> tags.",
-    models: sonnetModels
-  });
-  
-  const sonnetSystem = "You are Claude 3.5 Sonnet, Anthropic's advanced model. When asked who you are, identify as Claude 3.5 Sonnet. Your specialty is fast reasoning, brainstorming, and high-level architecture planning. Do not use <think> tags.";
+Requires Node.js ${MIN_NODE_MAJOR}+ and an OmniRoute database created by starting OmniRoute once.
 
-  // 3. Haiku Combo
-  const haikuModels = [
-    {provider: 'openrouter', model: 'nvidia/nemotron-3.5-lightning:free', priority: 100, enabled: true},
-    {provider: 'openrouter', model: 'cohere/north-mini-code:free', priority: 99, enabled: true},
-    {provider: 'openrouter', model: 'nvidia/nemotron-3-super-120b-a12b:free', priority: 98, enabled: true},
-    {provider: 'groq', model: 'openai/gpt-oss-120b', priority: 97, enabled: true},
-    {provider: 'bluesminds', model: 'claude-haiku-4-5', priority: 96, enabled: true}
-  ];
-  
-  const haikuData = JSON.stringify({
-    name: "Claude Haiku Tier (Ultra-Fast)",
-    strategy: "priority",
-    description: "Fastest sub-second models. NO <think> tags.",
-    models: haikuModels
-  });
-  
-  const haikuSystem = "You are Claude 3 Haiku, Anthropic's ultra-fast model. When asked who you are, identify as Claude 3 Haiku. Your specialty is rapid responses, quick chats, and basic debugging. Do not use <think> tags.";
+Environment:
+  OMNIROUTE_DB   Full path to storage.sqlite
+  DATA_DIR       Directory containing storage.sqlite
+`);
+}
 
-  // Insert or Update Combos
-  const upsertCombo = db.prepare(`
-    INSERT INTO combos (id, name, data, sort_order, created_at, updated_at, system_message) 
+function openDatabase(dbPath, { readOnly = false } = {}) {
+  let DatabaseSync;
+  try {
+    ({ DatabaseSync } = require("node:sqlite"));
+  } catch (err) {
+    throw new Error(
+      `This installer needs Node.js ${MIN_NODE_MAJOR}+ with the built-in node:sqlite module. ${err.message}`
+    );
+  }
+  try {
+    return new DatabaseSync(dbPath, { readOnly, timeout: 8000 });
+  } catch (err) {
+    if (/busy|locked/i.test(err.message)) {
+      throw new Error(`OmniRoute database is locked. Stop OmniRoute or wait and retry. ${err.message}`);
+    }
+    throw new Error(`Could not open OmniRoute database at ${dbPath}: ${err.message}`);
+  }
+}
+
+function tableColumns(db, table) {
+  return db.prepare(`PRAGMA table_info(${table})`).all().map((row) => row.name);
+}
+
+function assertSchema(db) {
+  const tables = db
+    .prepare("SELECT name FROM sqlite_master WHERE type = 'table'")
+    .all()
+    .map((row) => row.name);
+  for (const table of ["combos", "model_combo_mappings", "provider_connections"]) {
+    if (!tables.includes(table)) {
+      throw new Error(
+        `OmniRoute schema mismatch: missing table "${table}". Upgrade OmniRoute and start it once, then rerun setup.`
+      );
+    }
+  }
+  const comboCols = tableColumns(db, "combos");
+  const mappingCols = tableColumns(db, "model_combo_mappings");
+  const missingCombo = REQUIRED_COMBO_COLUMNS.filter((c) => !comboCols.includes(c));
+  const missingMapping = REQUIRED_MAPPING_COLUMNS.filter((c) => !mappingCols.includes(c));
+  if (missingCombo.length || missingMapping.length) {
+    const details = [
+      missingCombo.length ? `combos missing: ${missingCombo.join(", ")}` : null,
+      missingMapping.length ? `model_combo_mappings missing: ${missingMapping.join(", ")}` : null,
+    ]
+      .filter(Boolean)
+      .join("; ");
+    throw new Error(
+      `OmniRoute schema mismatch: required columns are missing. Upgrade OmniRoute (3.8.x) and retry. ${details}`
+    );
+  }
+}
+
+function activeProviders(db) {
+  const rows = db.prepare("SELECT provider, is_active FROM provider_connections").all();
+  const set = new Set();
+  for (const row of rows) {
+    if (Number(row.is_active) === 1) set.add(row.provider);
+  }
+  return set;
+}
+
+function catalogHasModel(db, provider, model) {
+  const rows = db
+    .prepare("SELECT key, value FROM key_value WHERE namespace = 'syncedAvailableModels'")
+    .all();
+  const needle = String(model).toLowerCase();
+  for (const row of rows) {
+    if (!String(row.key).toLowerCase().startsWith(String(provider).toLowerCase())) continue;
+    let parsed;
+    try {
+      parsed = JSON.parse(row.value);
+    } catch {
+      continue;
+    }
+    const list = Array.isArray(parsed) ? parsed : parsed.models || parsed.data || [];
+    for (const entry of list) {
+      const id = typeof entry === "string" ? entry : entry.id || entry.model || "";
+      if (String(id).toLowerCase() === needle) return true;
+    }
+  }
+  return false;
+}
+
+function selectTargets(def, providers, db) {
+  const selected = [];
+  const skipped = [];
+  for (const target of def.targets) {
+    if (!providers.has(target.provider)) {
+      skipped.push({ ...target, reason: `provider "${target.provider}" is not connected` });
+      continue;
+    }
+    if (target.requireCatalog && !catalogHasModel(db, target.provider, target.model)) {
+      skipped.push({
+        ...target,
+        reason: `model "${target.model}" was not in the OmniRoute catalog for ${target.provider}`,
+      });
+      continue;
+    }
+    selected.push({ provider: target.provider, model: target.model });
+  }
+  return { selected, skipped };
+}
+
+function stamp() {
+  return new Date().toISOString().replace(/[:.]/g, "-");
+}
+
+function copyIfExists(src, dest) {
+  if (!fs.existsSync(src)) return false;
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.copyFileSync(src, dest);
+  return true;
+}
+
+function backupFiles(dbPath, settingsPath) {
+  const id = BACKUP_PREFIX + stamp();
+  const dbBackupDir = path.join(omnirouteBackupDir(), id);
+  fs.mkdirSync(dbBackupDir, { recursive: true });
+  const copied = [];
+  for (const suffix of ["", "-wal", "-shm"]) {
+    const src = dbPath + suffix;
+    const dest = path.join(dbBackupDir, path.basename(dbPath) + suffix);
+    if (copyIfExists(src, dest)) copied.push(dest);
+  }
+  let settingsBackup = null;
+  if (fs.existsSync(settingsPath)) {
+    fs.mkdirSync(claudeBackupDir(), { recursive: true });
+    settingsBackup = path.join(claudeBackupDir(), `${id}-settings.json`);
+    fs.copyFileSync(settingsPath, settingsBackup);
+  }
+  const manifest = {
+    createdAt: new Date().toISOString(),
+    dbPath,
+    dbBackupDir,
+    settingsPath,
+    settingsBackup,
+    copied,
+  };
+  fs.writeFileSync(path.join(dbBackupDir, "manifest.json"), JSON.stringify(manifest, null, 2));
+  return manifest;
+}
+
+function newestBackup() {
+  const root = omnirouteBackupDir();
+  if (!fs.existsSync(root)) return null;
+  const dirs = fs
+    .readdirSync(root, { withFileTypes: true })
+    .filter((d) => d.isDirectory() && d.name.startsWith(BACKUP_PREFIX))
+    .map((d) => path.join(root, d.name))
+    .sort();
+  if (!dirs.length) return null;
+  const dir = dirs[dirs.length - 1];
+  const manifestPath = path.join(dir, "manifest.json");
+  if (!fs.existsSync(manifestPath)) return null;
+  return JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+}
+
+function rollback() {
+  const manifest = newestBackup();
+  if (!manifest) fail("No Limitless Claude backup found under ~/.omniroute/backups/.");
+  const dbPath = resolveDbPath();
+  try {
+    for (const suffix of ["", "-wal", "-shm"]) {
+      const src = path.join(manifest.dbBackupDir, path.basename(manifest.dbPath) + suffix);
+      const dest = dbPath + suffix;
+      if (fs.existsSync(src)) fs.copyFileSync(src, dest);
+    }
+  } catch (err) {
+    if (/busy|locked/i.test(err.message)) {
+      fail("Could not restore the database because it is locked. Stop OmniRoute, then rerun --rollback.");
+    }
+    fail("Database restore failed.", err.message);
+  }
+  if (manifest.settingsBackup && fs.existsSync(manifest.settingsBackup)) {
+    fs.mkdirSync(path.dirname(claudeSettingsPath()), { recursive: true });
+    fs.copyFileSync(manifest.settingsBackup, claudeSettingsPath());
+  }
+  console.log(`Restored backup from ${manifest.createdAt}`);
+  console.log(`Database files restored beside ${dbPath}`);
+  if (manifest.settingsBackup) console.log(`Claude settings restored to ${claudeSettingsPath()}`);
+}
+
+function upsertCombos(db, providers) {
+  const insertCombo = db.prepare(`
+    INSERT INTO combos (id, name, data, sort_order, created_at, updated_at, system_message)
     VALUES (?, ?, ?, 0, datetime('now'), datetime('now'), ?)
-    ON CONFLICT(id) DO UPDATE SET data = excluded.data, system_message = excluded.system_message, updated_at = datetime('now')
+    ON CONFLICT(id) DO UPDATE SET
+      name = excluded.name,
+      data = excluded.data,
+      system_message = excluded.system_message,
+      updated_at = datetime('now')
   `);
-
-  upsertCombo.run('combo/claude-opus', 'Claude Opus Tier', opusData, opusSystem);
-  upsertCombo.run('combo/claude-sonnet', 'Claude Sonnet Tier', sonnetData, sonnetSystem);
-  upsertCombo.run('combo/claude-haiku', 'Claude Haiku Tier', haikuData, haikuSystem);
-  
-  console.log("✅ Combos & System Messages Injected!");
-
-  // Update Mappings
-  db.prepare("DELETE FROM model_combo_mappings WHERE pattern LIKE '%opus%' OR pattern LIKE '%sonnet%' OR pattern LIKE '%haiku%'").run();
-  
-  const insertMap = db.prepare(`
-    INSERT INTO model_combo_mappings (id, pattern, combo_id, priority, enabled, created_at, updated_at) 
-    VALUES (?, ?, ?, ?, 1, datetime('now'), datetime('now'))
-  `);
-
-  const uuidv4 = () => require('crypto').randomUUID();
-  
-  insertMap.run(uuidv4(), '*opus*', 'combo/claude-opus', 10);
-  insertMap.run(uuidv4(), '*sonnet-1-million*', 'combo/claude-sonnet', 10);
-  insertMap.run(uuidv4(), '*sonnet-5*', 'combo/claude-sonnet', 10);
-  insertMap.run(uuidv4(), '*sonnet-3.5*', 'combo/claude-sonnet', 10);
-  insertMap.run(uuidv4(), '*sonnet*', 'combo/claude-sonnet', 5);
-  insertMap.run(uuidv4(), '*haiku*', 'combo/claude-haiku', 10);
-
-  console.log("✅ Routing Mappings Locked!");
-
-  // Automate Claude Code Settings to prevent "issue with selected model" errors
-  const claudeSettingsPath = path.join(process.env.USERPROFILE || process.env.HOME, '.claude', 'settings.json');
-  if (fs.existsSync(claudeSettingsPath)) {
-    try {
-      let settings = JSON.parse(fs.readFileSync(claudeSettingsPath, 'utf8'));
-      if (!settings.env) settings.env = {};
-      
-      // Force the base URL to OmniRoute
-      settings.env.ANTHROPIC_BASE_URL = "http://localhost:20128";
-      
-      // Force a valid Anthropic model name to bypass Claude Code's hardcoded CLI validation
-      // (OmniRoute's *opus* mapping will still catch this and route it to GLM)
-      settings.model = "claude-3-opus-20240229";
-      
-      fs.writeFileSync(claudeSettingsPath, JSON.stringify(settings, null, 2));
-      console.log("✅ Claude Code settings.json automatically configured! (Model validation bypass applied)");
-    } catch (err) {
-      console.error("⚠️ Could not automatically update Claude Code settings.json:", err.message);
+  const applied = [];
+  for (const def of COMBO_DEFS) {
+    const { selected, skipped } = selectTargets(def, providers, db);
+    if (!selected.length) {
+      fail(
+        `Combo "${def.name}" has no usable models. Connect OpenRouter (required) in the OmniRoute dashboard and rerun setup.`
+      );
     }
-  } else {
-    console.log("⚠️ Claude Code settings.json not found. You may need to configure it manually.");
+    const data = {
+      name: def.name,
+      strategy: "priority",
+      description: def.description,
+      models: selected,
+    };
+    insertCombo.run(def.id, def.name, JSON.stringify(data), def.systemMessage);
+    applied.push({ def, selected, skipped });
+    console.log(`Combo ${def.id}: ${selected.length} model(s)`);
+    for (const [index, target] of selected.entries()) {
+      console.log(`  ${index + 1}. ${target.provider} / ${target.model}`);
+    }
+    for (const skip of skipped) {
+      console.log(`  skipped ${skip.provider} / ${skip.model} (${skip.reason})`);
+    }
+  }
+  return applied;
+}
+
+function upsertMappings(db) {
+  const hasDescription = tableColumns(db, "model_combo_mappings").includes("description");
+  const insertSql = hasDescription
+    ? `
+      INSERT INTO model_combo_mappings (id, pattern, combo_id, priority, enabled, description, created_at, updated_at)
+      VALUES (?, ?, ?, ?, 1, ?, datetime('now'), datetime('now'))
+      ON CONFLICT(id) DO UPDATE SET
+        pattern = excluded.pattern,
+        combo_id = excluded.combo_id,
+        priority = excluded.priority,
+        enabled = 1,
+        description = excluded.description,
+        updated_at = datetime('now')
+    `
+    : `
+      INSERT INTO model_combo_mappings (id, pattern, combo_id, priority, enabled, created_at, updated_at)
+      VALUES (?, ?, ?, ?, 1, datetime('now'), datetime('now'))
+      ON CONFLICT(id) DO UPDATE SET
+        pattern = excluded.pattern,
+        combo_id = excluded.combo_id,
+        priority = excluded.priority,
+        enabled = 1,
+        updated_at = datetime('now')
+    `;
+  const insertMap = db.prepare(insertSql);
+  for (const def of COMBO_DEFS) {
+    if (hasDescription) {
+      insertMap.run(def.mappingId, def.pattern, def.id, def.mappingPriority, "Limitless Claude");
+    } else {
+      insertMap.run(def.mappingId, def.pattern, def.id, def.mappingPriority);
+    }
   }
 
-  // Automate OmniRoute Background Startup on Windows
-  const startupPath = path.join(process.env.APPDATA, 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup', 'start_omniroute.vbs');
-  const omnirouteCmdPath = path.join(process.env.USERPROFILE || process.env.HOME, '.pnpm', 'omniroute.cmd');
-  
-  if (fs.existsSync(omnirouteCmdPath)) {
+  const managed = COMBO_DEFS.map((d) => d.mappingId);
+  const comboIds = COMBO_DEFS.map((d) => d.id);
+  const stale = db
+    .prepare(
+      `SELECT id, pattern FROM model_combo_mappings
+       WHERE combo_id IN (${comboIds.map(() => "?").join(",")})
+         AND id NOT IN (${managed.map(() => "?").join(",")})`
+    )
+    .all(...comboIds, ...managed);
+  const extraPatterns = ["*sonnet-5*", "*sonnet-3.5*", "*sonnet-1-million*"];
+  const extras = db
+    .prepare(
+      `SELECT id, pattern FROM model_combo_mappings
+       WHERE pattern IN (${extraPatterns.map(() => "?").join(",")})
+         AND id NOT IN (${managed.map(() => "?").join(",")})`
+    )
+    .all(...extraPatterns, ...managed);
+  const toDelete = new Map();
+  for (const row of [...stale, ...extras]) toDelete.set(row.id, row.pattern);
+  const del = db.prepare("DELETE FROM model_combo_mappings WHERE id = ?");
+  for (const [id, pattern] of toDelete) {
+    del.run(id);
+    console.log(`Removed stale mapping ${pattern} (${id})`);
+  }
+  console.log("Mappings upserted: *opus* *sonnet* *haiku*");
+}
+
+function mergeClaudeSettings(settingsPath) {
+  let settings = {};
+  let existed = fs.existsSync(settingsPath);
+  if (existed) {
     try {
-      const vbsContent = `CreateObject("WScript.Shell").Run "cmd /c ${omnirouteCmdPath} serve --no-open", 0, False`;
-      fs.writeFileSync(startupPath, vbsContent);
-      console.log("✅ OmniRoute configured to start automatically on laptop boot!");
+      settings = JSON.parse(fs.readFileSync(settingsPath, "utf8"));
+      if (settings === null || typeof settings !== "object" || Array.isArray(settings)) {
+        fail(`${settingsPath} is not a JSON object. Fix or move the file, then rerun setup.`);
+      }
     } catch (err) {
-      console.error("⚠️ Could not create startup script:", err.message);
+      fail(`Could not parse ${settingsPath}. Fix the JSON or restore a backup.`, err.message);
     }
-  } else {
-    console.log("⚠️ Could not find omniroute.cmd. Auto-startup script was not created.");
+  }
+  if (!settings.env || typeof settings.env !== "object") settings.env = {};
+  settings.env.ANTHROPIC_BASE_URL = GATEWAY_ORIGIN;
+  settings.env.CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY = "1";
+  settings.env.ANTHROPIC_DEFAULT_OPUS_MODEL = "claude-opus";
+  settings.env.ANTHROPIC_DEFAULT_SONNET_MODEL = "claude-sonnet";
+  settings.env.ANTHROPIC_DEFAULT_HAIKU_MODEL = "claude-haiku";
+  fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
+  fs.writeFileSync(settingsPath, `${JSON.stringify(settings, null, 2)}\n`);
+  const hasToken = Boolean(settings.env.ANTHROPIC_AUTH_TOKEN || settings.env.ANTHROPIC_API_KEY);
+  if (existed) console.log(`Merged Claude Code settings at ${settingsPath}`);
+  else console.log(`Created Claude Code settings at ${settingsPath}`);
+  if (!hasToken) {
+    console.log(
+      "WARN: No ANTHROPIC_AUTH_TOKEN in Claude settings. Paste your OmniRoute API key into env.ANTHROPIC_AUTH_TOKEN. The dashboard shows a placeholder snippet; the key is created under OmniRoute API keys."
+    );
+  }
+}
+
+function vbsContent(omniroutePath) {
+  const escaped = String(omniroutePath).replace(/"/g, '""');
+  return `Set sh = CreateObject("WScript.Shell")\r\nsh.Run "cmd /c ""${escaped}"" serve --no-open", 0, False\r\n`;
+}
+
+function installStartup(cliPath) {
+  if (process.platform !== "win32") fail("--install-startup is only supported on Windows.");
+  const dir = windowsStartupDir();
+  if (!dir) fail("APPDATA is not set; cannot install a Startup shortcut.");
+  if (!cliPath) fail("OmniRoute CLI was not found on PATH. Install OmniRoute, then retry --install-startup.");
+  fs.mkdirSync(dir, { recursive: true });
+  const dest = path.join(dir, STARTUP_VBS_NAME);
+  if (fs.existsSync(dest)) {
+    const current = fs.readFileSync(dest, "utf8");
+    const next = vbsContent(cliPath);
+    if (current === next) {
+      console.log(`Startup entry already present: ${dest}`);
+      return;
+    }
+  }
+  fs.writeFileSync(dest, vbsContent(cliPath));
+  console.log(`Installed Windows startup launcher: ${dest}`);
+}
+
+function uninstallStartup() {
+  if (process.platform !== "win32") fail("--uninstall-startup is only supported on Windows.");
+  const dir = windowsStartupDir();
+  if (!dir) fail("APPDATA is not set; cannot remove a Startup shortcut.");
+  const dest = path.join(dir, STARTUP_VBS_NAME);
+  if (!fs.existsSync(dest)) {
+    console.log("No Limitless Claude startup entry found.");
+    return;
+  }
+  fs.unlinkSync(dest);
+  console.log(`Removed ${dest}`);
+}
+
+function runSetup(args) {
+  if (nodeMajor() < MIN_NODE_MAJOR) {
+    fail(`Node.js ${MIN_NODE_MAJOR}+ is required. This process is v${process.versions.node}.`);
+  }
+  console.log(`OS: ${process.platform} ${os.release()}`);
+  console.log(`Node.js: v${process.versions.node}`);
+  const cliPath = findOmnirouteCli();
+  if (cliPath) console.log(`OmniRoute CLI: ${cliPath}`);
+  else console.log("WARN: OmniRoute CLI was not found on PATH. Setup can still write the database if it exists.");
+
+  const dbPath = resolveDbPath();
+  if (!fs.existsSync(dbPath)) {
+    fail(
+      "OmniRoute database not found. Install OmniRoute, start it once, then rerun setup.",
+      `Expected: ${dbPath}`
+    );
+  }
+  console.log(`Database: ${dbPath}`);
+
+  const settingsPath = claudeSettingsPath();
+  const manifest = backupFiles(dbPath, settingsPath);
+  console.log(`Backup: ${manifest.dbBackupDir}`);
+  if (manifest.settingsBackup) console.log(`Claude backup: ${manifest.settingsBackup}`);
+
+  let db;
+  try {
+    db = openDatabase(dbPath);
+    db.exec("PRAGMA busy_timeout = 8000");
+    assertSchema(db);
+    const providers = activeProviders(db);
+    if (!providers.size) {
+      fail("No active OmniRoute providers. Connect OpenRouter in the OmniRoute dashboard, then rerun setup.");
+    }
+    console.log(`Active providers: ${[...providers].sort().join(", ")}`);
+    if (providers.has("kiro")) {
+      console.log(
+        "WARN: Kiro is connected. OmniRoute documents that Kiro's terms prohibit third-party proxy/harness use. Kiro models are optional fallbacks only."
+      );
+    }
+    upsertCombos(db, providers);
+    upsertMappings(db);
+  } catch (err) {
+    if (/busy|locked/i.test(err.message)) {
+      fail("OmniRoute database is locked. Stop OmniRoute or wait and retry.", err.message);
+    }
+    fail("Setup failed while writing combos/mappings.", err.stack || err.message);
+  } finally {
+    try {
+      db.close();
+    } catch {
+      /* ignore */
+    }
   }
 
-  console.log("🎉 Setup Complete. Your Claude Code is now routing to the Limitless Claude Architecture!");
-  
-} catch (error) {
-  console.error("❌ Error during setup:", error);
-} finally {
-  db.close();
+  mergeClaudeSettings(settingsPath);
+
+  if (args.installStartup) installStartup(cliPath);
+
+  console.log("Setup finished. Run: node validate.js");
+}
+
+function main() {
+  const args = parseArgs(process.argv);
+  if (args.unknown.length) fail(`Unknown argument: ${args.unknown.join(" ")}. Use --help.`);
+  if (args.help) {
+    printHelp();
+    return;
+  }
+  if (args.rollback) {
+    rollback();
+    return;
+  }
+  if (args.installStartup && args.uninstallStartup) {
+    fail("Use only one of --install-startup or --uninstall-startup.");
+  }
+  if (args.uninstallStartup) {
+    uninstallStartup();
+    return;
+  }
+  runSetup(args);
+}
+
+module.exports = {
+  COMBO_DEFS,
+  COMBO_IDS,
+  MAPPING_IDS,
+  MIN_NODE_MAJOR,
+  GATEWAY_ORIGIN,
+  REQUIRED_COMBO_COLUMNS,
+  REQUIRED_MAPPING_COLUMNS,
+  homeDir,
+  resolveDbPath,
+  claudeSettingsPath,
+  findOmnirouteCli,
+  openDatabase,
+  assertSchema,
+  nodeMajor,
+  activeProviders,
+};
+
+if (require.main === module) {
+  main();
 }

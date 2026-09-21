@@ -48,9 +48,11 @@ const REQUIRED_MAPPING_COLUMNS = [
 
 /**
  * Array order is OmniRoute priority-strategy failover.
- * Opus: GLM first (Kiro glm-5, then OpenRouter/Cloudflare GLM), then coding models.
+ * Opus: coding, debugging, tests, agents — GLM first, then other free pools.
+ * Sonnet: planning, architecture, PRDs, design docs — short quality chain.
+ * Haiku: search, fact check, short answers — fastest measured first.
  * Optional targets are added only when that provider is connected.
- * Catalog-checked 2026-09-21 against OpenRouter /api/v1/models and local OmniRoute sync.
+ * Live-probed 2026-09-22. requireCatalog skips a target missing from OmniRoute sync.
  */
 const COMBO_DEFS = [
   {
@@ -59,20 +61,21 @@ const COMBO_DEFS = [
     mappingId: MAPPING_IDS.opus,
     pattern: "*opus*",
     mappingPriority: 10,
-    description: "Coding and implementation. GLM first, then elite coding fallbacks.",
+    description: "Coding, debugging, tests, and agents. GLM first, then other connected free pools.",
     systemMessage:
-      "You are a coding assistant reached through Limitless Claude (OmniRoute Opus tier). Implement and debug software. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
+      "You are a coding assistant reached through Limitless Claude (OmniRoute Opus tier). Implement, debug, and test software. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
     targets: [
       { provider: "kiro", model: "glm-5", optional: true },
-      { provider: "openrouter", model: "z-ai/glm-5.2:free" },
       { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash", optional: true },
-      { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
-      { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
+      { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct", optional: true },
+      { provider: "antigravity", model: "gemini-3.7-flash-high", optional: true },
+      { provider: "antigravity", model: "gemini-pro-agent", optional: true },
+      { provider: "antigravity", model: "gemini-3.8-flash-tiered", optional: true },
+      { provider: "nvidia", model: "nvidia/nemotron-3-super-120b-a12b", optional: true, requireCatalog: true },
+      { provider: "openrouter", model: "z-ai/glm-5.2:free", requireCatalog: true },
+      { provider: "openrouter", model: "poolside/laguna-s-2.1:free", requireCatalog: true },
+      { provider: "kilo-gateway", model: "poolside/laguna-s-2.1:free", optional: true, requireCatalog: true },
       { provider: "kiro", model: "qwen3-coder-next", optional: true },
-      { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
-      { provider: "openrouter", model: "poolside/laguna-xs-2.1:free" },
-      { provider: "openrouter", model: "thinkingmachines/inkling:free" },
-      { provider: "openrouter", model: "nex-agi/nex-n2.5-pro:free" }
     ],
   },
   {
@@ -81,20 +84,15 @@ const COMBO_DEFS = [
     mappingId: MAPPING_IDS.sonnet,
     pattern: "*sonnet*",
     mappingPriority: 10,
-    description: "Reasoning and architecture. OpenRouter Nemotron first, then optional Kiro.",
+    description: "Planning, architecture, PRDs, and design docs.",
     systemMessage:
-      "You are a software-architecture assistant reached through Limitless Claude (OmniRoute Sonnet tier). Prefer clear plans and tradeoffs. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
+      "You are a planning assistant reached through Limitless Claude (OmniRoute Sonnet tier). Help with brainstorming, architecture, PRDs, and design docs. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
     targets: [
-      { provider: "openrouter", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
-      { provider: "openrouter", model: "nvidia/nemotron-3-super-120b-a12b:free" },
-      { provider: "kiro", model: "deepseek-3.2", optional: true },
-      { provider: "kiro", model: "claude-sonnet-5", optional: true },
-      { provider: "openrouter", model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free" },
-      { provider: "openrouter", model: "google/gemma-4-31b-it:free" },
-      { provider: "openrouter", model: "google/gemma-4-26b-a4b-it:free" },
-      { provider: "openrouter", model: "inclusionai/ling-3.0-flash-vl:free" },
-      { provider: "openrouter", model: "inclusionai/ling-3.0-flash-sante:free" },
-      { provider: "openrouter", model: "dots-studio/dots-3-note-preview:free" }
+      { provider: "antigravity", model: "claude-opus-4-6-thinking", optional: true },
+      { provider: "antigravity", model: "claude-sonnet-4-6", optional: true },
+      { provider: "antigravity", model: "gemini-pro-agent", optional: true },
+      { provider: "nvidia", model: "nvidia/nemotron-3-super-120b-a12b", optional: true, requireCatalog: true },
+      { provider: "openrouter", model: "nvidia/nemotron-3-ultra-550b-a55b:free", requireCatalog: true },
     ],
   },
   {
@@ -103,20 +101,13 @@ const COMBO_DEFS = [
     mappingId: MAPPING_IDS.haiku,
     pattern: "*haiku*",
     mappingPriority: 10,
-    description: "Fast replies and small edits. OpenRouter free models first, then optional Groq.",
+    description: "Search, fact check, and short answers. Fastest measured first.",
     systemMessage:
-      "You are a fast coding assistant reached through Limitless Claude (OmniRoute Haiku tier). Keep answers short. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
+      "You are a fast assistant reached through Limitless Claude (OmniRoute Haiku tier). Answer short questions. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
     targets: [
-      { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
-      { provider: "openrouter", model: "cohere/north-mini-code:free" },
-      { provider: "groq", model: "openai/gpt-oss-120b", optional: true },
-      { provider: "openrouter", model: "thinkingmachines/inkling-small:free" },
-      { provider: "openrouter", model: "nex-agi/nex-n2.5-mini:free" },
-      { provider: "openrouter", model: "inclusionai/ling-3.0-flash-fin:free" },
-      { provider: "openrouter", model: "nvidia/nemotron-3.5-content-safety:free" },
-      { provider: "openrouter", model: "openrouter/free" },
-      { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast", optional: true },
-      { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct", optional: true }
+      { provider: "groq", model: "openai/gpt-oss-20b", optional: true, requireCatalog: true },
+      { provider: "antigravity", model: "gemini-3.1-flash-lite", optional: true },
+      { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free", requireCatalog: true },
     ],
   },
 ];
@@ -285,9 +276,12 @@ function catalogHasModel(db, provider, model) {
   const rows = db
     .prepare("SELECT key, value FROM key_value WHERE namespace = 'syncedAvailableModels'")
     .all();
+  const prefix = String(provider).toLowerCase();
   const needle = String(model).toLowerCase();
+  let sawProvider = false;
   for (const row of rows) {
-    if (!String(row.key).toLowerCase().startsWith(String(provider).toLowerCase())) continue;
+    if (!String(row.key).toLowerCase().startsWith(prefix)) continue;
+    sawProvider = true;
     let parsed;
     try {
       parsed = JSON.parse(row.value);
@@ -297,10 +291,10 @@ function catalogHasModel(db, provider, model) {
     const list = Array.isArray(parsed) ? parsed : parsed.models || parsed.data || [];
     for (const entry of list) {
       const id = typeof entry === "string" ? entry : entry.id || entry.model || "";
-      if (String(id).toLowerCase() === needle) return true;
+      if (String(id).toLowerCase() === needle) return "yes";
     }
   }
-  return false;
+  return sawProvider ? "no" : "unsynced";
 }
 
 function selectTargets(def, providers, db) {
@@ -311,12 +305,15 @@ function selectTargets(def, providers, db) {
       skipped.push({ ...target, reason: `provider "${target.provider}" is not connected` });
       continue;
     }
-    if (target.requireCatalog && !catalogHasModel(db, target.provider, target.model)) {
-      skipped.push({
-        ...target,
-        reason: `model "${target.model}" was not in the OmniRoute catalog for ${target.provider}`,
-      });
-      continue;
+    if (target.requireCatalog) {
+      const catalog = catalogHasModel(db, target.provider, target.model);
+      if (catalog === "no") {
+        skipped.push({
+          ...target,
+          reason: `model "${target.model}" was not in the OmniRoute catalog for ${target.provider}`,
+        });
+        continue;
+      }
     }
     selected.push({ provider: target.provider, model: target.model });
   }
@@ -528,6 +525,56 @@ function mergeClaudeSettings(settingsPath) {
       "WARN: No ANTHROPIC_AUTH_TOKEN in Claude settings. Paste your OmniRoute API key into env.ANTHROPIC_AUTH_TOKEN. The dashboard shows a placeholder snippet; the key is created under OmniRoute API keys."
     );
   }
+  return hasToken ? settings.env.ANTHROPIC_AUTH_TOKEN || settings.env.ANTHROPIC_API_KEY : "";
+}
+
+function vsCodeSettingsPath() {
+  if (process.platform === "win32") {
+    if (!process.env.APPDATA) return null;
+    return path.join(process.env.APPDATA, "Code", "User", "settings.json");
+  }
+  if (process.platform === "darwin") {
+    return path.join(homeDir(), "Library", "Application Support", "Code", "User", "settings.json");
+  }
+  return path.join(homeDir(), ".config", "Code", "User", "settings.json");
+}
+
+function mergeVsCodeSettings(token) {
+  const settingsPath = vsCodeSettingsPath();
+  if (!settingsPath || !fs.existsSync(settingsPath)) {
+    console.log(
+      "VS Code user settings were not found. Terminal Claude Code still uses ~/.claude/settings.json. For the VS Code extension, add claudeCode.environmentVariables as the README shows."
+    );
+    return;
+  }
+  if (!token) {
+    console.log("Skipped VS Code settings: ANTHROPIC_AUTH_TOKEN is not set yet.");
+    return;
+  }
+  let settings;
+  try {
+    settings = JSON.parse(fs.readFileSync(settingsPath, "utf8"));
+  } catch {
+    console.log(
+      `WARN: Could not parse ${settingsPath} (comments or trailing commas). Merge claudeCode.environmentVariables by hand. See the README.`
+    );
+    return;
+  }
+  if (!settings || typeof settings !== "object" || Array.isArray(settings)) {
+    console.log(`WARN: ${settingsPath} is not a JSON object. VS Code settings were left unchanged.`);
+    return;
+  }
+  const wanted = [
+    { name: "ANTHROPIC_BASE_URL", value: GATEWAY_ORIGIN },
+    { name: "ANTHROPIC_AUTH_TOKEN", value: token },
+  ];
+  const current = Array.isArray(settings["claudeCode.environmentVariables"])
+    ? settings["claudeCode.environmentVariables"]
+    : [];
+  const next = current.filter((entry) => entry && !wanted.some((item) => item.name === entry.name));
+  settings["claudeCode.environmentVariables"] = [...next, ...wanted];
+  fs.writeFileSync(settingsPath, `${JSON.stringify(settings, null, 2)}\n`);
+  console.log(`Merged Claude Code gateway env into ${settingsPath}`);
 }
 
 function vbsContent(omniroutePath) {
@@ -603,7 +650,7 @@ function runSetup(args) {
     console.log(`Active providers: ${[...providers].sort().join(", ")}`);
     if (providers.has("kiro")) {
       console.log(
-        "WARN: Kiro is connected. OmniRoute documents that Kiro's terms prohibit third-party proxy/harness use. Kiro models are optional fallbacks only."
+        "WARN: Kiro is connected. Opus tries kiro/glm-5 first. OmniRoute documents that Kiro's terms prohibit third-party proxy/harness use."
       );
     }
     upsertCombos(db, providers);
@@ -621,7 +668,8 @@ function runSetup(args) {
     }
   }
 
-  mergeClaudeSettings(settingsPath);
+  const token = mergeClaudeSettings(settingsPath);
+  mergeVsCodeSettings(token);
 
   if (args.installStartup) installStartup(cliPath);
 

@@ -1,8 +1,8 @@
 {
   "name": "limitless-claude",
-  "version": "2.1.0",
+  "version": "3.1.0",
   "private": true,
-  "description": "Claude Code + OmniRoute configuration that routes Opus, Sonnet, and Haiku workloads across verified provider/model fallbacks.",
+  "description": "Claude Code + OmniRoute installer: Opus for coding, Sonnet for plans, Haiku for short lookups.",
   "license": "MIT",
   "engines": {
     "node": ">=22"

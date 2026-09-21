@@ -27,6 +27,11 @@ Providers like OpenRouter pool all your free models into a single daily request 
 
 **Total Arsenal Capacity:** You are effectively equipped with a system capable of pushing **~11.5 Million to 16 Million free tokens every single day**. If a model hits a rate limit, OmniRoute will instantaneously cascade down the list without Claude Code ever throwing an error on your screen.
 
+### 💡 Pro-Tip: The $10 OpenRouter Hack (Unlock 40M+ Tokens/Day)
+If you top up your OpenRouter account with just **$10**, it instantly converts your account from the standard free tier (50 requests/day) to the verified tier (**1,000 requests/day**). 
+* **The Trick:** You *don't* actually have to spend the $10! As long as the balance sits in your account, your daily free-model request limit increases by 20x.
+* **The Result:** Because this architecture aggressively utilizes OpenRouter's free models, this simple hack skyrockets your daily free token limit from ~15 Million up to **30 Million - 40 Million free tokens per day** for coding, completely for free.
+
 ## Architecture
 
 ```mermaid

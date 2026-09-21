@@ -20,13 +20,14 @@ try {
   const opusModels = [
     {provider: 'kiro', model: 'glm-5', priority: 100, enabled: true},
     {provider: 'openrouter', model: 'z-ai/glm-5.3-flash', priority: 99, enabled: true},
-    {provider: 'cloudflare-ai', model: '@cf/zai-org/glm-4.7-flash', priority: 98, enabled: true},
-    {provider: 'openrouter', model: 'z-ai/glm-5.2:free', priority: 97, enabled: true},
-    {provider: 'kiro', model: 'deepseek-3.2', priority: 96, enabled: true},
-    {provider: 'kiro', model: 'qwen3-coder-next', priority: 95, enabled: true},
-    {provider: 'kiro', model: 'claude-sonnet-5', priority: 94, enabled: true},
-    {provider: 'openrouter', model: 'cohere/north-mini-code:free', priority: 93, enabled: true},
-    {provider: 'openrouter', model: 'poolside/laguna-s-2.1:free', priority: 92, enabled: true}
+    {provider: 'openrouter', model: 'qwen/qwen3.8-27b:free', priority: 98, enabled: true},
+    {provider: 'cloudflare-ai', model: '@cf/zai-org/glm-4.7-flash', priority: 97, enabled: true},
+    {provider: 'openrouter', model: 'z-ai/glm-5.2:free', priority: 96, enabled: true},
+    {provider: 'kiro', model: 'deepseek-3.2', priority: 95, enabled: true},
+    {provider: 'kiro', model: 'qwen3-coder-next', priority: 94, enabled: true},
+    {provider: 'kiro', model: 'claude-sonnet-5', priority: 93, enabled: true},
+    {provider: 'openrouter', model: 'cohere/north-mini-code:free', priority: 92, enabled: true},
+    {provider: 'openrouter', model: 'poolside/laguna-s-2.1:free', priority: 91, enabled: true}
   ];
   
   const opusData = JSON.stringify({
@@ -57,10 +58,11 @@ try {
 
   // 3. Haiku Combo
   const haikuModels = [
-    {provider: 'openrouter', model: 'cohere/north-mini-code:free', priority: 100, enabled: true},
-    {provider: 'openrouter', model: 'nvidia/nemotron-3-super-120b-a12b:free', priority: 99, enabled: true},
-    {provider: 'groq', model: 'openai/gpt-oss-120b', priority: 98, enabled: true},
-    {provider: 'bluesminds', model: 'claude-haiku-4-5', priority: 97, enabled: true}
+    {provider: 'openrouter', model: 'nvidia/nemotron-3.5-lightning:free', priority: 100, enabled: true},
+    {provider: 'openrouter', model: 'cohere/north-mini-code:free', priority: 99, enabled: true},
+    {provider: 'openrouter', model: 'nvidia/nemotron-3-super-120b-a12b:free', priority: 98, enabled: true},
+    {provider: 'groq', model: 'openai/gpt-oss-120b', priority: 97, enabled: true},
+    {provider: 'bluesminds', model: 'claude-haiku-4-5', priority: 96, enabled: true}
   ];
   
   const haikuData = JSON.stringify({

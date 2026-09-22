@@ -80,10 +80,7 @@ Setup automatically edits your `~/.claude/settings.json` file. A timestamped bac
   "env": {
     "ANTHROPIC_BASE_URL": "http://localhost:20128",
     "ANTHROPIC_AUTH_TOKEN": "your-omniroute-api-key",
-    "CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY": "1",
-    "ANTHROPIC_DEFAULT_OPUS_MODEL": "claude-opus",
-    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-haiku"
+    "ANTHROPIC_MODEL": "claude-3-opus-20240229"
   }
 }
 ```

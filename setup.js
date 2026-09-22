@@ -515,10 +515,15 @@ function mergeClaudeSettings(settingsPath) {
   }
   if (!settings.env || typeof settings.env !== "object") settings.env = {};
   settings.env.ANTHROPIC_BASE_URL = GATEWAY_ORIGIN;
-  settings.env.CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY = "1";
-  settings.env.ANTHROPIC_DEFAULT_OPUS_MODEL = "claude-opus";
-  settings.env.ANTHROPIC_DEFAULT_SONNET_MODEL = "claude-sonnet";
-  settings.env.ANTHROPIC_DEFAULT_HAIKU_MODEL = "claude-haiku";
+  
+  // Remove model discovery so Claude only shows the 3 default models
+  delete settings.env.CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY;
+  delete settings.env.ANTHROPIC_DEFAULT_OPUS_MODEL;
+  delete settings.env.ANTHROPIC_DEFAULT_SONNET_MODEL;
+  delete settings.env.ANTHROPIC_DEFAULT_HAIKU_MODEL;
+
+  // Default Claude Code to boot into the Opus tier for best coding models
+  settings.env.ANTHROPIC_MODEL = "claude-3-opus-20240229";
   fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
   fs.writeFileSync(settingsPath, `${JSON.stringify(settings, null, 2)}\n`);
   const hasToken = Boolean(settings.env.ANTHROPIC_AUTH_TOKEN || settings.env.ANTHROPIC_API_KEY);

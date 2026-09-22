@@ -96,9 +96,10 @@ Setup automatically injects `claudeCode.environmentVariables` into your VS Code 
 
 Run `node validate.js` at any time to verify the database schema, models, active providers, and JSON settings.
 
-**Windows startup launcher (optional):**
+**Windows Auto-Boot:**
+The setup script will automatically detect if you are on Windows and configure OmniRoute to silently launch in the background every time you boot your PC. You never have to manually start it.
+To completely remove the startup launcher:
 ```bash
-node setup.js --install-startup
 node setup.js --uninstall-startup
 ```
 

@@ -586,18 +586,40 @@ function vbsContent(omniroutePath) {
   return `Set sh = CreateObject("WScript.Shell")\r\nsh.Run "cmd /c ""${escaped}"" serve --no-open", 0, False\r\n`;
 }
 
+function ensureClaudeCodeInstalled() {
+  const finder = process.platform === "win32" ? "where" : "which";
+  const result = spawnSync(finder, ["claude"], { encoding: "utf8", windowsHide: true });
+  if (result.status !== 0) {
+    console.log("INFO: Claude Code CLI not found. Installing via npm...");
+    const npmResult = spawnSync(process.platform === "win32" ? "npm.cmd" : "npm", ["install", "-g", "@anthropic-ai/claude-code"], { stdio: "inherit", windowsHide: true });
+    if (npmResult.status !== 0) {
+      console.log("WARN: Failed to install Claude Code automatically. Please run `npm install -g @anthropic-ai/claude-code` manually.");
+    } else {
+      console.log("INFO: Claude Code installed successfully.");
+    }
+  }
+}
+
 function installStartup(cliPath) {
-  if (process.platform !== "win32") fail("--install-startup is only supported on Windows.");
+  if (process.platform !== "win32") {
+    console.log("WARN: Startup auto-boot is only supported on Windows.");
+    return;
+  }
   const dir = windowsStartupDir();
-  if (!dir) fail("APPDATA is not set; cannot install a Startup shortcut.");
-  if (!cliPath) fail("OmniRoute CLI was not found on PATH. Install OmniRoute, then retry --install-startup.");
+  if (!dir) {
+    console.log("WARN: APPDATA is not set; cannot install a Startup shortcut.");
+    return;
+  }
+  if (!cliPath) {
+    console.log("WARN: OmniRoute CLI was not found on PATH. Cannot configure auto-boot.");
+    return;
+  }
   fs.mkdirSync(dir, { recursive: true });
   const dest = path.join(dir, STARTUP_VBS_NAME);
   if (fs.existsSync(dest)) {
-    const current = fs.readFileSync(dest, "utf8");
-    const next = vbsContent(cliPath);
-    if (current === next) {
-      console.log(`Startup entry already present: ${dest}`);
+    const existing = fs.readFileSync(dest, "utf8");
+    if (existing.includes(cliPath)) {
+      console.log(`Windows startup launcher already exists at: ${dest}`);
       return;
     }
   }
@@ -611,11 +633,11 @@ function uninstallStartup() {
   if (!dir) fail("APPDATA is not set; cannot remove a Startup shortcut.");
   const dest = path.join(dir, STARTUP_VBS_NAME);
   if (!fs.existsSync(dest)) {
-    console.log("No Limitless Claude startup entry found.");
+    console.log("Startup launcher not found. Nothing to uninstall.");
     return;
   }
   fs.unlinkSync(dest);
-  console.log(`Removed ${dest}`);
+  console.log(`Removed Windows startup launcher: ${dest}`);
 }
 
 function runSetup(args) {
@@ -672,10 +694,17 @@ function runSetup(args) {
     }
   }
 
+  ensureClaudeCodeInstalled();
   const token = mergeClaudeSettings(settingsPath);
   mergeVsCodeSettings(token);
 
-  if (args.installStartup) installStartup(cliPath);
+  if (process.platform === "win32" && cliPath && !args.uninstallStartup) {
+    try {
+      installStartup(cliPath);
+    } catch (e) {
+      console.log("WARN: Could not install Windows startup shortcut automatically: " + e.message);
+    }
+  }
 
   console.log("Setup finished. Run: node validate.js");
 }

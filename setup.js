@@ -13,7 +13,7 @@ const path = require("path");
 const { spawnSync } = require("child_process");
 
 const MIN_NODE_MAJOR = 22;
-const GATEWAY_ORIGIN = "http://127.0.0.1:20129";
+const GATEWAY_ORIGIN = "http://127.0.0.1:20128";
 const COMBO_IDS = {
   opus: "limitless-opus",
   sonnet: "limitless-sonnet",
@@ -465,39 +465,30 @@ function upsertMappings(db) {
         updated_at = datetime('now')
     `;
   const insertMap = db.prepare(insertSql);
-  for (const def of COMBO_DEFS) {
+
+  const extraMappings = [
+    { id: 'mapping/opus', pattern: '*opus*', combo: COMBO_IDS.opus, prio: 10 },
+    { id: 'mapping/best', pattern: '*best*', combo: COMBO_IDS.opus, prio: 11 },
+    { id: 'mapping/opus-1m', pattern: '*opus[1m]*', combo: COMBO_IDS.opus, prio: 12 },
+    
+    { id: 'mapping/sonnet', pattern: '*sonnet*', combo: COMBO_IDS.sonnet, prio: 13 },
+    { id: 'mapping/opusplan', pattern: '*opusplan*', combo: COMBO_IDS.sonnet, prio: 14 },
+    { id: 'mapping/sonnet-1m', pattern: '*sonnet[1m]*', combo: COMBO_IDS.sonnet, prio: 15 },
+    
+    { id: 'mapping/haiku', pattern: '*haiku*', combo: COMBO_IDS.haiku, prio: 16 },
+    { id: 'mapping/fable', pattern: '*fable*', combo: COMBO_IDS.haiku, prio: 17 },
+    { id: 'mapping/default', pattern: '*default*', combo: COMBO_IDS.haiku, prio: 18 }
+  ];
+
+  for (const m of extraMappings) {
     if (hasDescription) {
-      insertMap.run(def.mappingId, def.pattern, def.id, def.mappingPriority, "Limitless Claude");
+      insertMap.run(m.id, m.pattern, m.combo, m.prio, "Limitless Claude");
     } else {
-      insertMap.run(def.mappingId, def.pattern, def.id, def.mappingPriority);
+      insertMap.run(m.id, m.pattern, m.combo, m.prio);
     }
   }
 
-  const managed = COMBO_DEFS.map((d) => d.mappingId);
-  const comboIds = COMBO_DEFS.map((d) => d.id);
-  const stale = db
-    .prepare(
-      `SELECT id, pattern FROM model_combo_mappings
-       WHERE combo_id IN (${comboIds.map(() => "?").join(",")})
-         AND id NOT IN (${managed.map(() => "?").join(",")})`
-    )
-    .all(...comboIds, ...managed);
-  const extraPatterns = ["*sonnet-5*", "*sonnet-3.5*", "*sonnet-1-million*"];
-  const extras = db
-    .prepare(
-      `SELECT id, pattern FROM model_combo_mappings
-       WHERE pattern IN (${extraPatterns.map(() => "?").join(",")})
-         AND id NOT IN (${managed.map(() => "?").join(",")})`
-    )
-    .all(...extraPatterns, ...managed);
-  const toDelete = new Map();
-  for (const row of [...stale, ...extras]) toDelete.set(row.id, row.pattern);
-  const del = db.prepare("DELETE FROM model_combo_mappings WHERE id = ?");
-  for (const [id, pattern] of toDelete) {
-    del.run(id);
-    console.log(`Removed stale mapping ${pattern} (${id})`);
-  }
-  console.log("Mappings upserted: *opus* *sonnet* *haiku*");
+  console.log("Mappings upserted for native Claude Code routing.");
 }
 
 function mergeClaudeSettings(settingsPath) {
@@ -518,7 +509,7 @@ function mergeClaudeSettings(settingsPath) {
   
   // Enable Gateway Discovery so Claude Code asks OmniRoute for the model list.
   // OmniRoute will now only return our 3 restricted limitless-* models!
-  settings.env.CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY = "1";
+  settings.env.CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY = "0";
   delete settings.env.ANTHROPIC_DEFAULT_OPUS_MODEL;
   delete settings.env.ANTHROPIC_DEFAULT_SONNET_MODEL;
   delete settings.env.ANTHROPIC_DEFAULT_HAIKU_MODEL;
@@ -585,6 +576,7 @@ function mergeVsCodeSettings(token) {
   const wanted = [
     { name: "ANTHROPIC_BASE_URL", value: GATEWAY_ORIGIN },
     { name: "ANTHROPIC_AUTH_TOKEN", value: token },
+    { name: "CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY", value: "0" },
   ];
   const current = Array.isArray(settings["claudeCode.environmentVariables"])
     ? settings["claudeCode.environmentVariables"]
@@ -720,8 +712,8 @@ function runSetup(args) {
     // "Claude 3 Opus retired" hardcoded CLI warnings by using custom model names!
     try {
       const targetModels = ["limitless-opus", "limitless-sonnet", "limitless-haiku"];
-      db.prepare("UPDATE api_keys SET model_access_mode = 'restricted', allowed_models = '[]', allowed_combos = ?").run(JSON.stringify(targetModels));
-      console.log("Restricted OmniRoute API keys to expose only the 3 custom Limitless UI models.");
+      db.prepare("UPDATE api_keys SET model_access_mode = 'all', allowed_models = '[]', allowed_combos = '[]'").run();
+      console.log("Unrestricted OmniRoute API keys to prevent 403 errors across all effort levels.");
     } catch (e) {
       console.log("WARN: Could not restrict API keys: " + e.message);
     }
@@ -753,7 +745,7 @@ function runSetup(args) {
     const targetModels = ["limitless-opus", "limitless-sonnet", "limitless-haiku"];
     
     // Update any existing keys just in case
-    db2.prepare("UPDATE api_keys SET model_access_mode = 'restricted', allowed_models = '[]', allowed_combos = ?").run(JSON.stringify(targetModels));
+    db2.prepare("UPDATE api_keys SET model_access_mode = 'all', allowed_models = '[]', allowed_combos = '[]'").run();
     
     // Upsert the specific token we are using
     db2.prepare(`
@@ -763,19 +755,19 @@ function runSetup(args) {
         'Limitless Claude Token',
         ?,
         ?,
-        'restricted',
+        'all',
         '[]',
-        ?,
+        '[]',
         datetime('now'),
         'legacy',
         '[]',
         'legacy'
       )
       ON CONFLICT(key) DO UPDATE SET 
-        model_access_mode = 'restricted', 
+        model_access_mode = 'all', 
         allowed_models = '[]',
-        allowed_combos = excluded.allowed_combos
-    `).run(token, hash, JSON.stringify(targetModels));
+        allowed_combos = '[]'
+    `).run(token, hash);
   } catch (err) {
     console.log("WARN: Could not sync API key to OmniRoute DB: " + err.message);
   } finally {

@@ -514,9 +514,14 @@ function mergeClaudeSettings(settingsPath) {
   delete settings.env.ANTHROPIC_DEFAULT_SONNET_MODEL;
   delete settings.env.ANTHROPIC_DEFAULT_HAIKU_MODEL;
 
-  // Default Claude Code to boot into the Opus tier for best coding models
-  // By using limitless-opus, we bypass the Opus Retirement warning!
-  settings.env.ANTHROPIC_MODEL = "limitless-opus";
+  // Default Claude Code to its native model names now that discovery is off
+  delete settings.env.ANTHROPIC_MODEL;
+  if (settings.model === "limitless-opus" || settings.model === "limitless-sonnet" || settings.model === "limitless-haiku") {
+    settings.model = "claude-3-opus-20240229";
+  }
+  if (settings.modelSettings && settings.modelSettings["limitless-opus"]) {
+    delete settings.modelSettings["limitless-opus"];
+  }
 
   // Ensure the API key strictly follows the Anthropic format to pass Claude Code's local regex validation
   // when switching effort levels (e.g. from High to Extra High).

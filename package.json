@@ -10,5 +10,10 @@
   "scripts": {
     "setup": "node setup.js",
     "validate": "node validate.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "http-proxy-middleware": "^4.2.0"
   }
 }

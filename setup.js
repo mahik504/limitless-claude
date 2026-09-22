@@ -13,7 +13,7 @@ const path = require("path");
 const { spawnSync } = require("child_process");
 
 const MIN_NODE_MAJOR = 22;
-const GATEWAY_ORIGIN = "http://localhost:20128";
+const GATEWAY_ORIGIN = "http://127.0.0.1:20129";
 const COMBO_IDS = {
   opus: "limitless-opus",
   sonnet: "limitless-sonnet",
@@ -518,7 +518,7 @@ function mergeClaudeSettings(settingsPath) {
   
   // Enable Gateway Discovery so Claude Code asks OmniRoute for the model list.
   // OmniRoute will now only return our 3 restricted limitless-* models!
-  settings.env.CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY = "0";
+  settings.env.CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY = "1";
   delete settings.env.ANTHROPIC_DEFAULT_OPUS_MODEL;
   delete settings.env.ANTHROPIC_DEFAULT_SONNET_MODEL;
   delete settings.env.ANTHROPIC_DEFAULT_HAIKU_MODEL;
@@ -597,7 +597,8 @@ function mergeVsCodeSettings(token) {
 
 function vbsContent(omniroutePath) {
   const escaped = String(omniroutePath).replace(/"/g, '""');
-  return `Set sh = CreateObject("WScript.Shell")\r\nsh.Run "cmd /c ""${escaped}"" serve --no-open", 0, False\r\n`;
+  const proxyScript = path.join(process.cwd(), "limitless-proxy.js");
+  return `Set sh = CreateObject("WScript.Shell")\r\nsh.Run "cmd /c ""${escaped}"" serve --no-open", 0, False\r\nsh.Run "node ""${proxyScript}""", 0, False\r\n`;
 }
 
 function ensureClaudeCodeInstalled() {

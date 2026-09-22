@@ -15,9 +15,9 @@ const { spawnSync } = require("child_process");
 const MIN_NODE_MAJOR = 22;
 const GATEWAY_ORIGIN = "http://localhost:20128";
 const COMBO_IDS = {
-  opus: "combo/claude-opus",
-  sonnet: "combo/claude-sonnet",
-  haiku: "combo/claude-haiku",
+  opus: "limitless-opus",
+  sonnet: "limitless-sonnet",
+  haiku: "limitless-haiku",
 };
 const MAPPING_IDS = {
   opus: "mapping/limitless-opus",
@@ -57,13 +57,13 @@ const REQUIRED_MAPPING_COLUMNS = [
 const COMBO_DEFS = [
   {
     id: COMBO_IDS.opus,
-    name: "Claude Opus Tier",
+    name: "Limitless Opus Tier",
     mappingId: MAPPING_IDS.opus,
     pattern: "*opus*",
     mappingPriority: 10,
     description: "Coding, debugging, tests, and agents. GLM first for limits, then highest benchmarked paid/free coding models (Copilot, DeepSeek, Mistral, SambaNova).",
     systemMessage:
-      "You are a coding assistant reached through Limitless Claude (OmniRoute Opus tier). Implement, debug, and test software. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
+      "You are an elite coding assistant reached through Limitless Claude (OmniRoute Opus tier). You must write flawless, production-ready code. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
     targets: [
       { provider: "kiro", model: "glm-5", optional: true },
       { provider: "github", model: "claude-3.5-sonnet", optional: true },
@@ -85,13 +85,13 @@ const COMBO_DEFS = [
   },
   {
     id: COMBO_IDS.sonnet,
-    name: "Claude Sonnet Tier",
+    name: "Limitless Sonnet Tier",
     mappingId: MAPPING_IDS.sonnet,
     pattern: "*sonnet*",
     mappingPriority: 10,
     description: "Planning, system design, deep thinking, and architecture. Exactly 3-4 elite models to save tokens.",
     systemMessage:
-      "You are a planning assistant reached through Limitless Claude (OmniRoute Sonnet tier). Help with brainstorming, architecture, PRDs, and design docs. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
+      "You are a brainstorming and architecture assistant reached through Limitless Claude (OmniRoute Sonnet tier). Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
     targets: [
       { provider: "antigravity", model: "claude-opus-4-6-thinking", optional: true },
       { provider: "antigravity", model: "claude-sonnet-4-6", optional: true },
@@ -101,7 +101,7 @@ const COMBO_DEFS = [
   },
   {
     id: COMBO_IDS.haiku,
-    name: "Claude Haiku Tier",
+    name: "Limitless Haiku Tier",
     mappingId: MAPPING_IDS.haiku,
     pattern: "*haiku*",
     mappingPriority: 10,
@@ -518,7 +518,7 @@ function mergeClaudeSettings(settingsPath) {
   
   // Enable Gateway Discovery so Claude Code asks OmniRoute for the model list.
   // OmniRoute will now only return our 3 restricted limitless-* models!
-  settings.env.CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY = "1";
+  settings.env.CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY = "0";
   delete settings.env.ANTHROPIC_DEFAULT_OPUS_MODEL;
   delete settings.env.ANTHROPIC_DEFAULT_SONNET_MODEL;
   delete settings.env.ANTHROPIC_DEFAULT_HAIKU_MODEL;
@@ -671,6 +671,24 @@ function runSetup(args) {
       `Expected: ${dbPath}`
     );
   }
+  
+  // Force REQUIRE_API_KEY=true so OmniRoute respects our allowed_models restriction.
+  // Without this, OmniRoute runs in open mode and dumps all 180+ models to Claude Code.
+  try {
+    const envPath = path.join(path.dirname(dbPath), ".env");
+    let envContent = "";
+    if (fs.existsSync(envPath)) {
+      envContent = fs.readFileSync(envPath, "utf8");
+    }
+    if (!envContent.includes("REQUIRE_API_KEY=true")) {
+      envContent = envContent.replace(/^REQUIRE_API_KEY=.*$/m, "");
+      fs.writeFileSync(envPath, envContent + "\nREQUIRE_API_KEY=true\n");
+      console.log("Enabled REQUIRE_API_KEY in OmniRoute to enforce UI model restrictions.");
+    }
+  } catch (err) {
+    console.log("WARN: Could not update OmniRoute .env file: " + err.message);
+  }
+
   console.log(`Database: ${dbPath}`);
 
   const settingsPath = claudeSettingsPath();
@@ -701,7 +719,7 @@ function runSetup(args) {
     // "Claude 3 Opus retired" hardcoded CLI warnings by using custom model names!
     try {
       const targetModels = ["limitless-opus", "limitless-sonnet", "limitless-haiku"];
-      db.prepare("UPDATE api_keys SET model_access_mode = 'restricted', allowed_models = ?").run(JSON.stringify(targetModels));
+      db.prepare("UPDATE api_keys SET model_access_mode = 'restricted', allowed_models = '[]', allowed_combos = ?").run(JSON.stringify(targetModels));
       console.log("Restricted OmniRoute API keys to expose only the 3 custom Limitless UI models.");
     } catch (e) {
       console.log("WARN: Could not restrict API keys: " + e.message);
@@ -723,6 +741,45 @@ function runSetup(args) {
   ensureClaudeCodeInstalled();
   const token = mergeClaudeSettings(settingsPath);
   mergeVsCodeSettings(token);
+
+  // Sync the new compliant token into the OmniRoute database so it restricts the UI models.
+  let db2;
+  try {
+    db2 = openDatabase(dbPath);
+    db2.exec("PRAGMA busy_timeout = 8000");
+    const crypto = require("crypto");
+    const hash = crypto.createHash("sha256").update(token).digest("hex");
+    const targetModels = ["limitless-opus", "limitless-sonnet", "limitless-haiku"];
+    
+    // Update any existing keys just in case
+    db2.prepare("UPDATE api_keys SET model_access_mode = 'restricted', allowed_models = '[]', allowed_combos = ?").run(JSON.stringify(targetModels));
+    
+    // Upsert the specific token we are using
+    db2.prepare(`
+      INSERT INTO api_keys (id, name, key, key_hash, model_access_mode, allowed_models, allowed_combos, created_at, stream_default_mode, allowed_quotas, cache_default_mode)
+      VALUES (
+        lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-' || lower(hex(randomblob(2))) || '-' || lower(hex(randomblob(2))) || '-' || lower(hex(randomblob(6))),
+        'Limitless Claude Token',
+        ?,
+        ?,
+        'restricted',
+        '[]',
+        ?,
+        datetime('now'),
+        'legacy',
+        '[]',
+        'legacy'
+      )
+      ON CONFLICT(key) DO UPDATE SET 
+        model_access_mode = 'restricted', 
+        allowed_models = '[]',
+        allowed_combos = excluded.allowed_combos
+    `).run(token, hash, JSON.stringify(targetModels));
+  } catch (err) {
+    console.log("WARN: Could not sync API key to OmniRoute DB: " + err.message);
+  } finally {
+    if (db2) db2.close();
+  }
 
   if (process.platform === "win32" && cliPath && !args.uninstallStartup) {
     try {

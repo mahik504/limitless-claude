@@ -109,9 +109,9 @@ const COMBO_DEFS = [
     systemMessage:
       "You are a fast assistant reached through Limitless Claude (OmniRoute Haiku tier). Answer short questions. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
     targets: [
-      { provider: "cerebras", model: "llama3.1-70b", optional: true },
-      { provider: "groq", model: "openai/gpt-oss-120b", optional: true },
-      { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
+      { provider: "cerebras", model: "llama-3.3-70b", optional: true },
+      { provider: "groq", model: "llama-3.3-70b-versatile", optional: true },
+      { provider: "openrouter", model: "meta-llama/llama-3.3-70b-instruct:free" },
     ],
   },
 ];
@@ -516,14 +516,16 @@ function mergeClaudeSettings(settingsPath) {
   if (!settings.env || typeof settings.env !== "object") settings.env = {};
   settings.env.ANTHROPIC_BASE_URL = GATEWAY_ORIGIN;
   
-  // Remove model discovery so Claude only shows the 3 default models
-  delete settings.env.CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY;
+  // Enable Gateway Discovery so Claude Code asks OmniRoute for the model list.
+  // OmniRoute will now only return our 3 restricted limitless-* models!
+  settings.env.CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY = "1";
   delete settings.env.ANTHROPIC_DEFAULT_OPUS_MODEL;
   delete settings.env.ANTHROPIC_DEFAULT_SONNET_MODEL;
   delete settings.env.ANTHROPIC_DEFAULT_HAIKU_MODEL;
 
   // Default Claude Code to boot into the Opus tier for best coding models
-  settings.env.ANTHROPIC_MODEL = "claude-3-opus-20240229";
+  // By using limitless-opus, we bypass the Opus Retirement warning!
+  settings.env.ANTHROPIC_MODEL = "limitless-opus";
 
   // Ensure the API key strictly follows the Anthropic format to pass Claude Code's local regex validation
   // when switching effort levels (e.g. from High to Extra High).
@@ -693,6 +695,18 @@ function runSetup(args) {
     }
     upsertCombos(db, providers);
     upsertMappings(db);
+    
+    // Restrict all OmniRoute API keys to ONLY expose our 3 custom models to Claude Code.
+    // This perfectly cleans up the UI (hides the 170+ models) and completely bypasses the 
+    // "Claude 3 Opus retired" hardcoded CLI warnings by using custom model names!
+    try {
+      const targetModels = ["limitless-opus", "limitless-sonnet", "limitless-haiku"];
+      db.prepare("UPDATE api_keys SET model_access_mode = 'restricted', allowed_models = ?").run(JSON.stringify(targetModels));
+      console.log("Restricted OmniRoute API keys to expose only the 3 custom Limitless UI models.");
+    } catch (e) {
+      console.log("WARN: Could not restrict API keys: " + e.message);
+    }
+    
   } catch (err) {
     if (/busy|locked/i.test(err.message)) {
       fail("OmniRoute database is locked. Stop OmniRoute or wait and retry.", err.message);

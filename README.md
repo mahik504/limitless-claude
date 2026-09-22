@@ -12,33 +12,33 @@ Providers like OpenRouter pool all your free models into a single daily request 
 
 ### 1. Opus Tier (Coding & Development)
 * **Goal:** The absolute best coding models for agentic AI development, web design, hard coding, debugging, and testing. Ranked by quality and token availability.
-* **Models (11):** GLM-First (Kiro, OpenRouter, Cloudflare), Qwen 32B Coder, Gemini 3.8 Flash Tiered, Nemotron Super 120B, Laguna, etc.
-* **Estimated Limits:** **~3.5 Million to 5 Million tokens per day** (drawing heavily from Cloudflare Neurons, Kiro credits, and OpenRouter requests).
+* **Models (16):** Copilot (Claude 3.5 Sonnet, GPT-4o, o1-mini), DeepSeek Coder, Mistral Codestral, SambaNova Llama 3.1 405B, GLM-First (Kiro, OpenRouter, Cloudflare), Qwen 32B Coder, Gemini 3.8 Flash Tiered, Nemotron Super 120B, etc.
+* **Estimated Limits:** **~5 Million to 8 Million tokens per day** (drawing heavily from Cloudflare Neurons, GitHub Copilot, DeepSeek, SambaNova, Kiro credits, and OpenRouter requests).
 
 ### 2. Sonnet Tier (System Design & Brainstorming)
 * **Goal:** Planning, architecture, PRDs, and deep thinking.
-* **Models (5):** Only the elite reasoning engines: Claude Opus 4.6 Thinking (Antigravity), Claude Sonnet 4.6, Nemotron Ultra 550B, DeepSeek 3.2.
+* **Models (4):** Only the elite reasoning engines: Claude Opus 4.6 Thinking (Antigravity), Claude Sonnet 4.6, GitHub o1-preview, and Nemotron Ultra 550B.
 * **Estimated Limits:** **~3 Million to 4 Million tokens per day**.
 
 ### 3. Haiku Tier (Rapid Responses)
 * **Goal:** Short answers and rapid lookups.
-* **Models (3):** Only the fastest inferencing engines in existence: GPT-OSS (Groq), Nemotron 3.5 Lightning (OpenRouter), and Gemini 3.1 Flash Lite.
+* **Models (3):** Only the fastest inferencing engines in existence: Cerebras Llama 3.1 70B, GPT-OSS (Groq), and Nemotron 3.5 Lightning (OpenRouter).
 * **Estimated Limits:** **~5 Million to 7 Million tokens per day**.
 
-**Total Arsenal Capacity:** You are effectively equipped with a system capable of pushing **~11.5 Million to 16 Million free tokens every single day**. If a model hits a rate limit, OmniRoute will instantaneously cascade down the list without Claude Code ever throwing an error on your screen.
+**Total Arsenal Capacity:** You are effectively equipped with a system capable of pushing **~13 Million to 19 Million free tokens every single day**. If a model hits a rate limit, OmniRoute will instantaneously cascade down the list without Claude Code ever throwing an error on your screen.
 
 ### 💡 Pro-Tip: The $10 OpenRouter Hack (Unlock 40M+ Tokens/Day)
 If you top up your OpenRouter account with just **$10**, it instantly converts your account from the standard free tier (50 requests/day) to the verified tier (**1,000 requests/day**). 
 * **The Trick:** You *don't* actually have to spend the $10! As long as the balance sits in your account, your daily free-model request limit increases by 20x.
-* **The Result:** Because this architecture aggressively utilizes OpenRouter's free models, this simple hack skyrockets your daily free token limit from ~15 Million up to **30 Million - 40 Million free tokens per day** for coding, completely for free.
+* **The Result:** Because this architecture aggressively utilizes OpenRouter's free models, this simple hack skyrockets your daily free token limit from ~15 Million up to **40 Million - 50 Million free tokens per day** for coding, completely for free.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
   claudeCode[ClaudeCode]
-  opus[Opus - 11 Models]
-  sonnet[Sonnet - 5 Models]
+  opus[Opus - 16 Models]
+  sonnet[Sonnet - 4 Models]
   haiku[Haiku - 3 Models]
   claudeCode -->|"claude-opus"| opus
   claudeCode -->|"claude-sonnet"| sonnet

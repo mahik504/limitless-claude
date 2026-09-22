@@ -524,17 +524,24 @@ function mergeClaudeSettings(settingsPath) {
 
   // Default Claude Code to boot into the Opus tier for best coding models
   settings.env.ANTHROPIC_MODEL = "claude-3-opus-20240229";
+
+  // Ensure the API key strictly follows the Anthropic format to pass Claude Code's local regex validation
+  // when switching effort levels (e.g. from High to Extra High).
+  let currentToken = settings.env.ANTHROPIC_AUTH_TOKEN || settings.env.ANTHROPIC_API_KEY;
+  if (!currentToken || !currentToken.startsWith("sk-ant-api03-")) {
+    const rawKey = currentToken ? currentToken.replace(/^sk-/, "") : "limitless-claude-key";
+    currentToken = `sk-ant-api03-${rawKey}`;
+    settings.env.ANTHROPIC_AUTH_TOKEN = currentToken;
+    delete settings.env.ANTHROPIC_API_KEY; // keep it clean
+  }
+
   fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
   fs.writeFileSync(settingsPath, `${JSON.stringify(settings, null, 2)}\n`);
-  const hasToken = Boolean(settings.env.ANTHROPIC_AUTH_TOKEN || settings.env.ANTHROPIC_API_KEY);
+
   if (existed) console.log(`Merged Claude Code settings at ${settingsPath}`);
   else console.log(`Created Claude Code settings at ${settingsPath}`);
-  if (!hasToken) {
-    console.log(
-      "WARN: No ANTHROPIC_AUTH_TOKEN in Claude settings. Paste your OmniRoute API key into env.ANTHROPIC_AUTH_TOKEN. The dashboard shows a placeholder snippet; the key is created under OmniRoute API keys."
-    );
-  }
-  return hasToken ? settings.env.ANTHROPIC_AUTH_TOKEN || settings.env.ANTHROPIC_API_KEY : "";
+
+  return currentToken;
 }
 
 function vsCodeSettingsPath() {

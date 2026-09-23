@@ -709,6 +709,14 @@ function runSetup(args) {
         "WARN: Kiro is connected. Opus tries kiro/glm-5 first. OmniRoute documents that Kiro's terms prohibit third-party proxy/harness use."
       );
     }
+    // Clean up old combos
+    try {
+      const oldCombos = ['combo/claude-opus', 'combo/claude-sonnet', 'combo/claude-haiku', 'claude-opus', 'claude-sonnet', 'claude-haiku'];
+      for (const oc of oldCombos) {
+        db.prepare('DELETE FROM combos WHERE id = ? OR name = ?').run(oc, oc);
+      }
+    } catch(e) {}
+    
     upsertCombos(db, providers);
     upsertMappings(db);
     
@@ -717,7 +725,7 @@ function runSetup(args) {
     // "Claude 3 Opus retired" hardcoded CLI warnings by using custom model names!
     try {
       const targetModels = ["limitless-opus", "limitless-sonnet", "limitless-haiku"];
-      db.prepare("UPDATE api_keys SET model_access_mode = 'all', allowed_models = '[]', allowed_combos = '[]'").run();
+      db.prepare("UPDATE api_keys SET model_access_mode = 'all', allowed_models = '[]', allowed_combos = '[\"combo/*\"]'").run();
       console.log("Unrestricted OmniRoute API keys to prevent 403 errors across all effort levels.");
     } catch (e) {
       console.log("WARN: Could not restrict API keys: " + e.message);
@@ -750,7 +758,7 @@ function runSetup(args) {
     const targetModels = ["limitless-opus", "limitless-sonnet", "limitless-haiku"];
     
     // Update any existing keys just in case
-    db2.prepare("UPDATE api_keys SET model_access_mode = 'all', allowed_models = '[]', allowed_combos = '[]'").run();
+    db2.prepare("UPDATE api_keys SET model_access_mode = 'all', allowed_models = '[]', allowed_combos = '[\"combo/*\"]'").run();
     
     // Upsert the specific token we are using
     db2.prepare(`
@@ -771,7 +779,7 @@ function runSetup(args) {
       ON CONFLICT(key) DO UPDATE SET 
         model_access_mode = 'all', 
         allowed_models = '[]',
-        allowed_combos = '[]'
+        allowed_combos = '[\"combo/*\"]'
     `).run(token, hash);
   } catch (err) {
     console.log("WARN: Could not sync API key to OmniRoute DB: " + err.message);

@@ -67,21 +67,20 @@ const COMBO_DEFS = [
     systemMessage:
       "You are an elite coding assistant reached through Limitless Claude (OmniRoute Opus tier). You must write flawless, production-ready code. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
     targets: [
-      { provider: "kiro", model: "glm-5", optional: true },
       { provider: "agentrouter", model: "claude-opus-5", optional: true },
+      { provider: "bluesminds", model: "gpt-5.5", optional: true },
+      { provider: "ollama-cloud", model: "glm-5.3", optional: true },
+      { provider: "bluesminds", model: "kimi-k3", optional: true },
+      { provider: "antigravity", model: "gemini-pro-agent", optional: true },
+      { provider: "antigravity", model: "gemini-3.7-flash-high", optional: true },
+      { provider: "kiro", model: "glm-5", optional: true },
       { provider: "deepseek", model: "deepseek-v4-pro", optional: true },
       { provider: "kilo-gateway", model: "kilo-auto/frontier", optional: true },
       { provider: "mistral", model: "codestral-latest", optional: true },
       { provider: "sambanova", model: "DeepSeek-V3.2", optional: true },
-      { provider: "github", model: "claude-3.5-sonnet", optional: true },
-      { provider: "github", model: "claude-sonnet-5", optional: true },
-      { provider: "github", model: "gpt-4o", optional: true },
-      { provider: "github", model: "gpt-5.6-sol", optional: true },
-      { provider: "github", model: "o1-mini", optional: true },
-      { provider: "antigravity", model: "gemini-3.7-flash-high", optional: true },
-      { provider: "bluesminds", model: "gpt-5.5", optional: true },
-      { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code", optional: true },
+      { provider: "ollama-cloud", model: "glm-5.2", optional: true },
       { provider: "openrouter", model: "z-ai/glm-5.2:free" },
+      { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code", optional: true },
       { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
       { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash", optional: true },
       { provider: "huggingchat", model: "Qwen/Qwen3.6-27B", optional: true },
@@ -89,9 +88,9 @@ const COMBO_DEFS = [
       { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
       { provider: "kiro", model: "qwen3-coder-next", optional: true },
       { provider: "opencode", model: "big-pickle", optional: true },
-      { provider: "ollama-cloud", model: "glm-5.2", optional: true },
       { provider: "duckduckgo", model: "tinfoil/gpt-oss-120b", optional: true }
     ],
+
   },
   {
     id: COMBO_IDS.sonnet,
@@ -128,18 +127,16 @@ const COMBO_DEFS = [
       "You are a fast assistant reached through Limitless Claude (OmniRoute Haiku tier). Answer short questions. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
     targets: [
       { provider: "groq", model: "llama-3.1-8b-instant", optional: true },
-      { provider: "github", model: "gpt-4o-mini", optional: true },
-      { provider: "duckduckgo", model: "claude-haiku-4-5", optional: true },
-      { provider: "duckduckgo", model: "mistral-small-2603", optional: true },
+      { provider: "cerebras", model: "llama3.1-8b", optional: true },
       { provider: "bluesminds", model: "gemini-2.0-flash", optional: true },
+      { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" },
+      { provider: "antigravity", model: "gemini-3.1-flash-lite", optional: true },
       { provider: "opencode", model: "deepseek-v4-flash-free", optional: true },
       { provider: "kilo-gateway", model: "stepfun/step-3.7-flash:free", optional: true },
       { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free", optional: true },
       { provider: "openrouter", model: "poolside/laguna-xs-2.1:free", optional: true },
       { provider: "opencode", model: "hy3-free", optional: true },
-      { provider: "opencode", model: "north-mini-code-free", optional: true },
-      { provider: "cerebras", model: "llama3.1-8b", optional: true },
-      { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" }
+      { provider: "opencode", model: "north-mini-code-free", optional: true }
     ],
   },
   {

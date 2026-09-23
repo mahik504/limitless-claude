@@ -80,7 +80,13 @@ const COMBO_DEFS = [
       { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash", optional: true },
       { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code", optional: true },
       { provider: "huggingchat", model: "Qwen/Qwen3.6-27B", optional: true },
-      { provider: "openrouter", model: "poolside/laguna-s-2.1:free" }
+      { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
+      { provider: "kiro", model: "glm-5", optional: true },
+      { provider: "deepseek", model: "deepseek-v4-pro", optional: true },
+      { provider: "sambanova", model: "DeepSeek-V3.2", optional: true },
+      { provider: "opencode", model: "big-pickle", optional: true },
+      { provider: "kiro", model: "qwen3-coder-next", optional: true },
+      { provider: "duckduckgo", model: "tinfoil/gpt-oss-120b", optional: true }
     ],
 
   },
@@ -120,7 +126,12 @@ const COMBO_DEFS = [
       { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" },
       { provider: "antigravity", model: "gemini-3.1-flash-lite", optional: true },
       { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free", optional: true },
-      { provider: "openrouter", model: "poolside/laguna-xs-2.1:free", optional: true }
+      { provider: "openrouter", model: "poolside/laguna-xs-2.1:free", optional: true },
+      { provider: "opencode", model: "deepseek-v4-flash-free", optional: true },
+      { provider: "duckduckgo", model: "claude-haiku-4-5", optional: true },
+      { provider: "duckduckgo", model: "mistral-small-2603", optional: true },
+      { provider: "opencode", model: "hy3-free", optional: true },
+      { provider: "opencode", model: "north-mini-code-free", optional: true }
     ],
   },
   {

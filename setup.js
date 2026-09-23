@@ -69,24 +69,24 @@ const COMBO_DEFS = [
     targets: [
       { provider: "agentrouter", model: "claude-opus-5", optional: true },
       { provider: "ollama-cloud", model: "glm-5.3", optional: true },
-      { provider: "antigravity", model: "gemini-pro-agent", optional: true },
-      { provider: "antigravity", model: "gemini-3.7-flash-high", optional: true },
+      { provider: "kiro", model: "glm-5", optional: true },
+      { provider: "opencode", model: "big-pickle", optional: true },
       { provider: "mistral", model: "codestral-latest", optional: true },
       { provider: "ollama-cloud", model: "glm-5.2", optional: true },
       { provider: "openrouter", model: "z-ai/glm-5.2:free" },
       { provider: "bluesminds", model: "gpt-5.5", optional: true },
       { provider: "bluesminds", model: "kimi-k3", optional: true },
+      { provider: "kiro", model: "qwen3-coder-next", optional: true },
       { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
       { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash", optional: true },
       { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code", optional: true },
       { provider: "huggingchat", model: "Qwen/Qwen3.6-27B", optional: true },
       { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
-      { provider: "kiro", model: "glm-5", optional: true },
       { provider: "deepseek", model: "deepseek-v4-pro", optional: true },
       { provider: "sambanova", model: "DeepSeek-V3.2", optional: true },
-      { provider: "opencode", model: "big-pickle", optional: true },
-      { provider: "kiro", model: "qwen3-coder-next", optional: true },
-      { provider: "duckduckgo", model: "tinfoil/gpt-oss-120b", optional: true }
+      { provider: "duckduckgo", model: "tinfoil/gpt-oss-120b", optional: true },
+      { provider: "antigravity", model: "gemini-pro-agent", optional: true },
+      { provider: "antigravity", model: "gemini-3.7-flash-high", optional: true }
     ],
 
   },
@@ -124,14 +124,14 @@ const COMBO_DEFS = [
       { provider: "groq", model: "llama-3.1-8b-instant", optional: true },
       { provider: "bluesminds", model: "gemini-2.0-flash", optional: true },
       { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" },
-      { provider: "antigravity", model: "gemini-3.1-flash-lite", optional: true },
       { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free", optional: true },
       { provider: "openrouter", model: "poolside/laguna-xs-2.1:free", optional: true },
       { provider: "opencode", model: "deepseek-v4-flash-free", optional: true },
       { provider: "duckduckgo", model: "claude-haiku-4-5", optional: true },
       { provider: "duckduckgo", model: "mistral-small-2603", optional: true },
       { provider: "opencode", model: "hy3-free", optional: true },
-      { provider: "opencode", model: "north-mini-code-free", optional: true }
+      { provider: "opencode", model: "north-mini-code-free", optional: true },
+      { provider: "antigravity", model: "gemini-3.1-flash-lite", optional: true }
     ],
   },
   {
@@ -510,16 +510,16 @@ function upsertMappings(db) {
   const insertMap = db.prepare(insertSql);
 
   const extraMappings = [
-    { id: 'mapping/opus', pattern: '*opus*', combo: COMBO_IDS.opus, prio: 10 },
+    { id: 'mapping/limitless-opus', pattern: '*opus*', combo: COMBO_IDS.opus, prio: 10 },
     { id: 'mapping/best', pattern: '*best*', combo: COMBO_IDS.opus, prio: 11 },
     { id: 'mapping/opus-1m', pattern: '*opus[1m]*', combo: COMBO_IDS.opus, prio: 12 },
     
-    { id: 'mapping/sonnet', pattern: '*sonnet*', combo: COMBO_IDS.sonnet, prio: 13 },
+    { id: 'mapping/limitless-sonnet', pattern: '*sonnet*', combo: COMBO_IDS.sonnet, prio: 13 },
     { id: 'mapping/opusplan', pattern: '*opusplan*', combo: COMBO_IDS.sonnet, prio: 14 },
     { id: 'mapping/sonnet-1m', pattern: '*sonnet[1m]*', combo: COMBO_IDS.sonnet, prio: 15 },
     
-    { id: 'mapping/haiku', pattern: '*haiku*', combo: COMBO_IDS.haiku, prio: 16 },
-    { id: 'mapping/fable', pattern: '*fable*', combo: COMBO_IDS.haiku, prio: 17 },
+    { id: 'mapping/limitless-haiku', pattern: '*haiku*', combo: COMBO_IDS.haiku, prio: 16 },
+    { id: 'mapping/limitless-fable', pattern: '*fable*', combo: COMBO_IDS.fable, prio: 17 },
     { id: 'mapping/default', pattern: '*default*', combo: COMBO_IDS.haiku, prio: 18 }
   ];
 
@@ -752,12 +752,12 @@ function runSetup(args) {
         "WARN: Kiro is connected. Opus tries kiro/glm-5 first. OmniRoute documents that Kiro's terms prohibit third-party proxy/harness use."
       );
     }
-    // Clean up old combos
     try {
       const oldCombos = ['combo/claude-opus', 'combo/claude-sonnet', 'combo/claude-haiku', 'claude-opus', 'claude-sonnet', 'claude-haiku'];
       for (const oc of oldCombos) {
         db.prepare('DELETE FROM combos WHERE id = ? OR name = ?').run(oc, oc);
       }
+      db.prepare("DELETE FROM model_combo_mappings WHERE id IN ('mapping/opus', 'mapping/sonnet', 'mapping/haiku', 'mapping/fable')").run();
     } catch(e) {}
     
     upsertCombos(db, providers);

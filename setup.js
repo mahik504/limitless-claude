@@ -154,13 +154,16 @@ const COMBO_DEFS = [
       "You are a god-mode brainstorming and architecture assistant reached through Limitless Claude (OmniRoute Fable tier). This tier is for absolute best paid models and free beast models for high-level critical thinking.",
     targets: [
       { provider: "antigravity", model: "claude-opus-4-6-thinking", optional: true },
-      { provider: "github", model: "gpt-5.6-sol", optional: true },
       { provider: "github", model: "o1-preview", optional: true },
+      { provider: "github", model: "gpt-5.6-sol", optional: true },
       { provider: "github", model: "claude-sonnet-5", optional: true },
+      { provider: "github", model: "gemini-3.1-pro-preview", optional: true },
+      { provider: "github", model: "claude-opus-5", optional: true },
       { provider: "ollama-cloud", model: "glm-5.3", optional: true },
       { provider: "bluesminds", model: "kimi-k3", optional: true },
       { provider: "agentrouter", model: "claude-opus-5", optional: true },
       { provider: "antigravity", model: "claude-sonnet-4-6", optional: true },
+      { provider: "github", model: "gpt-4o", optional: true },
       { provider: "openrouter", model: "nvidia/nemotron-3-ultra-550b-a55b:free", optional: true }
     ],
   }

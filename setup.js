@@ -109,9 +109,10 @@ const COMBO_DEFS = [
     systemMessage:
       "You are a fast assistant reached through Limitless Claude (OmniRoute Haiku tier). Answer short questions. Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
     targets: [
-      { provider: "cerebras", model: "llama-3.3-70b", optional: true },
-      { provider: "groq", model: "llama-3.3-70b-versatile", optional: true },
-      { provider: "openrouter", model: "meta-llama/llama-3.3-70b-instruct:free" },
+      { provider: "groq", model: "llama-3.1-8b-instant", optional: true },
+      { provider: "cerebras", model: "llama3.1-8b", optional: true },
+      { provider: "github", model: "gpt-4o-mini", optional: true },
+      { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" }
     ],
   },
 ];

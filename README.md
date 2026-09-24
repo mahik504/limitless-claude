@@ -1,83 +1,69 @@
-# Limitless Claude 🚀
+﻿# Limitless Claude ðŸš€
 
 **Supercharge your Claude Code CLI and VS Code Extension with unlimited, god-tier AI models.**
 
-Limitless Claude is an advanced proxy, mapping, and orchestration layer designed to completely unlock your Claude Code environment. Instead of being restricted to limited official models, Limitless Claude dynamically bridges Claude Code to the **OmniRoute** backend, giving you instant access to the greatest frontier models on the planet—entirely for free, or perfectly balanced with your paid API keys.
+Limitless Claude is an advanced proxy, mapping, and orchestration layer designed to completely unlock your Claude Code environment. Instead of being restricted to limited official models, Limitless Claude dynamically bridges Claude Code to the **OmniRoute** backend, giving you instant access to the greatest frontier models on the planetâ€”entirely for free, or perfectly balanced with your paid API keys.
 
 ---
 
-## 🌟 The Architecture: The 4 God-Tiers
+## 🚀 Supported Providers (The Limitless Stack)
 
-Limitless Claude cleanly bypasses the cluttered UI of 170+ confusing models and organizes your capabilities into four flawlessly benchmarked, auto-cascading tiers. 
+To get the exact God-Mode setup out of the box, configure these 19 providers in your OmniRoute server before running the setup. (Don't worry if you miss some—`setup.js` dynamically adapts the Fable/Opus/Sonnet tiers to use the absolute best available models you have connected).
 
-### 1. ⚡ Haiku Tier (Flash Speed)
-*Best for: Rapid codebase searches, short answers, syntax fixes, and instant CLI tools.*
-Strictly prioritizing Time-to-First-Token (TTFT) using LPUs and wafer-scale hardware. Expect sub-second response times using completely free endpoints like Groq (Llama 3.1 8B), Gemini 2.0 Flash, and Nemotron Lightning. 
-
-### 2. 🧠 Sonnet Tier (Reasoning & Architecture)
-*Best for: System design, architecture planning, complex math, and deep logical reasoning.*
-Strictly benchmarked for GPQA and logic. Uses internal `<thinking>` models like GitHub Copilot's `o1-preview`, Antigravity's `claude-opus-4.6-thinking`, and free reasoning champions like DeepSeek Reasoner. 
-
-### 3. 💻 Opus Tier (Agentic Coding Frontier)
-*Best for: Massive codebase refactors, debugging, test generation, and autonomous agents.*
-Prioritizes extreme context and coding capability while fiercely protecting your paid usage limits. We exhaust massive free daily quotas from AgentRouter (`claude-opus-5`), Ollama Cloud (`glm-5.3`), and Mistral *before* safely cascading down to Antigravity Pro agents if needed.
-
-### 4. 👑 Fable Tier (GOD MODE)
-*Best for: The impossible.*
-When API limits do not matter. We throw the absolute heaviest, most intelligent models on the planet at your prompt. This tier ignores token costs and unleashes pure power: Aider's #1 (`claude-sonnet-5`), LMSYS #1 (`claude-opus-4.6-thinking`), and raw 550B parameter behemoths.
-
----
-
-## 🛠️ System Architecture
-
-```mermaid
-graph TD
-    A[Claude Code CLI / VS Code Ext] -->|Effort Level Selection| B(Limitless Claude Proxy)
-    B -->|Maps to Tiers| C{OmniRoute Backend}
-    
-    C -->|*haiku*| D[Haiku Tier]
-    C -->|*sonnet*| E[Sonnet Tier]
-    C -->|*opus*| F[Opus Tier]
-    C -->|*fable*| G[Fable God-Mode]
-    
-    D --> H((Free LPUs / Flash))
-    E --> I((Deep Thinking / o1))
-    F --> J((Agentic Coders))
-    G --> K((Frontier 550B+))
-```
+1. AgentRouter
+2. Antigravity *(Paid)*
+3. Bluesminds
+4. Cerebras
+5. Cloudflare AI
+6. DeepSeek
+7. DuckDuckGo
+8. GitHub Copilot *(Paid)*
+9. Groq
+10. HuggingChat
+11. Kilo-Gateway
+12. Kiro
+13. Mistral
+14. Muse-Spark Web
+15. Nvidia
+16. Ollama Cloud
+17. OpenCode
+18. OpenRouter
+19. Qwen Web
 
 ---
 
-## 🚀 Key Features
+## 🛠️ Installation & Setup
 
-- **Total 403 API Error Bypass:** No more "Limitless Opus Tier is not allowed for this API key". We actively patch the OmniRoute backend restrictions to ensure your wildcard tokens work flawlessly.
-- **Effort-Level Native:** Claude Code's native UI effort slider (Low, Medium, High, Ultra) perfectly routes to your desired capability tiers under the hood.
-- **Rate-Limit Invulnerability:** If a model hits a cap or throws a 402, the proxy instantly cascades to the next best model in ~15 milliseconds. You will never see a timeout.
-- **Pristine UI:** Say goodbye to endless scrolling. Your Claude Code model dropdown will only show exactly what you need.
+**The easiest way to install Limitless Claude is to have your AI agent (Cursor, Antigravity, or Claude Code itself) do it for you.** 
 
-## 📦 Installation & Setup
+Copy and paste the prompt block below directly into your AI Assistant:
+
+> **Install Limitless Claude for me.**
+> 1. Install Claude Code and all of its dependencies globally.
+> 2. Ensure I have OmniRoute installed and running locally.
+> 3. Read the 19 supported providers above, and guide me on how to add their free/paid API keys to OmniRoute if they are missing.
+> 4. Once my providers are configured, run `npm install` and `npm run setup` in this repository.
+> 5. The setup script will automatically map my current providers to the Limitless Fable, Opus, Sonnet, and Haiku combos based on their best capabilities. (Fable = absolute best, Haiku = fast, Sonnet = reasoning/architecture, Opus = heavy logic).
+> 6. Run `node validate.js` to run the testing block. Verify that the combos are made perfectly, the Claude Code extension connects flawlessly, and there are no duplicate mappings or UI errors.
+
+### Manual Setup (For Humans)
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/limitless-claude.git
+   git clone https://github.com/mahik504/limitless-claude.git
    cd limitless-claude
    ```
 
-2. **Install Dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Run the Injector:**
+2. **Run the Injector:**
    ```bash
    npm run setup
    ```
-   *This automatically connects to your local OmniRoute instance, writes the god-tier combo tables, restricts messy API keys, and securely syncs your `~/.claude/settings.json`.*
+   *This scans your 19 providers, connects to your local OmniRoute instance, writes the god-tier combo tables, restricts messy API keys, and securely syncs your `~/.claude/settings.json`.*
 
-4. **Verify the Connection:**
+3. **Verify the Connection:**
    ```bash
    node validate.js
    ```
 
-5. **Code Like A God:**
+4. **Code Like A God:**
    Open the Claude Code extension in VS Code. You will instantly see your new, clean Limitless Tiers ready for action!

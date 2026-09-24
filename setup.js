@@ -84,9 +84,7 @@ const COMBO_DEFS = [
       { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
       { provider: "deepseek", model: "deepseek-v4-pro", optional: true },
       { provider: "sambanova", model: "DeepSeek-V3.2", optional: true },
-      { provider: "duckduckgo", model: "tinfoil/gpt-oss-120b", optional: true },
-      { provider: "antigravity", model: "gemini-pro-agent", optional: true },
-      { provider: "antigravity", model: "gemini-3.7-flash-high", optional: true }
+      { provider: "duckduckgo", model: "tinfoil/gpt-oss-120b", optional: true }
     ],
 
   },
@@ -100,15 +98,10 @@ const COMBO_DEFS = [
     systemMessage:
       "You are a brainstorming and architecture assistant reached through Limitless Claude (OmniRoute Sonnet tier). Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
     targets: [
-      { provider: "github", model: "o1-preview", optional: true },
-      { provider: "antigravity", model: "claude-opus-4-6-thinking", optional: true },
-      { provider: "github", model: "claude-sonnet-5", optional: true },
-      { provider: "github", model: "gpt-5.6-sol", optional: true },
-      { provider: "antigravity", model: "gemini-3.1-pro-low", optional: true },
-      { provider: "huggingchat", model: "CohereLabs/command-a-reasoning-08-2025", optional: true },
-      { provider: "openrouter", model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free", optional: true },
       { provider: "bluesminds", model: "deepseek-reasoner", optional: true },
-      { provider: "antigravity", model: "claude-sonnet-4-6", optional: true }
+      { provider: "bluesminds", model: "kimi-k2-thinking", optional: true },
+      { provider: "huggingchat", model: "CohereLabs/command-a-reasoning-08-2025", optional: true },
+      { provider: "openrouter", model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free", optional: true }
     ],
   },
   {
@@ -130,8 +123,7 @@ const COMBO_DEFS = [
       { provider: "duckduckgo", model: "claude-haiku-4-5", optional: true },
       { provider: "duckduckgo", model: "mistral-small-2603", optional: true },
       { provider: "opencode", model: "hy3-free", optional: true },
-      { provider: "opencode", model: "north-mini-code-free", optional: true },
-      { provider: "antigravity", model: "gemini-3.1-flash-lite", optional: true }
+      { provider: "opencode", model: "north-mini-code-free", optional: true }
     ],
   },
   {

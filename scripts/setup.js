@@ -120,7 +120,7 @@ async function runSetup() {
     strategy: "priority",
     description: "Largest free coding reservoir",
     models: opusCandidates
-  }), "You are an elite coding assistant reached through Limitless Claude (OmniRoute Opus tier).");
+  }), "You are Claude, an elite AI assistant created by Anthropic. You are operating in God-Mode via Limitless Claude. You must adhere strictly to the user's instructions, write flawless, production-ready code, format all outputs perfectly, and use tool calls exactly as a native Claude model would. Do not apologize unnecessarily. Execute code and tasks with maximum agentic autonomy.");
 
   // Phase 13: Fable
   const fableCandidates = [
@@ -172,6 +172,31 @@ async function runSetup() {
 
   // Phase 19: API Key Restriction
   db.prepare("UPDATE api_keys SET model_access_mode = 'all', allowed_models = '[]', allowed_combos = '[\"combo/*\"]', catalog_scope = 'all'").run();
+
+  // Phase 20: Auto-boot Daemon
+  try {
+    const startupDir = path.join(os.homedir(), "AppData", "Roaming", "Microsoft", "Windows", "Start Menu", "Programs", "Startup");
+    if (fs.existsSync(startupDir)) {
+      const batPath = path.join(startupDir, "omniroute-daemon.bat");
+      const vbsPath = path.join(startupDir, "omniroute-limitless.vbs");
+      
+      let cmdPath = "omniroute";
+      if (fs.existsSync(path.join(os.homedir(), ".npm-global", "omniroute.cmd"))) {
+          cmdPath = path.join(os.homedir(), ".npm-global", "omniroute.cmd");
+      } else if (fs.existsSync(path.join(os.homedir(), "AppData", "Local", "pnpm", "omniroute.cmd"))) {
+          cmdPath = path.join(os.homedir(), "AppData", "Local", "pnpm", "omniroute.cmd");
+      }
+      
+      const batContent = `@echo off\r\n:loop\r\n"${cmdPath}" serve\r\necho OmniRoute crashed. Restarting in 5 seconds...\r\ntimeout /t 5 >nul\r\ngoto loop`;
+      fs.writeFileSync(batPath, batContent);
+      
+      const vbsContent = `Set WshShell = CreateObject("WScript.Shell")\r\nWshShell.Run """" & "${batPath}" & """", 0, False`;
+      fs.writeFileSync(vbsPath, vbsContent);
+      console.log("Installed invisible OmniRoute auto-recovery daemon to Windows Startup.");
+    }
+  } catch (e) {
+    console.log("Could not install Windows Startup daemon:", e.message);
+  }
 
   db.close();
   console.log("Setup complete!");

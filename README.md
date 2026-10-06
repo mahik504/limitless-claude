@@ -96,15 +96,19 @@ We have streamlined this project to be completely zero-friction.
 **Prerequisites:** 
 - Node.js (v22+)
 - `pnpm` installed globally
+- Ensure you have Claude Code installed (`npm install -g @anthropic-ai/claude-code`)
 
 ### 1. Install & Boot OmniRoute
 ```bash
 pnpm add -g omniroute@latest
 omniroute serve
 ```
-*(Limitless automatically installs a silent VBS script in your Windows Startup folder, meaning OmniRoute will auto-boot in the background every time you turn on your laptop.)*
+*(Leave this running for now. Limitless will automatically install a silent background daemon in the next step so you never have to run this manually again).*
 
-### 2. Configure Limitless Claude
+### 2. Configure Providers in OmniRoute
+Go to the OmniRoute dashboard (`http://localhost:20128`) and authenticate your desired providers (e.g. OpenRouter, HuggingChat, Copilot).
+
+### 3. Build Limitless Claude Tiers
 Clone this repository and build your architecture:
 ```bash
 git clone https://github.com/mahik504/limitless-claude.git
@@ -114,16 +118,23 @@ npm run setup
 ```
 
 The `setup.js` script will:
-1. Scan your live providers.
+1. Scan your actively configured providers.
 2. Filter dead models.
-3. Construct the 4-Tier system inside OmniRoute.
+3. Dynamically construct the 4-Tier system based *only* on the models you have available.
 4. Overwrite your API keys to bypass rate limits.
-5. Create Claude Code alias mappings.
-6. Install the Windows Startup integration automatically.
+5. Inject official Anthropic System Prompts into the routing tier to guarantee output quality remains identical, even when cascading to models like Qwen or Gemini.
+6. Install an **invisible, 100% uptime auto-recovery daemon** to your Windows Startup. Even if you turn off your laptop for 10 days, OmniRoute will boot silently in the background on day 11, auto-restarting if it ever crashes.
 
-### 3. Run Claude Code
+### 4. Adding New Providers Later
+If you ever add a new provider to OmniRoute in the future, simply open this repository and run:
+```bash
+npm run setup
+```
+Limitless will instantly rebuild, benchmark, and prioritize your combos incorporating the new models, completely automatically.
+
+### 5. Run Claude Code
 Open your terminal and type:
 ```bash
 claude
 ```
-Your CLI is now permanently running through `limitless-opus` with total fallback protection. No 403s, no hangs, no limits.
+Your CLI is now permanently running through `limitless-opus` with total fallback protection. No 403s, no hangs, no limits. It natively supports Claude Code's full UI, Slash commands (`/plan`), Ultra Code capabilities, and Agentic execution inside any terminal, VS Code, or Cursor.

@@ -62,21 +62,81 @@ flowchart TD
 
 ---
 
-## The Four Tiers
+## The Four Tiers & Configured Models
+
+To ensure rate limits are spread perfectly across providers, models are **interleaved** horizontally (e.g. GitHub -> Antigravity -> OpenRouter -> GitHub) so that no single provider is slammed repeatedly before falling back.
 
 ### Haiku -- Speed
-The fastest responders. Used for rapid syntax corrections, quick lookups, and low-latency edits. These models return output in under 3 seconds.
+The fastest responders. Used for rapid syntax corrections, quick lookups, and low-latency edits.
+- `openrouter` → `nvidia/nemotron-3.5-lightning:free`
+- `github` → `gemini-3.7-flash`
+- `openrouter` → `google/gemini-2.0-flash-exp:free`
+- `antigravity` → `gemini-3.8-flash-low`
+- `huggingchat` → `deepseek-ai/DeepSeek-V4-Flash`
+- `antigravity` → `gemini-3.1-flash-lite`
+- `groq` → `llama-3.1-8b-instant`
+*Estimated daily tokens: ~1,500,000+ tokens*
 
 ### Sonnet -- Reasoning
-Dedicated strictly to system design, architecture planning, debugging, and chain-of-thought reasoning. These are the heaviest thinking engines available for free.
+Dedicated strictly to system design, architecture planning, debugging, and chain-of-thought reasoning. 
+- `github` → `gpt-4o-2024-11-20`
+- `antigravity` → `claude-opus-4-6-thinking`
+- `cloudflare-ai` → `@cf/qwen/qwq-32b`
+- `huggingchat` → `CohereLabs/command-a-reasoning-08-2025`
+- `antigravity` → `claude-sonnet-4-6`
+- `bluesminds` → `deepseek-reasoner`
+*Estimated daily tokens: ~2,500,000+ tokens*
 
 ### Opus -- Free Coding Reservoir
-The main workhorse. This tier aggregates every available free coding model across OpenRouter, HuggingChat, Mistral, Kiro, Cloudflare, Ollama Cloud, and OpenCode to maximize the number of free tokens you get per day. Antigravity and GitHub Copilot models are intentionally excluded from this tier to preserve their separate quotas for the Fable tier.
-
-Estimated daily volume: **10,000,000+ free tokens.**
+The massive workhorse tier. We extract every free coding model available across the ecosystem. 
+- `openrouter` → `qwen/qwen3.8-27b:free`
+- `huggingchat` → `deepseek-ai/DeepSeek-V4-Pro`
+- `agentrouter` → `claude-opus-5`
+- `kiro` → `qwen3-coder-next`
+- `openrouter` → `z-ai/glm-5.2:free`
+- `ollama-cloud` → `glm-5.3`
+- `qwen-web` → `qwen3.8-max`
+- `agentrouter` → `glm-5.3`
+- `mistral` → `codestral-latest`
+- `huggingchat` → `moonshotai/Kimi-K2.7-Code`
+- `openrouter` → `poolside/laguna-s-2.1:free`
+- `bluesminds` → `gpt-5.5`
+- `kiro` → `glm-5`
+- `muse-spark-web` → `muse-spark-thinking`
+- `agentrouter` → `gpt-5.6-sol`
+- `openrouter` → `cohere/north-mini-code:free`
+- `huggingchat` → `openai/gpt-oss-120b`
+- `opencode` → `big-pickle`
+- `cloudflare-ai` → `@cf/zai-org/glm-4.7-flash`
+- `qwen-web` → `qwen-3-coder`
+- `openrouter` → `liquid/lfm-2.5-2.6b:free`
+- `kiro` → `deepseek-3.2`
+- `huggingchat` → `Qwen/Qwen3.6-27B`
+- `ollama-cloud` → `glm-5.2`
+- `bluesminds` → `kimi-k3`
+- `muse-spark-web` → `muse-spark`
+- `kiro` → `minimax-m2.5`
+- `opencode` → `deepseek-v4-flash-free`
+*Estimated daily tokens (with \$10 OpenRouter unlock): ~14,000,000+ free tokens.*
 
 ### Fable -- Paid / God-Mode
-This tier is reserved exclusively for your paid API subscriptions and premium entitlements. It is pre-configured to leverage AgentRouter credits, GitHub Copilot Student entitlements, Antigravity Pro, and low-cost OpenRouter paid models. You use this tier when you need absolute perfection and are willing to spend credits for it.
+Reserved exclusively for your paid subscriptions and premium entitlements. 
+- `github` → `claude-fable-5`
+- `antigravity` → `claude-opus-4-6-thinking`
+- `github` → `claude-opus-5`
+- `openrouter` → `moonshotai/kimi-k2.7-code`
+- `antigravity` → `gemini-3.1-pro-low`
+- `github` → `gpt-4o-2024-11-20`
+- `openrouter` → `z-ai/glm-5.3-flash`
+- `antigravity` → `gemini-3.8-flash-high`
+- `github` → `gpt-5.6-sol`
+- `openrouter` → `openai/o1-preview`
+*Estimated daily volume: ~10,000,000+ premium tokens.*
+
+---
+
+## Total Network Capacity
+When fully configured with the \$10 OpenRouter unlock, this Limitless proxy pushes **~28,000,000 combined tokens per day** seamlessly through your terminal.
 
 ---
 
@@ -91,7 +151,6 @@ Because the Opus tier heavily relies on OpenRouter free models (`glm-5.2:free`, 
 ## Supported Providers
 
 The setup script dynamically discovers models from whatever providers you have connected:
-
 - agentrouter
 - antigravity
 - bluesminds
@@ -161,7 +220,7 @@ The tiers will be rebuilt automatically with the new models included.
 claude
 ```
 
-That is it. Claude Code is now permanently running through the Limitless Opus tier with full fallback protection. All Claude Code features work natively -- slash commands, `/plan` mode, Ultra Code, agentic execution, medium/high/xhigh effort levels. It works in any terminal, VS Code, Cursor, or Antigravity IDE.
+That is it. Claude Code is now permanently running through the Limitless Opus tier with full fallback protection. All Claude Code features work natively -- slash commands, `/plan` mode, Ultra Code, agentic execution, medium/high/xhigh effort levels. It works in any terminal, VS Code, Cursor, or Antigravity IDE. You can also point any other application, compiler, IDE, or agentic workflow directly at the `http://127.0.0.1:20128/v1` API.
 
 ---
 

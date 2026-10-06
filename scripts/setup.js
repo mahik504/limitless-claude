@@ -102,26 +102,26 @@ async function runSetup() {
 
   // Phase 9: Opus
   const opusCandidates = [
-    { provider: "agentrouter", model: "claude-opus-5" },
-    { provider: "ollama-cloud", model: "glm-5.3" },
+    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
+    { provider: "antigravity", model: "gemini-pro-agent" },
     { provider: "github", model: "claude-3.5-sonnet" },
-    { provider: "qwen-web", model: "qwen3.8-max" },
-    { provider: "kiro", model: "glm-5" },
-    { provider: "opencode", model: "big-pickle" },
-    { provider: "mistral", model: "codestral-latest" },
-    { provider: "ollama-cloud", model: "glm-5.2" },
     { provider: "openrouter", model: "z-ai/glm-5.2:free" },
+    { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
     { provider: "bluesminds", model: "gpt-5.5" },
     { provider: "bluesminds", model: "kimi-k3" },
-    { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
-    { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
     { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
+    { provider: "mistral", model: "codestral-latest" },
+    { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
     { provider: "huggingchat", model: "openai/gpt-oss-120b" },
     { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code" },
     { provider: "huggingchat", model: "Qwen/Qwen3.6-27B" },
-    { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
-    { provider: "antigravity", model: "gemini-pro-agent" },
+    { provider: "qwen-web", model: "qwen3.8-max" },
+    { provider: "agentrouter", model: "claude-opus-5" },
+    { provider: "ollama-cloud", model: "glm-5.3" },
+    { provider: "kiro", model: "glm-5" },
+    { provider: "opencode", model: "big-pickle" },
+    { provider: "ollama-cloud", model: "glm-5.2" },
+    { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "antigravity", model: "gemini-3.7-flash-high" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
@@ -180,7 +180,7 @@ async function runSetup() {
   insertMap.run(...mapArgs(MAPPING_IDS.opus1m, "*opus[1m]*", COMBO_IDS.opus, 11, "Opus 1M context"));
 
   // Phase 19: API Key Restriction
-  db.prepare("UPDATE api_keys SET model_access_mode = 'restricted', allowed_models = '[\"combo/limitless-opus\",\"combo/limitless-sonnet\",\"combo/limitless-haiku\",\"combo/limitless-fable\"]', allowed_combos = '[]', catalog_scope = 'all'").run();
+  db.prepare("UPDATE api_keys SET model_access_mode = 'all', allowed_models = '[]', allowed_combos = '[\"combo/*\"]', catalog_scope = 'all'").run();
 
   db.close();
   console.log("Setup complete!");

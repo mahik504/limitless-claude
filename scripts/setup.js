@@ -1,0 +1,200 @@
+const Database = require("better-sqlite3");
+const path = require("path");
+const fs = require("fs");
+const os = require("os");
+
+const COMBO_IDS = {
+  opus: "combo/limitless-opus",
+  sonnet: "combo/limitless-sonnet",
+  haiku: "combo/limitless-haiku",
+  fable: "combo/limitless-fable"
+};
+
+const MAPPING_IDS = {
+  opus: "mapping/limitless-opus",
+  sonnet: "mapping/limitless-sonnet",
+  haiku: "mapping/limitless-haiku",
+  fable: "mapping/limitless-fable",
+  best: "mapping/limitless-best",
+  opusplan: "mapping/limitless-opusplan",
+  default: "mapping/limitless-default",
+  sonnet1m: "mapping/limitless-sonnet1m",
+  opus1m: "mapping/limitless-opus1m"
+};
+
+function findModel(liveModels, provider, modelName) {
+  return liveModels.find(m => m.id === `${provider}/${modelName}`);
+}
+
+async function runSetup() {
+  console.log("Restoring Limitless Claude Architecture...");
+  
+  const dbPath = path.join(os.homedir(), ".omniroute", "storage.sqlite");
+  const db = new Database(dbPath);
+  db.pragma("busy_timeout = 8000");
+
+  const apiKeyRow = db.prepare("SELECT key FROM api_keys ORDER BY created_at DESC LIMIT 1").get();
+  const apiKey = apiKeyRow ? apiKeyRow.key : "";
+  if (apiKey) {
+    db.prepare("UPDATE api_keys SET model_access_mode = 'all' WHERE key = ?").run(apiKey);
+  }
+  
+  let liveModels = [];
+  try {
+    const res = await fetch("http://127.0.0.1:20128/v1/models", { headers: { "Authorization": `Bearer ${apiKey}` } });
+    const data = await res.json();
+    if (data && data.data && data.data.length > 0) liveModels = data.data;
+  } catch (e) {}
+  
+  if (liveModels.length === 0) {
+    try {
+      const data = JSON.parse(fs.readFileSync(path.join(__dirname, "../config/live_models.json"), "utf8"));
+      liveModels = data.data || [];
+    } catch (e) {}
+  }
+  
+  // Clean old
+  db.prepare("DELETE FROM combos WHERE id LIKE '%limitless%'").run();
+  db.prepare("DELETE FROM model_combo_mappings WHERE id LIKE '%limitless%'").run();
+
+  const insertCombo = db.prepare("INSERT INTO combos (id, name, data, system_message, created_at, updated_at) VALUES (?, ?, ?, ?, datetime('now'), datetime('now')) ON CONFLICT(id) DO UPDATE SET name = excluded.name, data = excluded.data, system_message = excluded.system_message, updated_at = datetime('now')");
+  
+  // Phase 7: Haiku
+  const haikuCandidates = [
+    { provider: "groq", model: "llama-3.1-8b-instant" },
+    { provider: "bluesminds", model: "gemini-2.0-flash" },
+    { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" },
+    { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Flash" },
+    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
+    { provider: "openrouter", model: "poolside/laguna-xs-2.1:free" },
+    { provider: "opencode", model: "deepseek-v4-flash-free" },
+    { provider: "opencode", model: "hy3-free" },
+    { provider: "opencode", model: "north-mini-code-free" },
+    { provider: "antigravity", model: "gemini-3.1-flash-lite" }
+  ].filter(c => findModel(liveModels, c.provider, c.model));
+  
+  insertCombo.run(COMBO_IDS.haiku, "Limitless Haiku Tier", JSON.stringify({
+    name: "Limitless Haiku Tier",
+    strategy: "priority",
+    description: "Fastest reliable models.",
+    models: haikuCandidates
+  }), "");
+
+  // Phase 8: Sonnet
+  const sonnetCandidates = [
+    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
+    { provider: "bluesminds", model: "deepseek-reasoner" },
+    { provider: "github", model: "gpt-4o" },
+    { provider: "antigravity", model: "gemini-3.1-pro-low" },
+    { provider: "bluesminds", model: "kimi-k2-thinking" },
+    { provider: "cloudflare-ai", model: "@cf/qwen/qwq-32b" },
+    { provider: "huggingchat", model: "CohereLabs/command-a-reasoning-08-2025" },
+    { provider: "openrouter", model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free" },
+    { provider: "antigravity", model: "claude-sonnet-4-6" }
+  ].filter(c => findModel(liveModels, c.provider, c.model));
+
+  insertCombo.run(COMBO_IDS.sonnet, "Limitless Sonnet Tier", JSON.stringify({
+    name: "Limitless Sonnet Tier",
+    strategy: "priority",
+    description: "Best planning / architecture / reasoning",
+    models: sonnetCandidates
+  }), "");
+
+  // Phase 9: Opus
+  const opusCandidates = [
+    { provider: "agentrouter", model: "claude-opus-5" },
+    { provider: "ollama-cloud", model: "glm-5.3" },
+    { provider: "github", model: "claude-3.5-sonnet" },
+    { provider: "qwen-web", model: "qwen3.8-max" },
+    { provider: "kiro", model: "glm-5" },
+    { provider: "opencode", model: "big-pickle" },
+    { provider: "mistral", model: "codestral-latest" },
+    { provider: "ollama-cloud", model: "glm-5.2" },
+    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
+    { provider: "bluesminds", model: "gpt-5.5" },
+    { provider: "bluesminds", model: "kimi-k3" },
+    { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
+    { provider: "kiro", model: "qwen3-coder-next" },
+    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
+    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
+    { provider: "huggingchat", model: "openai/gpt-oss-120b" },
+    { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code" },
+    { provider: "huggingchat", model: "Qwen/Qwen3.6-27B" },
+    { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
+    { provider: "antigravity", model: "gemini-pro-agent" },
+    { provider: "antigravity", model: "gemini-3.7-flash-high" }
+  ].filter(c => findModel(liveModels, c.provider, c.model));
+
+  insertCombo.run(COMBO_IDS.opus, "Limitless Opus Tier", JSON.stringify({
+    name: "Limitless Opus Tier",
+    strategy: "priority",
+    description: "Largest free coding reservoir",
+    models: opusCandidates
+  }), "You are an elite coding assistant reached through Limitless Claude (OmniRoute Opus tier).");
+
+  // Phase 13: Fable
+  const fableCandidates = [
+    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
+    { provider: "github", model: "claude-3.5-sonnet" },
+    { provider: "openrouter", model: "openai/o1-preview" },
+    { provider: "openrouter", model: "anthropic/claude-3.5-sonnet" },
+    { provider: "qwen-web", model: "qwen3.8-max" },
+    { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
+    { provider: "openrouter", model: "google/gemini-2.5-pro" },
+    { provider: "antigravity", model: "gemini-3.1-pro-low" },
+    { provider: "agentrouter", model: "claude-opus-5" },
+    { provider: "ollama-cloud", model: "glm-5.3" },
+    { provider: "bluesminds", model: "kimi-k3" },
+    { provider: "antigravity", model: "claude-sonnet-4-6" }
+  ].filter(c => findModel(liveModels, c.provider, c.model));
+
+  insertCombo.run(COMBO_IDS.fable, "Limitless Fable Tier", JSON.stringify({
+    name: "Limitless Fable Tier",
+    strategy: "priority",
+    description: "Maximum capability-per-dollar",
+    models: fableCandidates
+  }), "");
+
+  // Mappings
+  let hasDescription = false;
+  try {
+    const cols = db.prepare("PRAGMA table_info(model_combo_mappings)").all();
+    hasDescription = cols.some(c => c.name === "description");
+  } catch (e) {}
+
+  const insertMapSql = hasDescription ? 
+    "INSERT INTO model_combo_mappings (id, pattern, combo_id, priority, enabled, description, created_at, updated_at) VALUES (?, ?, ?, ?, 1, ?, datetime('now'), datetime('now')) ON CONFLICT(id) DO UPDATE SET pattern = excluded.pattern, combo_id = excluded.combo_id, priority = excluded.priority, enabled = 1, description = excluded.description, updated_at = datetime('now')" :
+    "INSERT INTO model_combo_mappings (id, pattern, combo_id, priority, enabled, created_at, updated_at) VALUES (?, ?, ?, ?, 1, datetime('now'), datetime('now')) ON CONFLICT(id) DO UPDATE SET pattern = excluded.pattern, combo_id = excluded.combo_id, priority = excluded.priority, enabled = 1, updated_at = datetime('now')";
+  const insertMap = db.prepare(insertMapSql);
+
+  const mapArgs = (id, pat, cid, pri, desc) => hasDescription ? [id, pat, cid, pri, desc] : [id, pat, cid, pri];
+
+  insertMap.run(...mapArgs(MAPPING_IDS.opus, "*opus*", COMBO_IDS.opus, 10, "Opus route"));
+  insertMap.run(...mapArgs(MAPPING_IDS.sonnet, "*sonnet*", COMBO_IDS.sonnet, 10, "Sonnet route"));
+  insertMap.run(...mapArgs(MAPPING_IDS.haiku, "*haiku*", COMBO_IDS.haiku, 10, "Haiku route"));
+  insertMap.run(...mapArgs(MAPPING_IDS.fable, "*fable*", COMBO_IDS.fable, 10, "Fable route"));
+  insertMap.run(...mapArgs(MAPPING_IDS.best, "*best*", COMBO_IDS.fable, 9, "Best route (Fable)"));
+  insertMap.run(...mapArgs(MAPPING_IDS.opusplan, "*opusplan*", COMBO_IDS.sonnet, 9, "Opusplan route (Sonnet)"));
+  insertMap.run(...mapArgs(MAPPING_IDS.default, "*default*", COMBO_IDS.opus, 8, "Default route (Opus)"));
+  insertMap.run(...mapArgs(MAPPING_IDS.sonnet1m, "*sonnet[1m]*", COMBO_IDS.sonnet, 11, "Sonnet 1M context"));
+  insertMap.run(...mapArgs(MAPPING_IDS.opus1m, "*opus[1m]*", COMBO_IDS.opus, 11, "Opus 1M context"));
+
+  // Phase 19: API Key Restriction
+  db.prepare("UPDATE api_keys SET model_access_mode = 'restricted', allowed_models = '[\"combo/limitless-opus\",\"combo/limitless-sonnet\",\"combo/limitless-haiku\",\"combo/limitless-fable\"]', allowed_combos = '[]', catalog_scope = 'all'").run();
+
+  db.close();
+  console.log("Setup complete!");
+  console.log("Haiku models:", haikuCandidates.length);
+  console.log("Sonnet models:", sonnetCandidates.length);
+  console.log("Opus models:", opusCandidates.length);
+  console.log("Fable models:", fableCandidates.length);
+
+  fs.writeFileSync("config/benchmark-results.json", JSON.stringify({
+    haiku: haikuCandidates,
+    sonnet: sonnetCandidates,
+    opus: opusCandidates,
+    fable: fableCandidates
+  }, null, 2));
+}
+
+runSetup().catch(console.error);

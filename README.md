@@ -1,4 +1,4 @@
-# Limitless Claude v4.3.1
+# Limitless Claude v4.3.2
 
 A local omnirouting architecture that connects Claude Code to a massive, auto-switching fleet of AI models. It eliminates rate limits, prevents downtime, and maximizes your free coding token reservoir -- all while keeping the full Claude Code experience intact.
 

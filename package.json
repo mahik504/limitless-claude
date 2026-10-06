@@ -8,8 +8,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "setup": "node setup.js",
-    "validate": "node validate.js"
+    "setup": "node scripts/setup.js",
+    "discover": "node scripts/discover.js"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",

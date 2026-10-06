@@ -62,8 +62,8 @@ async function runSetup() {
   // Phase 7: Haiku
   const haikuCandidates = [
     { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
-    { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" },
     { provider: "github", model: "gemini-3.7-flash" },
+    { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" },
     { provider: "antigravity", model: "gemini-3.8-flash-low" },
     { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Flash" },
     { provider: "antigravity", model: "gemini-3.1-flash-lite" },
@@ -81,9 +81,9 @@ async function runSetup() {
   const sonnetCandidates = [
     { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
+    { provider: "cloudflare-ai", model: "@cf/qwen/qwq-32b" },
     { provider: "huggingchat", model: "CohereLabs/command-a-reasoning-08-2025" },
     { provider: "antigravity", model: "claude-sonnet-4-6" },
-    { provider: "cloudflare-ai", model: "@cf/qwen/qwq-32b" },
     { provider: "bluesminds", model: "deepseek-reasoner" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
@@ -94,32 +94,35 @@ async function runSetup() {
     models: sonnetCandidates
   }), "");
 
-  // Phase 9: Opus
+  // Phase 9: Opus (Massive coding reservoir, fully interleaved with AgentRouter added back)
   const opusCandidates = [
     { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
-    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
-    { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
-    { provider: "openrouter", model: "cohere/north-mini-code:free" },
-    { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
-    { provider: "mistral", model: "codestral-latest" },
     { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
-    { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code" },
-    { provider: "huggingchat", model: "openai/gpt-oss-120b" },
-    { provider: "huggingchat", model: "Qwen/Qwen3.6-27B" },
-    { provider: "bluesminds", model: "gpt-5.5" },
-    { provider: "bluesminds", model: "kimi-k3" },
-    { provider: "muse-spark-web", model: "muse-spark-thinking" },
-    { provider: "muse-spark-web", model: "muse-spark" },
-    { provider: "qwen-web", model: "qwen3.8-max" },
-    { provider: "qwen-web", model: "qwen-3-coder" },
+    { provider: "agentrouter", model: "claude-opus-5" },
     { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "kiro", model: "glm-5" },
-    { provider: "kiro", model: "deepseek-3.2" },
-    { provider: "kiro", model: "minimax-m2.5" },
+    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
     { provider: "ollama-cloud", model: "glm-5.3" },
-    { provider: "ollama-cloud", model: "glm-5.2" },
-    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
+    { provider: "qwen-web", model: "qwen3.8-max" },
+    { provider: "agentrouter", model: "glm-5.3" },
+    { provider: "mistral", model: "codestral-latest" },
+    { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code" },
+    { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
+    { provider: "bluesminds", model: "gpt-5.5" },
+    { provider: "kiro", model: "glm-5" },
+    { provider: "muse-spark-web", model: "muse-spark-thinking" },
+    { provider: "agentrouter", model: "gpt-5.6-sol" },
+    { provider: "openrouter", model: "cohere/north-mini-code:free" },
+    { provider: "huggingchat", model: "openai/gpt-oss-120b" },
     { provider: "opencode", model: "big-pickle" },
+    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
+    { provider: "qwen-web", model: "qwen-3-coder" },
+    { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
+    { provider: "kiro", model: "deepseek-3.2" },
+    { provider: "huggingchat", model: "Qwen/Qwen3.6-27B" },
+    { provider: "ollama-cloud", model: "glm-5.2" },
+    { provider: "bluesminds", model: "kimi-k3" },
+    { provider: "muse-spark-web", model: "muse-spark" },
+    { provider: "kiro", model: "minimax-m2.5" },
     { provider: "opencode", model: "deepseek-v4-flash-free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
@@ -130,20 +133,18 @@ async function runSetup() {
     models: opusCandidates
   }), "You are Claude, a powerful AI assistant made by Anthropic. The most recent publicly available models are Claude Fable 5.1, Claude Opus 5.5, Claude Sonnet 5, and Claude Haiku 4.5. You are operating via a Limitless Claude routing layer. Adhere strictly to the user's instructions, write flawless production-ready code, format all outputs perfectly, and use tool calls exactly as a native Claude model would. Do not apologize unnecessarily. Execute code and tasks with maximum agentic autonomy.");
 
-  // Phase 13: Fable
-  // Note: AgentRouter models were tested and found to be completely fake (returning Mistral AI identity for Opus 5). 
-  // Per user request, they have been purged to protect the integrity of the Fable God-Mode tier.
+  // Phase 13: Fable (Interleaved GitHub, Antigravity, OpenRouter)
   const fableCandidates = [
     { provider: "github", model: "claude-fable-5" },
-    { provider: "github", model: "claude-opus-5" },
-    { provider: "github", model: "gpt-4o-2024-11-20" },
-    { provider: "openrouter", model: "moonshotai/kimi-k2.7-code" },
-    { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
-    { provider: "openrouter", model: "openai/o1-preview" },
-    { provider: "github", model: "gpt-5.6-sol" },
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
+    { provider: "github", model: "claude-opus-5" },
+    { provider: "openrouter", model: "moonshotai/kimi-k2.7-code" },
     { provider: "antigravity", model: "gemini-3.1-pro-low" },
-    { provider: "antigravity", model: "gemini-3.8-flash-high" }
+    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
+    { provider: "antigravity", model: "gemini-3.8-flash-high" },
+    { provider: "github", model: "gpt-5.6-sol" },
+    { provider: "openrouter", model: "openai/o1-preview" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   insertCombo.run(COMBO_IDS.fable, "Limitless Fable Tier", JSON.stringify({
@@ -187,14 +188,7 @@ async function runSetup() {
       const batPath = path.join(startupDir, "omniroute-daemon.bat");
       const vbsPath = path.join(startupDir, "omniroute-limitless.vbs");
       
-      let cmdPath = "omniroute";
-      if (fs.existsSync(path.join(os.homedir(), ".npm-global", "omniroute.cmd"))) {
-          cmdPath = path.join(os.homedir(), ".npm-global", "omniroute.cmd");
-      } else if (fs.existsSync(path.join(os.homedir(), "AppData", "Local", "pnpm", "omniroute.cmd"))) {
-          cmdPath = path.join(os.homedir(), "AppData", "Local", "pnpm", "omniroute.cmd");
-      }
-      
-      const batContent = `@echo off\r\n:loop\r\n"${cmdPath}" serve\r\necho OmniRoute crashed. Restarting in 5 seconds...\r\ntimeout /t 5 >nul\r\ngoto loop`;
+      const batContent = `@echo off\r\n:loop\r\nnpx omniroute serve\r\necho OmniRoute crashed. Restarting in 5 seconds...\r\ntimeout /t 5 >nul\r\ngoto loop`;
       fs.writeFileSync(batPath, batContent);
       
       const vbsContent = `Set WshShell = CreateObject("WScript.Shell")\r\nWshShell.Run """" & "${batPath}" & """", 0, False`;

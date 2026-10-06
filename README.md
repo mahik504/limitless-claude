@@ -1,115 +1,137 @@
-# Limitless Claude 🚀
+# Limitless Claude
 
-An ultimate **God-Mode Omnirouting Architecture** designed to seamlessly integrate Claude Code, OmniRoute, and 170+ open-source, free, and premium models into one unified workflow. 
+A local omnirouting architecture that connects Claude Code to a massive, auto-switching fleet of AI models. It eliminates rate limits, prevents downtime, and maximizes your free coding token reservoir -- all while keeping the full Claude Code experience intact.
 
-By intelligently intercepting your IDE's requests, Limitless Claude cascades through custom-built tiers of the world's best models—preventing downtime, expanding token reservoirs, and optimizing your coding cost to near zero.
+---
 
-## 🌟 The Vision & Token Reservoirs
+## The Vision
 
-Limitless Claude was born from a singular goal: **No more rate limits. No more manual model switching. Absolute God-Mode coding capability.**
+Claude Code is the best agentic coding tool available. But a single Anthropic API key has hard rate limits. When you hit the wall, you stop coding.
 
-Instead of relying on a single Anthropic key, this architecture uses OmniRoute as a local proxy (`127.0.0.1:20128`). We dynamically cluster over 700+ discovered models from 15+ global AI providers into **4 strictly curated, fallback-protected Tiers** based on their IQ, speed, and cost. If a model times out, hits a quota, or fails, the proxy instantly routes your code to the next elite model in the tier—completely invisibly to your Claude Code interface.
+Limitless Claude solves this permanently. It sits between your Claude Code client and the internet as a local OmniRoute proxy on `127.0.0.1:20128`. Behind that proxy, we dynamically cluster models from 13+ global AI providers into four strictly separated tiers. If a model times out, hits a quota, or goes down, the proxy cascades your request to the next model in the tier instantly and invisibly. You never see an error. You never stop coding.
 
-By aggregating free tiers across HuggingChat, Kiro, Cloudflare, Mistral, and OpenRouter, **Limitless Opus provides an estimated 10,000,000+ free tokens per day** before ever touching your paid limits.
+The current Claude model lineup this architecture is designed around:
+- Claude Opus 5.5 / Claude Opus 5
+- Claude Sonnet 5 / Claude Sonnet 5.5
+- Claude Fable 5.1 / Claude Fable 5
+- Claude Haiku 4.5
 
-## 🏗️ Architectural Design
+The system prompt injected into each tier is grounded directly from the official Anthropic system instructions (sourced from [asgeirtj/system_prompts_leaks](https://github.com/asgeirtj/system_prompts_leaks)), ensuring that even when a request cascades to a non-Anthropic model, the output quality, formatting, and tool-call behavior remain consistent with a native Claude experience.
+
+---
+
+## Architecture
 
 ```mermaid
 flowchart TD
-    subgraph Developer Environment
-        CC[Claude Code CLI / IDE]
-        Settings[~/.claude/settings.json\nModel: opus]
+    subgraph Client
+        CC[Claude Code CLI / Extension]
     end
 
-    subgraph Limitless Architecture
-        Proxy[OmniRoute Local Server\n127.0.0.1:20128]
-        API_Key[Strict Sandbox API Key\nCatalog Scope: All]
-        
-        subgraph Combos [The 4 Tiers]
-            C1[Limitless Haiku\nFastest Lookups]
-            C2[Limitless Sonnet\nPlanning & Architecture]
-            C3[Limitless Opus\nMassive Coding Reservoir]
-            C4[Limitless Fable\nPremium / God-Mode]
+    subgraph Limitless Proxy
+        OR[OmniRoute on 127.0.0.1:20128]
+        subgraph Tiers
+            H[Haiku - Speed]
+            S[Sonnet - Reasoning]
+            O[Opus - Free Coding]
+            F[Fable - Paid / God-Mode]
         end
-        
-        Router[Dynamic Fallback Router\nPriority Strategy]
     end
 
-    subgraph The Provider Grid
-        P1[GitHub Copilot]
-        P2[OpenRouter]
-        P3[Antigravity]
-        P4[HuggingChat]
-        P5[Cloudflare AI]
-        P6[10+ More...]
+    subgraph Providers
+        P1[OpenRouter]
+        P2[HuggingChat]
+        P3[Mistral]
+        P4[Cloudflare AI]
+        P5[GitHub Copilot]
+        P6[Antigravity]
+        P7[AgentRouter]
+        P8[+ 6 more]
     end
 
-    CC -- "POST /v1/messages" --> Proxy
-    Proxy -- "Auth & Map Alias" --> API_Key
-    API_Key --> Combos
-    Combos --> Router
-    Router -- "Cascading Requests" --> P1
-    Router -- "Fallback" --> P2
-    Router -- "Fallback" --> P3
-    Router -.-> P4
+    CC --> OR
+    OR --> Tiers
+    Tiers --> P1
+    Tiers --> P2
+    Tiers --> P3
+    Tiers --> P4
+    Tiers --> P5
+    Tiers --> P6
+    Tiers --> P7
 ```
 
-## 🔋 The 4-Tier Blueprint (IQ & Capabilities)
+---
 
-Our `setup.js` pipeline dynamically queries your live providers and builds the following intelligent tiers:
+## The Four Tiers
 
-1. **Haiku Tier (`limitless-haiku`) | Speed IQ**: The absolute fastest responders. Used for rapid, latency-sensitive edits, syntax corrections, and quick lookups. Contains ultra-fast models (e.g. Gemini 3.8 Flash, DeepSeek V4 Flash).
-2. **Sonnet Tier (`limitless-sonnet`) | Reasoning IQ**: Dedicated to system design, architecture planning, and rigorous chain-of-thought reasoning. Contains heavy reasoning models like `qwq-32b`, `command-a-reasoning`, and `claude-opus-4-6-thinking`.
-3. **Opus Tier (`limitless-opus`) | Coding IQ**: Our massive, uncapped, God-Mode free coding reservoir. It aggregates ALL unused free models across OpenRouter, HuggingChat, Mistral, Kiro, and Cloudflare to maximize your daily token limit. *Note: Antigravity and GitHub models are strictly excluded from this tier to preserve their quotas.*
-4. **Fable Tier (`limitless-fable`) | God-Mode IQ (PAID)**: The budget-protected, highest-tier premium capabilities. **This tier is strictly for your paid APIs and subscriptions.** It is pre-configured for heavy payloads leveraging AgentRouter ($138 credit), GitHub Copilot entitlements, Antigravity Pro, and OpenRouter paid models (like o1-preview, claude-sonnet-5, and glm-5.3-flash). It is designed to extract maximum capability-per-dollar when you need absolute perfection.
+### Haiku -- Speed
+The fastest responders. Used for rapid syntax corrections, quick lookups, and low-latency edits. These models return output in under 3 seconds.
+
+### Sonnet -- Reasoning
+Dedicated strictly to system design, architecture planning, debugging, and chain-of-thought reasoning. These are the heaviest thinking engines available for free.
+
+### Opus -- Free Coding Reservoir
+The main workhorse. This tier aggregates every available free coding model across OpenRouter, HuggingChat, Mistral, Kiro, Cloudflare, Ollama Cloud, and OpenCode to maximize the number of free tokens you get per day. Antigravity and GitHub Copilot models are intentionally excluded from this tier to preserve their separate quotas for the Fable tier.
+
+Estimated daily volume: **10,000,000+ free tokens.**
+
+### Fable -- Paid / God-Mode
+This tier is reserved exclusively for your paid API subscriptions and premium entitlements. It is pre-configured to leverage AgentRouter credits, GitHub Copilot Student entitlements, Antigravity Pro, and low-cost OpenRouter paid models. You use this tier when you need absolute perfection and are willing to spend credits for it.
 
 ---
 
-### 💡 PRO TIP: The $10 OpenRouter Hack
-Want to drastically increase your Opus Tier's free coding reservoir? 
-By default, OpenRouter limits free model usage to about 50 requests per day. However, **if you credit just $10 to your OpenRouter account, your limit for FREE models automatically increases from 50 to 1,000 requests per day!** 
-Because Limitless Claude heavily utilizes OpenRouter's free models (`qwen3.8-27b:free`, `glm-5.2:free`, `laguna-s:free`) in the Opus Tier, this $10 investment unlocks a permanent reservoir of roughly **8 million additional free tokens every single day**, without you ever actually spending the $10 credit on paid APIs.
+## The \$10 OpenRouter Tip
+
+By default, OpenRouter limits free model usage to roughly 50 requests per day. However, if you deposit just \$10 into your OpenRouter account, your rate limit for free models jumps from 50 to 1,000 requests per day. You do not actually spend the \$10 -- as long as the balance sits there, you get a permanent 20x boost to your free limits.
+
+Because the Opus tier heavily relies on OpenRouter free models (`glm-5.2:free`, `laguna-s-2.1:free`, `qwen3.8-27b:free`), this single deposit unlocks an estimated **8 million additional free tokens every day**.
 
 ---
 
-## 🔌 Supported Providers
+## Supported Providers
 
-Limitless automatically harvests models from your active configurations:
-- `agentrouter`
-- `antigravity`
-- `bluesminds`
-- `cloudflare-ai`
-- `github` *(Copilot Entitlements)*
-- `groq`
-- `huggingchat`
-- `kiro`
-- `mistral`
-- `ollama-cloud`
-- `opencode`
-- `openrouter`
-- `qwen-web`
+The setup script dynamically discovers models from whatever providers you have connected:
 
-## ⚙️ Installation & Workflow
+- agentrouter
+- antigravity
+- bluesminds
+- cloudflare-ai
+- github (Copilot)
+- groq
+- huggingchat
+- kiro
+- mistral
+- ollama-cloud
+- opencode
+- openrouter
+- qwen-web
 
-We have streamlined this project to be completely zero-friction. 
+If you only have 5 providers connected, the tiers are built from those 5 providers only. Nothing breaks. Nothing is wasted.
 
-**Prerequisites:** 
-- Node.js (v22+)
-- `pnpm` installed globally
-- Ensure you have Claude Code installed (`npm install -g @anthropic-ai/claude-code`)
+---
 
-### 1. Install & Boot OmniRoute
+## Installation
+
+**Prerequisites:**
+- Node.js v22 or later
+- pnpm installed globally
+- Claude Code installed (`npm install -g @anthropic-ai/claude-code`)
+
+### Step 1 -- Install and start OmniRoute
+
 ```bash
 pnpm add -g omniroute@latest
 omniroute serve
 ```
-*(Leave this running for now. Limitless will automatically install a silent background daemon in the next step so you never have to run this manually again).*
 
-### 2. Configure Providers in OmniRoute
-Go to the OmniRoute dashboard (`http://localhost:20128`) and authenticate your desired providers (e.g. OpenRouter, HuggingChat, Copilot).
+Leave this running for now. The setup script will install a background daemon so you never have to run this manually again.
 
-### 3. Build Limitless Claude Tiers
-Clone this repository and build your architecture:
+### Step 2 -- Connect your providers
+
+Open `http://localhost:20128` in your browser and authenticate the providers you want to use (OpenRouter, HuggingChat, GitHub Copilot, etc).
+
+### Step 3 -- Build the tiers
+
 ```bash
 git clone https://github.com/mahik504/limitless-claude.git
 cd limitless-claude
@@ -117,24 +139,38 @@ npm install
 npm run setup
 ```
 
-The `setup.js` script will:
-1. Scan your actively configured providers.
-2. Filter dead models.
-3. Dynamically construct the 4-Tier system based *only* on the models you have available.
-4. Overwrite your API keys to bypass rate limits.
-5. Inject official Anthropic System Prompts into the routing tier to guarantee output quality remains identical, even when cascading to models like Qwen or Gemini.
-6. Install an **invisible, 100% uptime auto-recovery daemon** to your Windows Startup. Even if you turn off your laptop for 10 days, OmniRoute will boot silently in the background on day 11, auto-restarting if it ever crashes.
+The setup script will:
+1. Query your live providers and filter out dead models.
+2. Build the four tiers dynamically based only on your active providers.
+3. Inject a grounded system prompt (sourced from the official Anthropic Opus 5.5 instructions) to maintain output quality across fallback models.
+4. Install an invisible auto-recovery daemon to your Windows Startup folder. If OmniRoute crashes, it restarts automatically within 5 seconds.
 
-### 4. Adding New Providers Later
-If you ever add a new provider to OmniRoute in the future, simply open this repository and run:
+### Step 4 -- Adding new providers later
+
+If you connect a new provider in OmniRoute at any point in the future, just run:
+
 ```bash
 npm run setup
 ```
-Limitless will instantly rebuild, benchmark, and prioritize your combos incorporating the new models, completely automatically.
 
-### 5. Run Claude Code
-Open your terminal and type:
+The tiers will be rebuilt automatically with the new models included.
+
+### Step 5 -- Use Claude Code
+
 ```bash
 claude
 ```
-Your CLI is now permanently running through `limitless-opus` with total fallback protection. No 403s, no hangs, no limits. It natively supports Claude Code's full UI, Slash commands (`/plan`), Ultra Code capabilities, and Agentic execution inside any terminal, VS Code, or Cursor.
+
+That is it. Claude Code is now permanently running through the Limitless Opus tier with full fallback protection. All Claude Code features work natively -- slash commands, `/plan` mode, Ultra Code, agentic execution, medium/high/xhigh effort levels. It works in any terminal, VS Code, Cursor, or Antigravity IDE.
+
+---
+
+## What happens after 10 days of not using it?
+
+Nothing. You turn on your laptop, the invisible daemon boots OmniRoute silently in the background, and when you type `claude` in your terminal it works exactly as before. No manual steps needed. If OmniRoute ever crashes, the daemon catches it and restarts it within 5 seconds.
+
+---
+
+## License
+
+MIT

@@ -61,13 +61,12 @@ async function runSetup() {
   
   // Phase 7: Haiku
   const haikuCandidates = [
-    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
-    { provider: "github", model: "gemini-3.7-flash" },
-    { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" },
-    { provider: "antigravity", model: "gemini-3.8-flash-low" },
-    { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Flash" },
+    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
+    { provider: "kiro", model: "qwen3-coder-next" },
+    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
     { provider: "antigravity", model: "gemini-3.1-flash-lite" },
-    { provider: "groq", model: "llama-3.1-8b-instant" }
+    { provider: "groq", model: "llama-3.1-8b-instant" },
+    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
   
   insertCombo.run(COMBO_IDS.haiku, "Limitless Haiku Tier", JSON.stringify({
@@ -81,8 +80,8 @@ async function runSetup() {
   const sonnetCandidates = [
     { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "cloudflare-ai", model: "@cf/qwen/qwq-32b" },
     { provider: "huggingchat", model: "CohereLabs/command-a-reasoning-08-2025" },
+    { provider: "kiro", model: "glm-5" },
     { provider: "antigravity", model: "claude-sonnet-4-6" },
     { provider: "bluesminds", model: "deepseek-reasoner" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
@@ -94,27 +93,21 @@ async function runSetup() {
     models: sonnetCandidates
   }), "");
 
-  // Phase 9: Opus (Massive coding reservoir, fully interleaved with AgentRouter added back)
+  // Phase 9: Opus
   const opusCandidates = [
     { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
     { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
-    { provider: "agentrouter", model: "claude-opus-5" },
     { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "openrouter", model: "z-ai/glm-5.2:free" },
     { provider: "ollama-cloud", model: "glm-5.3" },
     { provider: "qwen-web", model: "qwen3.8-max" },
-    { provider: "agentrouter", model: "glm-5.3" },
     { provider: "mistral", model: "codestral-latest" },
-    { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code" },
     { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
     { provider: "bluesminds", model: "gpt-5.5" },
     { provider: "kiro", model: "glm-5" },
     { provider: "muse-spark-web", model: "muse-spark-thinking" },
-    { provider: "agentrouter", model: "gpt-5.6-sol" },
     { provider: "openrouter", model: "cohere/north-mini-code:free" },
-    { provider: "huggingchat", model: "openai/gpt-oss-120b" },
     { provider: "opencode", model: "big-pickle" },
-    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
     { provider: "qwen-web", model: "qwen-3-coder" },
     { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
     { provider: "kiro", model: "deepseek-3.2" },
@@ -133,17 +126,14 @@ async function runSetup() {
     models: opusCandidates
   }), "You are Claude, a powerful AI assistant made by Anthropic. The most recent publicly available models are Claude Fable 5.1, Claude Opus 5.5, Claude Sonnet 5, and Claude Haiku 4.5. You are operating via a Limitless Claude routing layer. Adhere strictly to the user's instructions, write flawless production-ready code, format all outputs perfectly, and use tool calls exactly as a native Claude model would. Do not apologize unnecessarily. Execute code and tasks with maximum agentic autonomy.");
 
-  // Phase 13: Fable (Interleaved GitHub, Antigravity, OpenRouter)
+  // Phase 13: Fable
   const fableCandidates = [
-    { provider: "github", model: "claude-fable-5" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "github", model: "claude-opus-5" },
     { provider: "openrouter", model: "moonshotai/kimi-k2.7-code" },
     { provider: "antigravity", model: "gemini-3.1-pro-low" },
-    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
     { provider: "antigravity", model: "gemini-3.8-flash-high" },
-    { provider: "github", model: "gpt-5.6-sol" },
     { provider: "openrouter", model: "openai/o1-preview" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 

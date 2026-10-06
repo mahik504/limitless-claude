@@ -1,4 +1,4 @@
-# Limitless Claude
+# Limitless Claude v4.3.1
 
 A local omnirouting architecture that connects Claude Code to a massive, auto-switching fleet of AI models. It eliminates rate limits, prevents downtime, and maximizes your free coding token reservoir -- all while keeping the full Claude Code experience intact.
 
@@ -8,13 +8,16 @@ A local omnirouting architecture that connects Claude Code to a massive, auto-sw
 
 Claude Code is the best agentic coding tool available. But a single Anthropic API key has hard rate limits. When you hit the wall, you stop coding.
 
-Limitless Claude solves this permanently. It sits between your Claude Code client and the internet as a local OmniRoute proxy on `127.0.0.1:20128`. Behind that proxy, we dynamically cluster models from 13+ global AI providers into four strictly separated tiers. If a model times out, hits a quota, or goes down, the proxy cascades your request to the next model in the tier instantly and invisibly. You never see an error. You never stop coding.
+Limitless Claude solves this permanently. It sits between your Claude Code client and the internet as a local OmniRoute proxy on `127.0.0.1:20128`. Behind that proxy, we dynamically cluster models from global AI providers into four strictly separated tiers. If a model times out, hits a quota, or goes down, the proxy cascades your request to the next model in the tier instantly and invisibly. You never see an error. You never stop coding.
+
+### Tip: Query a Single Specific Model Directly
+If you want to use a specific model directly instead of our combos, you do not need to create any custom configurations! OmniRoute supports bypass routing natively. In Claude Code, just type `/model openrouter/qwen/qwen-2.5-coder-32b-instruct` (or whichever specific model slug you want). OmniRoute will seamlessly pass the request straight to that model without any cascade.
 
 The current Claude model lineup this architecture is designed around:
-- Claude Opus tier combo
-- Claude Sonnet tier combo
-- Claude Fable tier combo
-- Claude Haiku tier combo
+- Claude Opus tier combo (17 Models)
+- Claude Sonnet tier combo (5 Models)
+- Claude Fable tier combo (8 Models - includes Paid OpenRouter models)
+- Claude Haiku tier combo (5 Models)
 
 The system prompt injected into each tier is grounded directly from the official Anthropic system instructions (sourced from [asgeirtj/system_prompts_leaks](https://github.com/asgeirtj/system_prompts_leaks)), ensuring that even when a request cascades to a non-Anthropic model, the output quality, formatting, and tool-call behavior remain consistent with a native Claude experience.
 

@@ -63,6 +63,7 @@ async function runSetup() {
   const haikuCandidates = [
     { provider: "openrouter", model: "z-ai/glm-5.2:free" },
     { provider: "kiro", model: "qwen3-coder-next" },
+    { provider: "github", model: "gpt-4o-mini" },
     { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
     { provider: "antigravity", model: "gemini-3.1-flash-lite" },
     { provider: "groq", model: "llama-3.1-8b-instant" },
@@ -95,29 +96,26 @@ async function runSetup() {
 
   // Phase 9: Opus
   const opusCandidates = [
-    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "github", model: "gpt-4o-mini" },
     { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
     { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "openrouter", model: "z-ai/glm-5.2:free" },
     { provider: "ollama-cloud", model: "glm-5.3" },
-    { provider: "qwen-web", model: "qwen3.8-max" },
     { provider: "mistral", model: "codestral-latest" },
     { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
     { provider: "bluesminds", model: "gpt-5.5" },
     { provider: "kiro", model: "glm-5" },
     { provider: "muse-spark-web", model: "muse-spark-thinking" },
-    { provider: "openrouter", model: "cohere/north-mini-code:free" },
     { provider: "opencode", model: "big-pickle" },
-    { provider: "qwen-web", model: "qwen-3-coder" },
     { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
-    { provider: "kiro", model: "deepseek-3.2" },
     { provider: "huggingchat", model: "Qwen/Qwen3.6-27B" },
-    { provider: "ollama-cloud", model: "glm-5.2" },
     { provider: "bluesminds", model: "kimi-k3" },
-    { provider: "muse-spark-web", model: "muse-spark" },
-    { provider: "kiro", model: "minimax-m2.5" },
     { provider: "opencode", model: "deepseek-v4-flash-free" }
-  ].filter(c => findModel(liveModels, c.provider, c.model));
+  ].filter(c => findModel(liveModels, c.provider, c.model)).concat([
+    { provider: "openrouter", model: "qwen/qwen-2.5-coder-32b-instruct" },
+    { provider: "openrouter", model: "zhipu/glm-4-plus" }
+  ]);
 
   insertCombo.run(COMBO_IDS.opus, "Limitless Opus Tier", JSON.stringify({
     name: "Limitless Opus Tier",
@@ -129,13 +127,16 @@ async function runSetup() {
   // Phase 13: Fable
   const fableCandidates = [
     { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "github", model: "gpt-4o-mini" },
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "openrouter", model: "moonshotai/kimi-k2.7-code" },
     { provider: "antigravity", model: "gemini-3.1-pro-low" },
-    { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
-    { provider: "antigravity", model: "gemini-3.8-flash-high" },
+    { provider: "antigravity", model: "gemini-3.8-flash-high" }
+  ].filter(c => findModel(liveModels, c.provider, c.model)).concat([
+    { provider: "openrouter", model: "moonshotai/moonshot-v1-8k" },
+    { provider: "openrouter", model: "zhipu/glm-4-plus" },
+    { provider: "openrouter", model: "qwen/qwen-2.5-coder-32b-instruct" },
     { provider: "openrouter", model: "openai/o1-preview" }
-  ].filter(c => findModel(liveModels, c.provider, c.model));
+  ]);
 
   insertCombo.run(COMBO_IDS.fable, "Limitless Fable Tier", JSON.stringify({
     name: "Limitless Fable Tier",

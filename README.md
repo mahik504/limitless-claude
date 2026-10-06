@@ -58,17 +58,17 @@ flowchart TD
 
 Our `setup.js` pipeline dynamically queries your live providers and builds the following intelligent tiers:
 
-1. **Haiku Tier (`limitless-haiku`) | Speed IQ**: The absolute fastest responders. Used for rapid, latency-sensitive edits, syntax corrections, and quick lookups. Contains ultra-fast open-source models like Llama 3.1 and Gemini Flash.
-2. **Sonnet Tier (`limitless-sonnet`) | Reasoning IQ**: Dedicated to system design, architecture planning, and rigorous chain-of-thought reasoning. Contains heavy reasoning models like `qwq-32b`, `deepseek-reasoner`, and `claude-opus-4-6-thinking`.
-3. **Opus Tier (`limitless-opus`) | Coding IQ**: Our massive, uncapped, God-Mode free coding reservoir. Contains 15-20 heavily curated elite coding models (Claude 3.5, Gemini Pro, Qwen Max, DeepSeek V4 Pro) configured to cascade immediately upon failure, generating millions of tokens for free.
-4. **Fable Tier (`limitless-fable`) | God-Mode IQ (PAID)**: The budget-protected, highest-tier premium capabilities. **This tier is strictly for your paid APIs and subscriptions.** It contains models like `o1-preview`, `claude-3.5-sonnet`, and Antigravity Pro. It is designed to extract maximum capability-per-dollar when you need absolute perfection.
+1. **Haiku Tier (`limitless-haiku`) | Speed IQ**: The absolute fastest responders. Used for rapid, latency-sensitive edits, syntax corrections, and quick lookups. Contains ultra-fast models (e.g. Gemini 3.8 Flash, DeepSeek V4 Flash).
+2. **Sonnet Tier (`limitless-sonnet`) | Reasoning IQ**: Dedicated to system design, architecture planning, and rigorous chain-of-thought reasoning. Contains heavy reasoning models like `qwq-32b`, `command-a-reasoning`, and `claude-opus-4-6-thinking`.
+3. **Opus Tier (`limitless-opus`) | Coding IQ**: Our massive, uncapped, God-Mode free coding reservoir. It aggregates ALL unused free models across OpenRouter, HuggingChat, Mistral, Kiro, and Cloudflare to maximize your daily token limit. *Note: Antigravity and GitHub models are strictly excluded from this tier to preserve their quotas.*
+4. **Fable Tier (`limitless-fable`) | God-Mode IQ (PAID)**: The budget-protected, highest-tier premium capabilities. **This tier is strictly for your paid APIs and subscriptions.** It is pre-configured for heavy payloads leveraging AgentRouter ($138 credit), GitHub Copilot entitlements, Antigravity Pro, and OpenRouter paid models (like o1-preview, claude-3.5-sonnet, and glm-5.3-flash). It is designed to extract maximum capability-per-dollar when you need absolute perfection.
 
 ---
 
 ### 💡 PRO TIP: The $10 OpenRouter Hack
 Want to drastically increase your Opus Tier's free coding reservoir? 
 By default, OpenRouter limits free model usage to about 50 requests per day. However, **if you credit just $10 to your OpenRouter account, your limit for FREE models automatically increases from 50 to 1,000 requests per day!** 
-Because Limitless Claude heavily utilizes OpenRouter's free models (`qwen3.8-27b:free`, `glm-5.2:free`, `laguna-s:free`), this $10 investment unlocks a massive permanent reservoir of high-IQ coding tokens without actually spending your credit on paid APIs.
+Because Limitless Claude heavily utilizes OpenRouter's free models (`qwen3.8-27b:free`, `glm-5.2:free`, `laguna-s:free`) in the Opus Tier, this $10 investment unlocks a permanent reservoir of roughly **8 million additional free tokens every single day**, without you ever actually spending the $10 credit on paid APIs.
 
 ---
 

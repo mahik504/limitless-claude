@@ -61,16 +61,13 @@ async function runSetup() {
   
   // Phase 7: Haiku
   const haikuCandidates = [
-    { provider: "groq", model: "llama-3.1-8b-instant" },
-    { provider: "bluesminds", model: "gemini-2.0-flash" },
-    { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" },
+    { provider: "antigravity", model: "gemini-3.8-flash-low" },
+    { provider: "github", model: "gemini-3.7-flash" },
     { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Flash" },
-    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
-    { provider: "openrouter", model: "poolside/laguna-xs-2.1:free" },
-    { provider: "opencode", model: "deepseek-v4-flash-free" },
-    { provider: "opencode", model: "hy3-free" },
-    { provider: "opencode", model: "north-mini-code-free" },
-    { provider: "antigravity", model: "gemini-3.1-flash-lite" }
+    { provider: "antigravity", model: "gemini-3.1-flash-lite" },
+    { provider: "groq", model: "llama-3.1-8b-instant" },
+    { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" },
+    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
   
   insertCombo.run(COMBO_IDS.haiku, "Limitless Haiku Tier", JSON.stringify({
@@ -83,14 +80,11 @@ async function runSetup() {
   // Phase 8: Sonnet
   const sonnetCandidates = [
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "bluesminds", model: "deepseek-reasoner" },
-    { provider: "github", model: "gpt-4o" },
-    { provider: "antigravity", model: "gemini-3.1-pro-low" },
-    { provider: "bluesminds", model: "kimi-k2-thinking" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "cloudflare-ai", model: "@cf/qwen/qwq-32b" },
     { provider: "huggingchat", model: "CohereLabs/command-a-reasoning-08-2025" },
-    { provider: "openrouter", model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free" },
-    { provider: "antigravity", model: "claude-sonnet-4-6" }
+    { provider: "antigravity", model: "claude-sonnet-4-6" },
+    { provider: "bluesminds", model: "deepseek-reasoner" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   insertCombo.run(COMBO_IDS.sonnet, "Limitless Sonnet Tier", JSON.stringify({
@@ -103,26 +97,22 @@ async function runSetup() {
   // Phase 9: Opus
   const opusCandidates = [
     { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
-    { provider: "antigravity", model: "gemini-pro-agent" },
-    { provider: "github", model: "claude-3.5-sonnet" },
     { provider: "openrouter", model: "z-ai/glm-5.2:free" },
     { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
-    { provider: "bluesminds", model: "gpt-5.5" },
-    { provider: "bluesminds", model: "kimi-k3" },
-    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
-    { provider: "mistral", model: "codestral-latest" },
     { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
     { provider: "huggingchat", model: "openai/gpt-oss-120b" },
     { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code" },
     { provider: "huggingchat", model: "Qwen/Qwen3.6-27B" },
+    { provider: "mistral", model: "codestral-latest" },
+    { provider: "bluesminds", model: "gpt-5.5" },
+    { provider: "bluesminds", model: "kimi-k3" },
+    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
     { provider: "qwen-web", model: "qwen3.8-max" },
-    { provider: "agentrouter", model: "claude-opus-5" },
-    { provider: "ollama-cloud", model: "glm-5.3" },
-    { provider: "kiro", model: "glm-5" },
-    { provider: "opencode", model: "big-pickle" },
-    { provider: "ollama-cloud", model: "glm-5.2" },
     { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "antigravity", model: "gemini-3.7-flash-high" }
+    { provider: "kiro", model: "glm-5" },
+    { provider: "ollama-cloud", model: "glm-5.3" },
+    { provider: "ollama-cloud", model: "glm-5.2" },
+    { provider: "opencode", model: "big-pickle" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   insertCombo.run(COMBO_IDS.opus, "Limitless Opus Tier", JSON.stringify({
@@ -134,18 +124,19 @@ async function runSetup() {
 
   // Phase 13: Fable
   const fableCandidates = [
-    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "github", model: "claude-3.5-sonnet" },
-    { provider: "openrouter", model: "openai/o1-preview" },
-    { provider: "openrouter", model: "anthropic/claude-3.5-sonnet" },
-    { provider: "qwen-web", model: "qwen3.8-max" },
-    { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
-    { provider: "openrouter", model: "google/gemini-2.5-pro" },
-    { provider: "antigravity", model: "gemini-3.1-pro-low" },
     { provider: "agentrouter", model: "claude-opus-5" },
-    { provider: "ollama-cloud", model: "glm-5.3" },
-    { provider: "bluesminds", model: "kimi-k3" },
-    { provider: "antigravity", model: "claude-sonnet-4-6" }
+    { provider: "github", model: "claude-fable-5" },
+    { provider: "github", model: "claude-opus-5" },
+    { provider: "github", model: "gpt-5.6-sol" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "antigravity", model: "gemini-3.1-pro-low" },
+    { provider: "antigravity", model: "gemini-3.8-flash-high" },
+    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
+    { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
+    { provider: "openrouter", model: "moonshotai/kimi-k2.7-code" },
+    { provider: "openrouter", model: "openai/o1-preview" },
+    { provider: "agentrouter", model: "glm-5.3" },
+    { provider: "agentrouter", model: "gpt-5.6-sol" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   insertCombo.run(COMBO_IDS.fable, "Limitless Fable Tier", JSON.stringify({

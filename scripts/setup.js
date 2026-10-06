@@ -61,13 +61,13 @@ async function runSetup() {
   
   // Phase 7: Haiku
   const haikuCandidates = [
-    { provider: "antigravity", model: "gemini-3.8-flash-low" },
+    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
+    { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" },
     { provider: "github", model: "gemini-3.7-flash" },
+    { provider: "antigravity", model: "gemini-3.8-flash-low" },
     { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Flash" },
     { provider: "antigravity", model: "gemini-3.1-flash-lite" },
-    { provider: "groq", model: "llama-3.1-8b-instant" },
-    { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" },
-    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" }
+    { provider: "groq", model: "llama-3.1-8b-instant" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
   
   insertCombo.run(COMBO_IDS.haiku, "Limitless Haiku Tier", JSON.stringify({
@@ -79,11 +79,11 @@ async function runSetup() {
 
   // Phase 8: Sonnet
   const sonnetCandidates = [
-    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
     { provider: "github", model: "gpt-4o-2024-11-20" },
-    { provider: "cloudflare-ai", model: "@cf/qwen/qwq-32b" },
+    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
     { provider: "huggingchat", model: "CohereLabs/command-a-reasoning-08-2025" },
     { provider: "antigravity", model: "claude-sonnet-4-6" },
+    { provider: "cloudflare-ai", model: "@cf/qwen/qwq-32b" },
     { provider: "bluesminds", model: "deepseek-reasoner" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
@@ -99,11 +99,11 @@ async function runSetup() {
     { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
     { provider: "openrouter", model: "z-ai/glm-5.2:free" },
     { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
+    { provider: "mistral", model: "codestral-latest" },
     { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
     { provider: "huggingchat", model: "openai/gpt-oss-120b" },
     { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code" },
     { provider: "huggingchat", model: "Qwen/Qwen3.6-27B" },
-    { provider: "mistral", model: "codestral-latest" },
     { provider: "bluesminds", model: "gpt-5.5" },
     { provider: "bluesminds", model: "kimi-k3" },
     { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
@@ -124,19 +124,19 @@ async function runSetup() {
 
   // Phase 13: Fable
   const fableCandidates = [
-    { provider: "agentrouter", model: "claude-opus-5" },
     { provider: "github", model: "claude-fable-5" },
     { provider: "github", model: "claude-opus-5" },
     { provider: "github", model: "gpt-5.6-sol" },
     { provider: "github", model: "gpt-4o-2024-11-20" },
-    { provider: "antigravity", model: "gemini-3.1-pro-low" },
-    { provider: "antigravity", model: "gemini-3.8-flash-high" },
-    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
     { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
     { provider: "openrouter", model: "moonshotai/kimi-k2.7-code" },
     { provider: "openrouter", model: "openai/o1-preview" },
+    { provider: "agentrouter", model: "claude-opus-5" },
     { provider: "agentrouter", model: "glm-5.3" },
-    { provider: "agentrouter", model: "gpt-5.6-sol" }
+    { provider: "agentrouter", model: "gpt-5.6-sol" },
+    { provider: "antigravity", model: "gemini-3.1-pro-low" },
+    { provider: "antigravity", model: "gemini-3.8-flash-high" },
+    { provider: "antigravity", model: "claude-opus-4-6-thinking" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   insertCombo.run(COMBO_IDS.fable, "Limitless Fable Tier", JSON.stringify({

@@ -11,10 +11,10 @@ Claude Code is the best agentic coding tool available. But a single Anthropic AP
 Limitless Claude solves this permanently. It sits between your Claude Code client and the internet as a local OmniRoute proxy on `127.0.0.1:20128`. Behind that proxy, we dynamically cluster models from 13+ global AI providers into four strictly separated tiers. If a model times out, hits a quota, or goes down, the proxy cascades your request to the next model in the tier instantly and invisibly. You never see an error. You never stop coding.
 
 The current Claude model lineup this architecture is designed around:
-- Claude Opus 5.5 / Claude Opus 5
-- Claude Sonnet 5 / Claude Sonnet 5.5
-- Claude Fable 5.1 / Claude Fable 5
-- Claude Haiku 4.5
+- Claude Opus tier combo
+- Claude Sonnet tier combo
+- Claude Fable tier combo
+- Claude Haiku tier combo
 
 The system prompt injected into each tier is grounded directly from the official Anthropic system instructions (sourced from [asgeirtj/system_prompts_leaks](https://github.com/asgeirtj/system_prompts_leaks)), ensuring that even when a request cascades to a non-Anthropic model, the output quality, formatting, and tool-call behavior remain consistent with a native Claude experience.
 
@@ -142,7 +142,7 @@ npm run setup
 The setup script will:
 1. Query your live providers and filter out dead models.
 2. Build the four tiers dynamically based only on your active providers.
-3. Inject a grounded system prompt (sourced from the official Anthropic Opus 5.5 instructions) to maintain output quality across fallback models.
+3. Inject a grounded system prompt (sourced from the official Anthropic Claude Opus instructions) to maintain output quality across fallback models.
 4. Install an invisible auto-recovery daemon to your Windows Startup folder. If OmniRoute crashes, it restarts automatically within 5 seconds.
 
 ### Step 4 -- Adding new providers later

@@ -99,20 +99,28 @@ async function runSetup() {
     { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
     { provider: "openrouter", model: "z-ai/glm-5.2:free" },
     { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
+    { provider: "openrouter", model: "cohere/north-mini-code:free" },
+    { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
     { provider: "mistral", model: "codestral-latest" },
     { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
-    { provider: "huggingchat", model: "openai/gpt-oss-120b" },
     { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code" },
+    { provider: "huggingchat", model: "openai/gpt-oss-120b" },
     { provider: "huggingchat", model: "Qwen/Qwen3.6-27B" },
     { provider: "bluesminds", model: "gpt-5.5" },
     { provider: "bluesminds", model: "kimi-k3" },
-    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
+    { provider: "muse-spark-web", model: "muse-spark-thinking" },
+    { provider: "muse-spark-web", model: "muse-spark" },
     { provider: "qwen-web", model: "qwen3.8-max" },
+    { provider: "qwen-web", model: "qwen-3-coder" },
     { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "kiro", model: "glm-5" },
+    { provider: "kiro", model: "deepseek-3.2" },
+    { provider: "kiro", model: "minimax-m2.5" },
     { provider: "ollama-cloud", model: "glm-5.3" },
     { provider: "ollama-cloud", model: "glm-5.2" },
-    { provider: "opencode", model: "big-pickle" }
+    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
+    { provider: "opencode", model: "big-pickle" },
+    { provider: "opencode", model: "deepseek-v4-flash-free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   insertCombo.run(COMBO_IDS.opus, "Limitless Opus Tier", JSON.stringify({
@@ -123,20 +131,19 @@ async function runSetup() {
   }), "You are Claude, a powerful AI assistant made by Anthropic. The most recent publicly available models are Claude Fable 5.1, Claude Opus 5.5, Claude Sonnet 5, and Claude Haiku 4.5. You are operating via a Limitless Claude routing layer. Adhere strictly to the user's instructions, write flawless production-ready code, format all outputs perfectly, and use tool calls exactly as a native Claude model would. Do not apologize unnecessarily. Execute code and tasks with maximum agentic autonomy.");
 
   // Phase 13: Fable
+  // Note: AgentRouter models were tested and found to be completely fake (returning Mistral AI identity for Opus 5). 
+  // Per user request, they have been purged to protect the integrity of the Fable God-Mode tier.
   const fableCandidates = [
     { provider: "github", model: "claude-fable-5" },
     { provider: "github", model: "claude-opus-5" },
-    { provider: "github", model: "gpt-5.6-sol" },
     { provider: "github", model: "gpt-4o-2024-11-20" },
-    { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
     { provider: "openrouter", model: "moonshotai/kimi-k2.7-code" },
+    { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
     { provider: "openrouter", model: "openai/o1-preview" },
-    { provider: "agentrouter", model: "claude-opus-5" },
-    { provider: "agentrouter", model: "glm-5.3" },
-    { provider: "agentrouter", model: "gpt-5.6-sol" },
+    { provider: "github", model: "gpt-5.6-sol" },
+    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
     { provider: "antigravity", model: "gemini-3.1-pro-low" },
-    { provider: "antigravity", model: "gemini-3.8-flash-high" },
-    { provider: "antigravity", model: "claude-opus-4-6-thinking" }
+    { provider: "antigravity", model: "gemini-3.8-flash-high" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   insertCombo.run(COMBO_IDS.fable, "Limitless Fable Tier", JSON.stringify({

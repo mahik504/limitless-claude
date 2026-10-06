@@ -69,6 +69,7 @@ const COMBO_DEFS = [
     targets: [
       { provider: "agentrouter", model: "claude-opus-5", optional: true },
       { provider: "ollama-cloud", model: "glm-5.3", optional: true },
+      { provider: "qwen-web", model: "qwen3.8-max", optional: true },
       { provider: "kiro", model: "glm-5", optional: true },
       { provider: "opencode", model: "big-pickle", optional: true },
       { provider: "mistral", model: "codestral-latest", optional: true },
@@ -76,9 +77,11 @@ const COMBO_DEFS = [
       { provider: "openrouter", model: "z-ai/glm-5.2:free" },
       { provider: "bluesminds", model: "gpt-5.5", optional: true },
       { provider: "bluesminds", model: "kimi-k3", optional: true },
+      { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro", optional: true },
       { provider: "kiro", model: "qwen3-coder-next", optional: true },
       { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
       { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash", optional: true },
+      { provider: "huggingchat", model: "openai/gpt-oss-120b", optional: true },
       { provider: "huggingchat", model: "moonshotai/Kimi-K2.7-Code", optional: true },
       { provider: "huggingchat", model: "Qwen/Qwen3.6-27B", optional: true },
       { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
@@ -98,19 +101,20 @@ const COMBO_DEFS = [
     mappingId: MAPPING_IDS.sonnet,
     pattern: "*sonnet*",
     mappingPriority: 10,
-    description: "Planning, system design, deep thinking, and architecture. Exactly 3-4 elite models to save tokens.",
+    description: "Planning, system design, deep thinking, and architecture. Best reasoning models prioritized regardless of cost.",
     systemMessage:
       "You are a brainstorming and architecture assistant reached through Limitless Claude (OmniRoute Sonnet tier). Do not claim to be Anthropic Claude unless the upstream model is actually Claude.",
     targets: [
-      { provider: "bluesminds", model: "deepseek-reasoner", optional: true },
-      { provider: "bluesminds", model: "kimi-k2-thinking", optional: true },
-      { provider: "huggingchat", model: "CohereLabs/command-a-reasoning-08-2025", optional: true },
-      { provider: "openrouter", model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free", optional: true },
-      { provider: "github", model: "o1-preview", optional: true },
       { provider: "antigravity", model: "claude-opus-4-6-thinking", optional: true },
+      { provider: "github", model: "o1-preview", optional: true },
       { provider: "github", model: "claude-sonnet-5", optional: true },
+      { provider: "bluesminds", model: "deepseek-reasoner", optional: true },
       { provider: "github", model: "gpt-5.6-sol", optional: true },
       { provider: "antigravity", model: "gemini-3.1-pro-low", optional: true },
+      { provider: "bluesminds", model: "kimi-k2-thinking", optional: true },
+      { provider: "cloudflare-ai", model: "@cf/qwen/qwq-32b", optional: true },
+      { provider: "huggingchat", model: "CohereLabs/command-a-reasoning-08-2025", optional: true },
+      { provider: "openrouter", model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free", optional: true },
       { provider: "antigravity", model: "claude-sonnet-4-6", optional: true }
     ],
   },
@@ -127,6 +131,7 @@ const COMBO_DEFS = [
       { provider: "groq", model: "llama-3.1-8b-instant", optional: true },
       { provider: "bluesminds", model: "gemini-2.0-flash", optional: true },
       { provider: "openrouter", model: "google/gemini-2.0-flash-exp:free" },
+      { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Flash", optional: true },
       { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free", optional: true },
       { provider: "openrouter", model: "poolside/laguna-xs-2.1:free", optional: true },
       { provider: "opencode", model: "deepseek-v4-flash-free", optional: true },
@@ -144,22 +149,24 @@ const COMBO_DEFS = [
     mappingId: MAPPING_IDS.fable,
     pattern: "*fable*",
     mappingPriority: 10,
-    description: "Limitless Fable Tier",
+    description: "Limitless Fable Tier - God Mode Benchmarks",
     strategy: "priority",
     systemMessage:
       "You are a god-mode brainstorming and architecture assistant reached through Limitless Claude (OmniRoute Fable tier). This tier is for absolute best paid models and free beast models for high-level critical thinking.",
     targets: [
-      { provider: "github", model: "claude-sonnet-5", optional: true },
       { provider: "antigravity", model: "claude-opus-4-6-thinking", optional: true },
       { provider: "github", model: "o1-preview", optional: true },
+      { provider: "github", model: "claude-sonnet-5", optional: true },
+      { provider: "qwen-web", model: "qwen3.8-max", optional: true },
+      { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro", optional: true },
+      { provider: "github", model: "gpt-5.6-sol", optional: true },
       { provider: "github", model: "claude-opus-5", optional: true },
       { provider: "antigravity", model: "gemini-3.1-pro-low", optional: true },
       { provider: "agentrouter", model: "claude-opus-5", optional: true },
       { provider: "ollama-cloud", model: "glm-5.3", optional: true },
-      { provider: "github", model: "gpt-5.6-sol", optional: true },
-      { provider: "antigravity", model: "claude-sonnet-4-6", optional: true },
-      { provider: "bluesminds", model: "kimi-k3", optional: true }
-    ],
+      { provider: "bluesminds", model: "kimi-k3", optional: true },
+      { provider: "antigravity", model: "claude-sonnet-4-6", optional: true }
+    ]
   }
 ];
 

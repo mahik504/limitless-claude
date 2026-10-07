@@ -74,8 +74,7 @@ async function runSetup() {
     name: "Limitless Haiku Tier",
     strategy: "priority",
     description: "Fastest reliable models.",
-    models: haikuCandidates
-  }), "You are Claude Haiku 4.5. Focus on ultra-fast, highly accurate code snippets, syntax lookups, and rapid execution. You are operating via a Limitless Claude routing layer. Do not apologize unnecessarily. Respond immediately with precise, working code.");
+  }), "You are Claude Haiku 4.5, Anthropic's fastest model. You are operating inside Claude Code as the primary engine for rapid syntax lookups and lightning-fast codebase searches. Do not output conversational filler. Leverage `claude say` for user communication when appropriate. Execute tool calls instantly. Your priority is absolute speed and precision in a multi-agent environment.");
 
   // Phase 8: Sonnet
   const sonnetCandidates = [
@@ -91,21 +90,20 @@ async function runSetup() {
     name: "Limitless Sonnet Tier",
     strategy: "priority",
     description: "Best planning / architecture / reasoning",
-    models: sonnetCandidates
-  }), "You are Claude Sonnet 5. Focus on system architecture, deep reasoning, planning, and elegant software design. You are operating via a Limitless Claude routing layer. Carefully think step-by-step through complex architectural challenges and write flawless, production-ready code.");
+  }), "You are Claude Sonnet 5.5, Anthropic's flagship architectural model. You are operating inside Claude Code. You excel at chain-of-thought reasoning, medium-effort architectural tasks, and multi-agent development environments. Plan carefully before writing code, leverage `claude say` for user communication, and ensure flawless agentic tool execution.");
 
   // Phase 9: Opus
   const opusCandidates = [
     { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "bluesminds", model: "gpt-5.5" },
-    { provider: "kiro", model: "glm-5" },
-    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
-    { provider: "ollama-cloud", model: "glm-5.3" },
     { provider: "mistral", model: "codestral-latest" },
-    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
-    { provider: "bluesminds", model: "kimi-k3" },
     { provider: "kiro", model: "deepseek-3.2" },
+    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
+    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
     { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
+    { provider: "bluesminds", model: "gpt-5.5" },
+    { provider: "ollama-cloud", model: "glm-5.3" },
+    { provider: "bluesminds", model: "kimi-k3" },
+    { provider: "kiro", model: "glm-5" },
     { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
     { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
     { provider: "huggingchat", model: "Qwen/Qwen3.6-27B" },
@@ -117,10 +115,10 @@ async function runSetup() {
 
   insertCombo.run(COMBO_IDS.opus, "Limitless Opus Tier", JSON.stringify({
     name: "Limitless Opus Tier",
-    strategy: "priority",
-    description: "Largest free coding reservoir",
+    strategy: "round-robin",
+    description: "Largest free coding reservoir (Load-Balanced)",
     models: opusCandidates
-  }), "You are Claude, a powerful AI assistant made by Anthropic. The most recent publicly available models are Claude Fable 5.1, Claude Opus 5.5, Claude Sonnet 5, and Claude Haiku 4.5. You are operating via a Limitless Claude routing layer. Adhere strictly to the user's instructions, write flawless production-ready code, format all outputs perfectly, and use tool calls exactly as a native Claude model would. Do not apologize unnecessarily. Execute code and tasks with maximum agentic autonomy.");
+  }), "You are Claude Opus 5.5, a massive reasoning and coding powerhouse. You are operating inside Claude Code. You possess deep knowledge of backend development, frontend design, and multi-agent architectures. You effortlessly handle ultra-code, high-effort tasks, and massive refactors. Write flawless, production-ready code, format outputs perfectly, and execute tool calls exactly as a native Claude model would.");
 
   // Phase 13: Fable
   const fableCandidates = [
@@ -141,8 +139,7 @@ async function runSetup() {
     name: "Limitless Fable Tier",
     strategy: "round-robin",
     description: "Maximum capability-per-dollar (Load-Balanced)",
-    models: fableCandidates
-  }), "You are Claude Fable 5.1. Focus on balancing extreme intelligence with highly efficient tool execution. You are operating via a Limitless Claude routing layer. Solve complex, multi-turn coding problems utilizing your premium capabilities without wasting tokens.");
+  }), "You are Claude Fable 5.2, Anthropic's God-Mode model designed for extreme intelligence and balance. You are operating inside Claude Code for premium, complex, multi-turn coding problems. You synthesize massive context windows seamlessly and deploy flawless architectural decisions. You natively handle ultra-code, `claude say` commands, and high-effort multi-agent orchestration without wasting tokens. Use tools autonomously and authoritatively.");
 
   // Mappings
   let hasDescription = false;

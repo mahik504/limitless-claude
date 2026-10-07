@@ -16,9 +16,6 @@ const providers = db.prepare("SELECT provider, is_active FROM provider_connectio
 const providerInventory = providers.map(p => {
   // Categorize
   let status = p.is_active ? "CORE" : "UNUSABLE";
-  if (["kiro", "muse-spark-web", "opencode"].includes(p.provider)) {
-    status = "QUARANTINED";
-  }
   if (["agentrouter", "cerebras", "huggingchat", "qwen-web", "github"].includes(p.provider)) {
     status = p.is_active ? "USEFUL" : "UNUSABLE";
   }

@@ -61,12 +61,12 @@ async function runSetup() {
   
   // Phase 7: Haiku
   const haikuCandidates = [
-    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
-    { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "github", model: "gpt-4o-mini" },
-    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
     { provider: "antigravity", model: "gemini-3.1-flash-lite" },
+    { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "groq", model: "llama-3.1-8b-instant" },
+    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
+    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
     { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
   
@@ -75,16 +75,16 @@ async function runSetup() {
     strategy: "priority",
     description: "Fastest reliable models.",
     models: haikuCandidates
-  }), "");
+  }), "You are Claude Haiku 4.5. Focus on ultra-fast, highly accurate code snippets, syntax lookups, and rapid execution. You are operating via a Limitless Claude routing layer. Do not apologize unnecessarily. Respond immediately with precise, working code.");
 
   // Phase 8: Sonnet
   const sonnetCandidates = [
     { provider: "github", model: "gpt-4o-2024-11-20" },
-    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "huggingchat", model: "CohereLabs/command-a-reasoning-08-2025" },
-    { provider: "kiro", model: "glm-5" },
     { provider: "antigravity", model: "claude-sonnet-4-6" },
-    { provider: "bluesminds", model: "deepseek-reasoner" }
+    { provider: "kiro", model: "glm-5" },
+    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
+    { provider: "bluesminds", model: "deepseek-reasoner" },
+    { provider: "huggingchat", model: "CohereLabs/command-a-reasoning-08-2025" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   insertCombo.run(COMBO_IDS.sonnet, "Limitless Sonnet Tier", JSON.stringify({
@@ -92,26 +92,26 @@ async function runSetup() {
     strategy: "priority",
     description: "Best planning / architecture / reasoning",
     models: sonnetCandidates
-  }), "");
+  }), "You are Claude Sonnet 5. Focus on system architecture, deep reasoning, planning, and elegant software design. You are operating via a Limitless Claude routing layer. Carefully think step-by-step through complex architectural challenges and write flawless, production-ready code.");
 
   // Phase 9: Opus
   const opusCandidates = [
-    { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
     { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
     { provider: "bluesminds", model: "gpt-5.5" },
-    { provider: "huggingchat", model: "Qwen/Qwen3.6-27B" },
-    { provider: "ollama-cloud", model: "glm-5.3" },
     { provider: "kiro", model: "glm-5" },
-    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
+    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
+    { provider: "ollama-cloud", model: "glm-5.3" },
     { provider: "mistral", model: "codestral-latest" },
+    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
     { provider: "bluesminds", model: "kimi-k3" },
-    { provider: "opencode", model: "deepseek-v4-flash-free" },
-    { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
-    { provider: "muse-spark-web", model: "muse-spark-thinking" },
     { provider: "kiro", model: "deepseek-3.2" },
-    { provider: "opencode", model: "big-pickle" },
+    { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
     { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
+    { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
+    { provider: "huggingchat", model: "Qwen/Qwen3.6-27B" },
+    { provider: "opencode", model: "deepseek-v4-flash-free" },
+    { provider: "opencode", model: "big-pickle" },
+    { provider: "muse-spark-web", model: "muse-spark-thinking" },
     { provider: "muse-spark-web", model: "muse-spark" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
@@ -139,10 +139,10 @@ async function runSetup() {
 
   insertCombo.run(COMBO_IDS.fable, "Limitless Fable Tier", JSON.stringify({
     name: "Limitless Fable Tier",
-    strategy: "priority",
-    description: "Maximum capability-per-dollar",
+    strategy: "round-robin",
+    description: "Maximum capability-per-dollar (Load-Balanced)",
     models: fableCandidates
-  }), "");
+  }), "You are Claude Fable 5.1. Focus on balancing extreme intelligence with highly efficient tool execution. You are operating via a Limitless Claude routing layer. Solve complex, multi-turn coding problems utilizing your premium capabilities without wasting tokens.");
 
   // Mappings
   let hasDescription = false;
@@ -173,17 +173,34 @@ async function runSetup() {
 
   // Phase 20: Auto-boot Daemon
   try {
-    const startupDir = path.join(os.homedir(), "AppData", "Roaming", "Microsoft", "Windows", "Start Menu", "Programs", "Startup");
-    if (fs.existsSync(startupDir)) {
-      const batPath = path.join(startupDir, "omniroute-daemon.bat");
-      const vbsPath = path.join(startupDir, "omniroute-limitless.vbs");
-      
-      const batContent = `@echo off\r\n:loop\r\nnpx omniroute serve\r\necho OmniRoute crashed. Restarting in 5 seconds...\r\ntimeout /t 5 >nul\r\ngoto loop`;
-      fs.writeFileSync(batPath, batContent);
-      
-      const vbsContent = `Set WshShell = CreateObject("WScript.Shell")\r\nWshShell.Run """" & "${batPath}" & """", 0, False`;
-      fs.writeFileSync(vbsPath, vbsContent);
-      console.log("Installed invisible OmniRoute auto-recovery daemon to Windows Startup.");
+    const isWindows = os.platform() === 'win32';
+    if (isWindows) {
+      const startupDir = path.join(os.homedir(), "AppData", "Roaming", "Microsoft", "Windows", "Start Menu", "Programs", "Startup");
+      if (fs.existsSync(startupDir)) {
+        // 1. Clean up old corrupted startup files
+        const filesToClean = fs.readdirSync(startupDir).filter(f => f.includes('omniroute') || f.includes('StartOmniRoute') || f.includes('StartClaudeBridge'));
+        filesToClean.forEach(f => {
+          try { fs.unlinkSync(path.join(startupDir, f)); } catch (e) {}
+        });
+
+        // 2. Put the loop BAT file inside the project directory, NOT in Startup
+        const batPath = path.join(__dirname, '..', 'omniroute-daemon.bat');
+        const pnpmBinPath = path.join(os.homedir(), 'AppData', 'Local', 'pnpm', 'bin', 'omniroute.CMD');
+        
+        // If the direct pnpm path exists use it, otherwise fallback to npx
+        const cmdToRun = fs.existsSync(pnpmBinPath) ? `"${pnpmBinPath}"` : 'npx omniroute';
+
+        const batContent = `@echo off\r\n:loop\r\n${cmdToRun} serve\r\necho OmniRoute crashed. Restarting in 5 seconds...\r\ntimeout /t 5 >nul\r\ngoto loop`;
+        fs.writeFileSync(batPath, batContent);
+        
+        // 3. Put ONLY the VBS wrapper in Startup so it runs silently
+        const vbsPath = path.join(startupDir, "Limitless-OmniRoute-Launcher.vbs");
+        // Add a 10 second delay so Windows network initializes before omniroute starts
+        const vbsContent = `Set WshShell = CreateObject("WScript.Shell")\r\nWScript.Sleep 10000\r\nWshShell.Run """" & "${batPath}" & """", 0, False`;
+        fs.writeFileSync(vbsPath, vbsContent);
+        
+        console.log("Installed invisible OmniRoute auto-recovery daemon to Windows Startup.");
+      }
     }
   } catch (e) {
     console.log("Could not install Windows Startup daemon:", e.message);

@@ -74,6 +74,7 @@ async function runSetup() {
     name: "Limitless Haiku Tier",
     strategy: "priority",
     description: "Fastest reliable models.",
+    models: haikuCandidates
   }), "You are Claude Haiku 4.5, Anthropic's fastest model. You are operating inside Claude Code as the primary engine for rapid syntax lookups and lightning-fast codebase searches. Do not output conversational filler. Leverage `claude say` for user communication when appropriate. Execute tool calls instantly. Your priority is absolute speed and precision in a multi-agent environment.");
 
   // Phase 8: Sonnet
@@ -90,6 +91,7 @@ async function runSetup() {
     name: "Limitless Sonnet Tier",
     strategy: "priority",
     description: "Best planning / architecture / reasoning",
+    models: sonnetCandidates
   }), "You are Claude Sonnet 5.5, Anthropic's flagship architectural model. You are operating inside Claude Code. You excel at chain-of-thought reasoning, medium-effort architectural tasks, and multi-agent development environments. Plan carefully before writing code, leverage `claude say` for user communication, and ensure flawless agentic tool execution.");
 
   // Phase 9: Opus
@@ -139,6 +141,7 @@ async function runSetup() {
     name: "Limitless Fable Tier",
     strategy: "round-robin",
     description: "Maximum capability-per-dollar (Load-Balanced)",
+    models: fableCandidates
   }), "You are Claude Fable 5.2, Anthropic's God-Mode model designed for extreme intelligence and balance. You are operating inside Claude Code for premium, complex, multi-turn coding problems. You synthesize massive context windows seamlessly and deploy flawless architectural decisions. You natively handle ultra-code, `claude say` commands, and high-effort multi-agent orchestration without wasting tokens. Use tools autonomously and authoritatively.");
 
   // Mappings

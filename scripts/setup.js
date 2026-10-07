@@ -207,11 +207,12 @@ async function runSetup() {
   }
 
   db.close();
-  console.log("Setup complete!");
-  console.log("Haiku models:", haikuCandidates.length);
-  console.log("Sonnet models:", sonnetCandidates.length);
-  console.log("Opus models:", opusCandidates.length);
-  console.log("Fable models:", fableCandidates.length);
+  console.log("\x1b[36m%s\x1b[0m", "\n=== Limitless Claude Setup Complete! ===");
+  console.log(`\x1b[33mHaiku models:\x1b[0m ${haikuCandidates.length}`);
+  console.log(`\x1b[33mSonnet models:\x1b[0m ${sonnetCandidates.length}`);
+  console.log(`\x1b[33mOpus models:\x1b[0m ${opusCandidates.length}`);
+  console.log(`\x1b[33mFable models:\x1b[0m ${fableCandidates.length}\n`);
+  console.log("You can now run \x1b[1mclaude\x1b[0m in your terminal.");
 
   fs.writeFileSync("config/benchmark-results.json", JSON.stringify({
     haiku: haikuCandidates,

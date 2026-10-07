@@ -1,6 +1,6 @@
 {
   "name": "limitless-claude",
-  "version": "4.3.2",
+  "version": "4.3.4",
   "private": true,
   "description": "Claude Code + OmniRoute installer: Opus for coding, Sonnet for plans, Haiku for short lookups.",
   "license": "MIT",

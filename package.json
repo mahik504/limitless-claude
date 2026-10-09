@@ -9,7 +9,8 @@
   },
   "scripts": {
     "setup": "node scripts/setup.js",
-    "discover": "node scripts/discover.js"
+    "discover": "node scripts/discover.js",
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3"

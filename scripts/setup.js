@@ -29,7 +29,8 @@ function findModel(liveModels, provider, modelName) {
 async function runSetup() {
   console.log("Restoring Limitless Claude Architecture...");
   
-  const dbPath = path.join(os.homedir(), ".omniroute", "storage.sqlite");
+  const omnirouteDir = process.env.OMNIROUTE_DIR || path.join(os.homedir(), ".omniroute");
+  const dbPath = path.join(omnirouteDir, "storage.sqlite");
   
   if (!fs.existsSync(dbPath)) {
     console.error("Error: OmniRoute database not found at", dbPath);
@@ -256,10 +257,7 @@ async function runSetup() {
   console.log(`\x1b[33mFable models:\x1b[0m ${results.fableCandidates.length}\n`);
   console.log("You can now run \x1b[1mclaude\x1b[0m in your terminal.");
 
-  // Save tier configuration correctly (Not fake benchmarks)
-  if (fs.existsSync("config/benchmark-results.json")) {
-    fs.unlinkSync("config/benchmark-results.json");
-  }
+  // Save tier configuration correctly (Preserving any existing benchmark files untouched)
   fs.writeFileSync("config/tier-configuration.json", JSON.stringify({
     haiku: results.haikuCandidates,
     sonnet: results.sonnetCandidates,

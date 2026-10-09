@@ -2,7 +2,7 @@
   "name": "limitless-claude",
   "version": "4.4.1",
   "private": true,
-  "description": "Claude Code + OmniRoute installer: Opus for coding, Sonnet for plans, Haiku for short lookups.",
+  "description": "Open-source model-routing harness for Claude Code. Configure four coding tiers across multiple AI providers.",
   "license": "MIT",
   "engines": {
     "node": ">=22"

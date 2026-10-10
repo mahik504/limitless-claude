@@ -1,6 +1,6 @@
 {
   "name": "limitless-claude",
-  "version": "4.4.1",
+  "version": "4.4.2",
   "private": true,
   "description": "Open-source model-routing harness for Claude Code. Configure four coding tiers across multiple AI providers.",
   "license": "MIT",

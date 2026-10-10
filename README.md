@@ -154,7 +154,7 @@ For a complete breakdown, read our [Providers Guide](docs/PROVIDERS.md).
 
 ### Step 1: Install OmniRoute
 ```bash
-pnpm add -g omniroute@latest
+npm install -g omniroute@latest
 omniroute serve
 ```
 Leave this running.

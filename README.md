@@ -91,14 +91,35 @@ For the exact model identifiers and priority order, see the [Model Catalog](docs
 
 ---
 
+## Features and Compatibility
+
+| Feature | Status | Notes |
+|---|---|---|
+| **Claude Code CLI** | `Manually Smoke-Tested` | Works natively for local terminal execution. |
+| **Model Aliases** | `Automated-test-verified` | `limitless-opus`, `limitless-sonnet`, etc. mappings are verified by isolated tests. |
+| **Tool Calling (MCP)** | `Manually Smoke-Tested` | Agentic file editing and skill execution verified through manual smoke tests. |
+| **Multi-Agent Prompts**| `Automated-test-verified` | Tier personas successfully injected into payload, verified by isolated tests. |
+| **Plan Mode** | `Unverified` | Works conditionally, but heavily dependent on the upstream provider's reasoning capability. |
+| **Streaming** | `Unverified` | Dependent on the specific upstream model/provider support. |
+| **Long Context** | `Unverified` | Context limits vary wildly between third-party open-weight models. |
+
+---
+
 ## The Token-Capacity Story
 
-By load-balancing requests across multiple accounts, Limitless Claude can push a massive volume of tokens through your terminal. Based on published rate limits and an assumed 1.5k–3k context per request, **the estimated aggregate token capacity reaches ~28,000,000 tokens per day**.
+By load-balancing requests across multiple accounts, Limitless Claude aims to mitigate single-model rate limits. Based on published rate limits and an assumed 1.5k–3k context per request, **the theoretical estimated aggregate token capacity reaches ~28,000,000 tokens per day**.
 
-### The $10 OpenRouter Tip
-To unlock the ~14M tokens in the Opus tier, we rely on OpenRouter's free models. By default, OpenRouter restricts free usage to ~50 requests a day. However, **if you deposit a minimum of $10 into your account, your free rate limits instantly jump to 1,000 requests/day.** You do not need to spend the $10; funding the balance alone unlocks an estimated 8M+ zero-marginal-cost tokens daily.
+This is a theoretical maximum based on several assumptions:
+- **Per-tier assumptions:** Assumes all configured candidates in every tier remain active and available simultaneously.
+- **Concurrency/RPM/Quotas:** Assumes maximum utilization without hitting burst concurrency limits (RPM) before daily quotas reset.
+- **Filtering:** Assumes all active candidates pass health checks.
+- **Input/Output Ratio:** Assumes a balanced mix of input/output tokens. Output token limits are often much stricter than input.
+- **Capacity vs Real Usage:** Theoretical capacity is rarely achieved in practice, as human testing and agent iteration pauses limit continuous throughput.
 
-*Note: This is a modeled capacity estimate. Measured throughput will be lower as human testing takes time. Read our full transparent methodology in [Token Capacity](docs/TOKEN-CAPACITY.md).*
+### The OpenRouter Expansion Assumption
+Historical estimation assumed OpenRouter expanded free limits to 1,000 requests/day after a minimum $10 deposit. **This behavior is currently unverified.** If this historical assumption still holds, funding the balance alone would theoretically unlock an estimated 8M+ zero-marginal-cost tokens daily across the load-balanced pool.
+
+*Note: This is a modeled capacity estimate. Read our transparent methodology in [Token Capacity](docs/TOKEN-CAPACITY.md).*
 
 ---
 
@@ -109,7 +130,7 @@ Each tier is injected with a custom system prompt designed to optimize behavior:
 - **Reasoning (Sonnet):** Instructed to deploy chain-of-thought planning before writing code.
 - **Coding (Opus/Fable):** Instructed to synthesize massive multi-agent architectures.
 
-*Disclaimer: We use internal labels to describe these behaviors, but we do not impersonate official Anthropic model versions. While these prompts vastly improve third-party model behavior in Claude Code, they do not guarantee 100% parity with native Claude models.*
+*Disclaimer: Limitless Claude configures Claude Code and OmniRoute to route requests to third-party models; it does not itself supply inference or guarantee native Claude parity. We use internal labels to describe behaviors, but we do not impersonate official Anthropic model versions.*
 
 ---
 
@@ -121,20 +142,6 @@ We utilize a hybrid ecosystem of Zero-Marginal-Cost, Subscription-Entitled, and 
 - **Paid Inference:** Mistral, OpenRouter (Premium).
 
 For a complete breakdown, read our [Providers Guide](docs/PROVIDERS.md).
-
----
-
-## Features and Compatibility
-
-| Feature | Status | Notes |
-|---|---|---|
-| **Claude Code CLI** | `Tested` | Works natively for local terminal execution. |
-| **Model Aliases** | `Implemented` | `limitless-opus`, `limitless-sonnet`, etc. map flawlessly. |
-| **Tool Calling (MCP)** | `Tested` | Agentic file editing and skill execution works perfectly. |
-| **Multi-Agent Prompts**| `Implemented` | Tier personas successfully injected into payload. |
-| **Plan Mode** | `Conditional` | Works, but heavily dependent on the upstream provider's reasoning capability. |
-| **Streaming** | `Conditional` | Dependent on the specific upstream model/provider support. |
-| **Long Context** | `Unverified` | Context limits vary wildly between third-party open-weight models. |
 
 ---
 

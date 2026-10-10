@@ -28,10 +28,10 @@ function findModel(liveModels, provider, modelName) {
 
 async function runSetup() {
   console.log("Restoring Limitless Claude Architecture...");
-  
+
   const omnirouteDir = process.env.OMNIROUTE_DIR || path.join(os.homedir(), ".omniroute");
   const dbPath = path.join(omnirouteDir, "storage.sqlite");
-  
+
   if (!fs.existsSync(dbPath)) {
     console.error("Error: OmniRoute database not found at", dbPath);
     console.error("Please run `omniroute serve` at least once before setting up Limitless Claude.");
@@ -43,15 +43,33 @@ async function runSetup() {
     fs.copyFileSync(dbPath, dbPath + ".bak");
     console.log("Backed up database to storage.sqlite.bak");
   } catch (e) {
-    console.warn("Warning: Could not backup database:", e.message);
+    console.error("Error: Could not backup database:", e.message);
+    process.exit(1);
   }
 
   const db = new Database(dbPath);
   db.pragma("busy_timeout = 8000");
 
+  // Validate expected tables and columns
+  try {
+    const apiKeysCols = db.prepare("PRAGMA table_info(api_keys)").all();
+    if (apiKeysCols.length === 0) throw new Error("Table 'api_keys' does not exist.");
+    if (!apiKeysCols.some(c => c.name === 'key') || !apiKeysCols.some(c => c.name === 'model_access_mode')) {
+      throw new Error("Missing expected columns 'key' or 'model_access_mode' in 'api_keys' table.");
+    }
+    const combosCols = db.prepare("PRAGMA table_info(combos)").all();
+    if (combosCols.length === 0) throw new Error("Table 'combos' does not exist.");
+    if (!combosCols.some(c => c.name === 'id') || !combosCols.some(c => c.name === 'data')) {
+      throw new Error("Missing expected columns 'id' or 'data' in 'combos' table.");
+    }
+  } catch(e) {
+    console.error("Error: Incompatible database schema -", e.message);
+    process.exit(1);
+  }
+
   const apiKeyRow = db.prepare("SELECT key FROM api_keys ORDER BY created_at DESC LIMIT 1").get();
   const apiKey = apiKeyRow ? apiKeyRow.key : "";
-  
+
   let liveModels = [];
   try {
     const res = await fetch("http://127.0.0.1:20128/v1/models", { headers: { "Authorization": `Bearer ${apiKey}` } });
@@ -65,7 +83,7 @@ async function runSetup() {
   } catch (e) {
     console.warn(`\x1b[33m[WARNING] Failed to fetch live models from OmniRoute (${e.message}). Falling back to cached inventory.\x1b[0m`);
   }
-  
+
   if (liveModels.length === 0) {
     try {
       const data = JSON.parse(fs.readFileSync(path.join(__dirname, "../config/live_models.json"), "utf8"));
@@ -77,10 +95,6 @@ async function runSetup() {
 
   // Database Transaction to ensure atomicity
   const applySetup = db.transaction(() => {
-    if (apiKey) {
-      db.prepare("UPDATE api_keys SET model_access_mode = 'all' WHERE key = ?").run(apiKey);
-    }
-
     // Clean old exact matches
     const delCombos = db.prepare(`DELETE FROM combos WHERE id IN (?, ?, ?, ?)`);
     delCombos.run(COMBO_IDS.opus, COMBO_IDS.sonnet, COMBO_IDS.haiku, COMBO_IDS.fable);
@@ -92,7 +106,7 @@ async function runSetup() {
     );
 
     const insertCombo = db.prepare("INSERT INTO combos (id, name, data, system_message, created_at, updated_at) VALUES (?, ?, ?, ?, datetime('now'), datetime('now')) ON CONFLICT(id) DO UPDATE SET name = excluded.name, data = excluded.data, system_message = excluded.system_message, updated_at = datetime('now')");
-    
+
     // Phase 7: Haiku (Speed)
     const haikuCandidates = [
       { provider: "github", model: "gpt-4o-mini" },
@@ -103,7 +117,7 @@ async function runSetup() {
       { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
       { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" }
     ].filter(c => findModel(liveModels, c.provider, c.model));
-    
+
     insertCombo.run(COMBO_IDS.haiku, "Limitless Haiku Tier", JSON.stringify({
       name: "Limitless Haiku Tier",
       strategy: "priority",
@@ -180,7 +194,7 @@ async function runSetup() {
       hasDescription = cols.some(c => c.name === "description");
     } catch (e) {}
 
-    const insertMapSql = hasDescription ? 
+    const insertMapSql = hasDescription ?
       "INSERT INTO model_combo_mappings (id, pattern, combo_id, priority, enabled, description, created_at, updated_at) VALUES (?, ?, ?, ?, 1, ?, datetime('now'), datetime('now')) ON CONFLICT(id) DO UPDATE SET pattern = excluded.pattern, combo_id = excluded.combo_id, priority = excluded.priority, enabled = 1, description = excluded.description, updated_at = datetime('now')" :
       "INSERT INTO model_combo_mappings (id, pattern, combo_id, priority, enabled, created_at, updated_at) VALUES (?, ?, ?, ?, 1, datetime('now'), datetime('now')) ON CONFLICT(id) DO UPDATE SET pattern = excluded.pattern, combo_id = excluded.combo_id, priority = excluded.priority, enabled = 1, updated_at = datetime('now')";
     const insertMap = db.prepare(insertMapSql);
@@ -198,7 +212,20 @@ async function runSetup() {
     insertMap.run(...mapArgs(MAPPING_IDS.opus1m, "*opus[1m]*", COMBO_IDS.opus, 11, "Opus 1M context"));
 
     // Phase 19: API Key Restriction
-    db.prepare("UPDATE api_keys SET model_access_mode = 'all', allowed_models = '[]', allowed_combos = '[\"combo/*\"]', catalog_scope = 'all'").run();
+    if (apiKey) {
+      const apiCols = db.prepare("PRAGMA table_info(api_keys)").all();
+      const hasAllowedModels = apiCols.some(c => c.name === 'allowed_models');
+      const hasAllowedCombos = apiCols.some(c => c.name === 'allowed_combos');
+      const hasCatalogScope = apiCols.some(c => c.name === 'catalog_scope');
+
+      let updateSql = "UPDATE api_keys SET model_access_mode = 'all'";
+      if (hasAllowedModels) updateSql += ", allowed_models = '[]'";
+      if (hasAllowedCombos) updateSql += ", allowed_combos = '[\"combo/*\"]'";
+      if (hasCatalogScope) updateSql += ", catalog_scope = 'all'";
+
+      updateSql += " WHERE key = ?";
+      db.prepare(updateSql).run(apiKey);
+    }
 
     return { haikuCandidates, sonnetCandidates, opusCandidates, fableCandidates };
   });
@@ -215,7 +242,7 @@ async function runSetup() {
   try {
     const isWindows = os.platform() === 'win32';
     if (isWindows) {
-      const startupDir = path.join(os.homedir(), "AppData", "Roaming", "Microsoft", "Windows", "Start Menu", "Programs", "Startup");
+      const startupDir = process.env.TEST_STARTUP_DIR || path.join(os.homedir(), "AppData", "Roaming", "Microsoft", "Windows", "Start Menu", "Programs", "Startup");
       if (fs.existsSync(startupDir)) {
         // 1. Clean up old corrupted startup files precisely
         const exactMatches = ["Limitless-OmniRoute-Launcher.vbs"];
@@ -226,22 +253,23 @@ async function runSetup() {
           }
         });
 
-        // 2. Put the loop BAT file inside the project directory, NOT in Startup
-        const batPath = path.join(__dirname, '..', 'omniroute-daemon.bat');
+        // 2. Put the loop BAT file inside the startup directory or project directory, but isolate for tests
+        const batDir = process.env.TEST_STARTUP_DIR || path.join(__dirname, '..');
+        const batPath = path.join(batDir, 'omniroute-daemon.bat');
         const pnpmBinPath = path.join(os.homedir(), 'AppData', 'Local', 'pnpm', 'bin', 'omniroute.CMD');
-        
+
         // If the direct pnpm path exists use it, otherwise fallback to npx
         const cmdToRun = fs.existsSync(pnpmBinPath) ? `"${pnpmBinPath}"` : 'npx omniroute';
 
         const batContent = `@echo off\r\n:loop\r\n${cmdToRun} serve\r\necho OmniRoute crashed. Restarting in 5 seconds...\r\ntimeout /t 5 >nul\r\ngoto loop`;
         fs.writeFileSync(batPath, batContent);
-        
+
         // 3. Put ONLY the VBS wrapper in Startup so it runs silently
         const vbsPath = path.join(startupDir, "Limitless-OmniRoute-Launcher.vbs");
         // Add a 10 second delay so Windows network initializes before omniroute starts
         const vbsContent = `Set WshShell = CreateObject("WScript.Shell")\r\nWScript.Sleep 10000\r\nWshShell.Run """" & "${batPath}" & """", 0, False`;
         fs.writeFileSync(vbsPath, vbsContent);
-        
+
         console.log("Installed invisible OmniRoute auto-recovery daemon to Windows Startup.");
       }
     }
@@ -258,12 +286,23 @@ async function runSetup() {
   console.log("You can now run \x1b[1mclaude\x1b[0m in your terminal.");
 
   // Save tier configuration correctly (Preserving any existing benchmark files untouched)
-  fs.writeFileSync("config/tier-configuration.json", JSON.stringify({
+  const configDir = process.env.LIMITLESS_CONFIG_DIR || path.join(__dirname, "../config");
+  const tierConfigPath = path.join(configDir, "tier-configuration.json");
+  let existingConfig = {};
+  if (fs.existsSync(tierConfigPath)) {
+    try {
+      existingConfig = JSON.parse(fs.readFileSync(tierConfigPath, "utf8"));
+    } catch (e) {
+      console.warn("Could not parse existing tier-configuration.json, proceeding with default empty config.");
+    }
+  }
+
+  fs.writeFileSync(tierConfigPath, JSON.stringify(Object.assign({}, existingConfig, {
     haiku: results.haikuCandidates,
     sonnet: results.sonnetCandidates,
     opus: results.opusCandidates,
     fable: results.fableCandidates
-  }, null, 2));
+  }), null, 2));
 }
 
 runSetup().catch(console.error);

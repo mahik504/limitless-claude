@@ -16,16 +16,17 @@ npm test
 3. **Payload Regressions:** Asserts that the database payloads retain the `models` array and the correct `strategy` flags (priority vs. round-robin). This explicitly prevents a known regression from older versions.
 4. **Prompt Sanity:** Verifies that no fabricated identities (e.g., "You are Claude Opus 5.5") are maliciously injected into the database system prompts.
 
-## 2. Live Provider Testing (Manual)
-Because this repository relies on your personal OmniRoute API keys, live testing cannot be automated in CI. You must manually verify your upstream connections.
+## 2. Live Provider Smoke Testing (Manual)
+Because this repository relies on your personal OmniRoute API keys, live testing cannot be automated in CI. You must manually verify your upstream connections to ensure Limitless Claude works.
 
-1. Ensure OmniRoute is running (`omniroute serve`).
-2. Run Claude Code targeting a specific tier:
-```bash
-claude -m limitless-haiku
-```
-3. Ask a simple prompt (e.g., `Say hello`).
-4. Monitor the OmniRoute terminal or the Claude Code output to verify which underlying provider caught the request and successfully returned it.
+Perform this checklist to verify routing behavior:
+
+1. **Verify OmniRoute Connection:** Ensure OmniRoute is running locally. Check that Claude Code is configured to point its endpoint to `http://127.0.0.1:20128`.
+2. **Select Tier Aliases:** For each tier, start a session using the intended syntax for Claude Code (e.g., `claude -m limitless-haiku`). Ensure the CLI accepts the mapping.
+3. **Confirm Routing in Logs:** Ask a simple prompt (e.g., `Say hello`). Monitor the OmniRoute terminal logs to verify which combo ID was selected and which actual upstream provider/model handled the request safely.
+4. **Test Tool Invocation:** In a disposable test directory, ask Claude Code to "Create a text file with the word hello". Verify that the specific model can invoke the filesystem tool correctly.
+5. **Verify Fallback Behavior:** Intentionally cause a failure in the primary candidate (e.g., by temporarily disabling its network connection or API key in OmniRoute) and re-send a request. Verify the OmniRoute logs show a successful fallback to the next candidate in the tier without crashing Claude Code.
+6. **Startup & Rollback Instructions:** Verify that running `npm run setup` places the daemon in the Windows Startup folder correctly, and that manually deleting the script (as instructed in the README) halts the daemon on the next reboot.
 
 ## 3. Benchmarking
 Currently, true end-to-end benchmarking (measuring actual API latency and token counts) is deferred, as it requires burning your real token quotas. 

@@ -1,85 +1,116 @@
-
 const Database = require("better-sqlite3");
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
 
 const dbPath = path.join(os.homedir(), ".omniroute", "storage.sqlite");
-const db = new Database(dbPath, { readonly: true });
+const configDir = process.env.LIMITLESS_CONFIG_DIR || path.join(__dirname, "../config");
+
+let db;
+try {
+  db = new Database(dbPath, { readonly: true });
+} catch (e) {
+  console.error("[ERROR] Could not open OmniRoute database:", e.message);
+  process.exit(1);
+}
 
 // Read API Key (grab the latest one)
-const apiKeyRow = db.prepare("SELECT key FROM api_keys ORDER BY created_at DESC LIMIT 1").get();
-const apiKey = apiKeyRow ? apiKeyRow.key : "";
+let apiKey = "";
+try {
+  const apiKeyRow = db.prepare("SELECT key FROM api_keys ORDER BY created_at DESC LIMIT 1").get();
+  apiKey = apiKeyRow ? apiKeyRow.key : "";
+} catch (e) {
+  console.error("[ERROR] Could not query api_keys:", e.message);
+}
 
 // Read Providers
-const providers = db.prepare("SELECT provider, is_active FROM provider_connections").all();
-const providerInventory = providers.map(p => {
-  // Categorize
-  let status = p.is_active ? "CORE" : "UNUSABLE";
-  if (["agentrouter", "cerebras", "huggingchat", "qwen-web", "github"].includes(p.provider)) {
-    status = p.is_active ? "USEFUL" : "UNUSABLE";
-  }
+let providers = [];
+try {
+  providers = db.prepare("SELECT provider, is_active FROM provider_connections").all();
+} catch (e) {
+  console.error("[ERROR] Could not query provider_connections:", e.message);
+}
 
+const providerInventory = providers.map(p => {
   return {
     provider: p.provider,
-    connected: true,
+    configured: true,
     active: p.is_active === 1,
-    authentication_state: p.is_active === 1 ? "Valid" : "Unknown",
-    models_available: 0,
-    free_or_paid: p.provider === "openrouter" ? "Mixed" : "Free", 
-    quota_class: p.provider === "openrouter" ? "Paid" : "Rate-Limited Uncapped",
-    tool_support: true,
-    status,
+    authentication_state: "unverified", // Cannot infer auth is valid just from DB flag
+    free_or_paid: "unverified",
+    quota_class: "unverified",
+    tool_support: "unverified",
     last_verified: new Date().toISOString(),
-    notes: ""
+    notes: "Metadata inferred from local database row. Needs runtime verification."
   };
 });
 
-fs.writeFileSync("config/provider-inventory.json", JSON.stringify(providerInventory, null, 2));
+fs.writeFileSync(path.join(configDir, "provider-inventory.json"), JSON.stringify(providerInventory, null, 2));
 console.log("Wrote provider-inventory.json");
 
 // Read Live Models
 async function fetchModels() {
-  const res = await fetch("http://127.0.0.1:20128/v1/models", {
-    headers: { "Authorization": `Bearer ${apiKey}` }
-  });
-  const data = await res.json();
+  if (!apiKey) {
+    console.error("[ERROR] No API key found in OmniRoute database.");
+    return;
+  }
+
+  let res;
+  try {
+    res = await fetch("http://127.0.0.1:20128/v1/models", {
+      headers: { "Authorization": `Bearer ${apiKey}` }
+    });
+  } catch (e) {
+    console.error("[ERROR] HTTP request to OmniRoute failed:", e.message);
+    return;
+  }
+
+  if (!res.ok) {
+    console.error(`[ERROR] OmniRoute returned HTTP ${res.status}`);
+    return;
+  }
+
+  let data;
+  try {
+    data = await res.json();
+  } catch (e) {
+    console.error("[ERROR] Failed to parse JSON response from OmniRoute:", e.message);
+    return;
+  }
   
-  if (!data.data) {
-    console.error("Failed to fetch models:", data);
+  if (!data || !data.data || !Array.isArray(data.data)) {
+    console.error("[ERROR] Invalid response format from OmniRoute: missing data array.");
     return;
   }
   
   const modelInventory = data.data
-    .filter(m => m.id.includes("/"))
+    .filter(m => m.id && m.id.includes("/"))
     .map(m => {
       const parts = m.id.split("/");
       const provider = parts.shift();
       const modelName = parts.join("/");
       
-      let billing = "free";
-      if (provider === "openrouter" && !modelName.includes(":free")) billing = "paid";
-      if (provider === "github" || provider === "antigravity") billing = "subscription";
+      let billing = "unverified";
+      if (provider === "openrouter" && modelName.includes(":free")) billing = "free";
 
       return {
         id: m.id,
         provider,
         model: modelName,
         billing,
-        context: m.context_length || 128000,
-        tools: m.capabilities?.tool_calling || false,
-        reasoning: m.capabilities?.reasoning || false,
-        vision: m.capabilities?.vision || (m.input_modalities && m.input_modalities.includes("image")),
-        latency_data: "unknown",
-        pricing: "unknown",
-        quota: billing === "free" ? "Rate-limited" : "Budget-based",
+        context: m.context_length !== undefined ? m.context_length : "unknown",
+        tools: m.capabilities?.tool_calling !== undefined ? m.capabilities.tool_calling : "unknown",
+        reasoning: m.capabilities?.reasoning !== undefined ? m.capabilities.reasoning : "unknown",
+        vision: m.capabilities?.vision !== undefined ? m.capabilities.vision : (m.input_modalities && m.input_modalities.includes("image") ? true : "unknown"),
+        latency_data: "unverified",
+        pricing: "unverified",
+        quota: "unverified",
         timestamp: new Date().toISOString()
       };
     });
     
-  fs.writeFileSync("config/model-inventory.json", JSON.stringify(modelInventory, null, 2));
+  fs.writeFileSync(path.join(configDir, "model-inventory.json"), JSON.stringify(modelInventory, null, 2));
   console.log("Wrote model-inventory.json");
 }
 
-fetchModels().catch(console.error);
-
+fetchModels().catch(e => console.error("[ERROR] Unhandled exception:", e.message));

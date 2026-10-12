@@ -2,12 +2,12 @@
 
 > **Your Claude Code workflow. Your connected model fleet.**
 >
-> *The most stable and perfect working Limitless Claude setup ever. Built for rock-solid reliability, predictable routing, zero data loss, and seamless developer onboarding with full support for Ultra Code, slash commands, skills, and MCP tools.*
+> *A robust, hardened configuration harness for routing Claude Code through OmniRoute to supported third-party models. Built for predictable routing, transactional SQLite state, isolated testing, and reproducible local developer setup.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen.svg)](https://nodejs.org/)
 [![OmniRoute](https://img.shields.io/badge/Gateway-OmniRoute-orange.svg)](https://github.com/danny-avila/OmniRoute)
-[![Tests Passing](https://img.shields.io/badge/Tests-23%2F23%20Passing-success.svg)](test/)
+[![Tests Passing](https://img.shields.io/badge/Tests-31%2F31%20Passing-success.svg)](test/)
 
 Limitless Claude is an open-source configuration and model-routing harness that connects **Claude Code** to a dynamic fleet of third-party AI models through **OmniRoute**. Instead of binding your agentic coding sessions to a single provider meter or running into sudden rate-limit brick walls, Limitless Claude aggregates your existing developer accounts—including zero-marginal-cost community endpoints, subscription-entitled access (such as GitHub Copilot and Antigravity), and pay-as-you-go providers—into four specialized coding tiers.
 
@@ -20,9 +20,9 @@ Deep agentic coding loops run high token volumes through terminal actions, autom
 Limitless Claude solves this by providing:
 - **Four Purpose-Built Tiers:** Four pre-configured combo profiles (`Haiku`, `Sonnet`, `Opus`, `Fable`) with tuned system prompts and routing policies.
 - **Dynamic Provider Filtering:** Scans your active OmniRoute providers and automatically configures only the models you actually have authenticated access to.
-- **Safe Database Management:** Manages OmniRoute's SQLite database atomically with automatic, WAL-consistent backups (`VACUUM INTO`) and minimal API key permissions.
-- **Silent Background Recovery:** Windows VBScript/Batch launchers and Unix background scripts that restart OmniRoute automatically after system boot or unexpected process termination.
-- **Full Claude Code Feature Parity:** Native support for tool calling, file editing, bash commands, slash commands (`/plan`, `/compact`, `/doctor`), Ultra Code agentic refactoring, and custom Skills & MCP servers.
+- **Safe Database Management:** Manages OmniRoute's SQLite database atomically with verified, WAL-consistent backups (preferring `VACUUM INTO`, with verified checkpoint fallback) and minimal API key permissions.
+- **Silent Background Launchers:** Windows VBScript/Batch launcher with an auto-recovery restart loop in Startup, and Unix background runner script (`start-daemon.sh`).
+- **Claude Code Compatibility:** Standard Claude Code developer workflows (tool calling, file editing, terminal commands, slash commands like `/plan` and `/compact`, and MCP servers) are supported via OmniRoute's proxying of the Anthropic Messages API (`POST /v1/messages`).
 - **Transparent Capacity Modeling:** Clear, reproducible calculations of your aggregate daily theoretical token capacity.
 
 ---
@@ -238,7 +238,7 @@ When running Claude Code within Cursor's integrated terminal, it automatically i
 
 ## 10. Native Claude Code Features: Ultra Code, Slash Commands, Skills & MCPs
 
-Because Limitless Claude translates and proxies the Anthropic Messages API (`/v1/messages`), all advanced Claude Code features work natively and without degradation:
+Because Limitless Claude configures OmniRoute to translate and proxy Claude Code's requests to the Anthropic Messages API (`POST /v1/messages`), standard Claude Code workflows are supported across compatible upstream models:
 
 - **Ultra Code & Agentic Refactoring:** Multi-turn autonomous tool execution (running tests, reading files, generating unified diffs, running shell commands) operates seamlessly over the configured model fleet.
 - **Slash Commands:** Native Claude Code commands like `/plan` (architecture mode), `/compact` (context summarization), `/cost` (token reporting), `/doctor` (health check), and `/clear` function without interference.

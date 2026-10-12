@@ -1,5 +1,12 @@
 #!/bin/bash
-# Limitless Claude Auto-Start Daemon for Linux / macOS
+# Limitless Claude Background Launcher for Linux / macOS
+# Note: Launches OmniRoute in the background using nohup. It is not an auto-restarting service.
+
+if command -v nc >/dev/null 2>&1 && nc -z 127.0.0.1 20128 2>/dev/null; then
+    echo "OmniRoute gateway is already running and listening on port 20128."
+    echo "You can now run 'claude' in your terminal."
+    exit 0
+fi
 
 if ! command -v npx &> /dev/null && ! command -v omniroute &> /dev/null; then
     echo "Error: Neither 'omniroute' nor 'npx' was found in PATH."

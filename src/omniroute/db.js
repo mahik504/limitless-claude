@@ -123,43 +123,90 @@ function backupDatabase(db, dbPath, backupPath) {
   // 1. Ensure target directory exists
   fs.mkdirSync(path.dirname(backupPath), { recursive: true });
 
-  // 2. Remove previous backup file if it exists (VACUUM INTO requires target to not exist)
-  if (fs.existsSync(backupPath)) {
-    try {
-      fs.unlinkSync(backupPath);
-    } catch (_) {}
+  // 2. Use an isolated candidate file so any existing valid backup is NEVER deleted before verification
+  const candidatePath = `${backupPath}.candidate.${Date.now()}.${Math.random().toString(36).slice(2, 8)}`;
+  if (fs.existsSync(candidatePath)) {
+    try { fs.unlinkSync(candidatePath); } catch (_) {}
   }
 
   let backedUp = false;
 
   // 3. Preferred approach: SQLite consistent VACUUM INTO
   try {
-    const normalizedTarget = backupPath.replace(/\\/g, "/").replace(/'/g, "''");
+    const normalizedTarget = candidatePath.replace(/\\/g, "/").replace(/'/g, "''");
     db.exec(`VACUUM INTO '${normalizedTarget}';`);
     backedUp = true;
   } catch (err) {
-    // VACUUM INTO might fail on certain file systems or read-only attachments
+    // VACUUM INTO may fail on older engines, permission constraints, or read-only attachments
     backedUp = false;
   }
 
   // 4. Fallback approach: WAL full checkpoint followed by file copy
   if (!backedUp) {
+    let checkpointOk = false;
     try {
-      db.exec("PRAGMA wal_checkpoint(FULL);");
-    } catch (_) {}
-    fs.copyFileSync(dbPath, backupPath);
+      const res = db.prepare("PRAGMA wal_checkpoint(FULL);").get();
+      const busyVal = res ? (res.busy !== undefined ? res.busy : Object.values(res)[0]) : 0;
+      if (busyVal === 0) {
+        checkpointOk = true;
+      }
+    } catch (_) {
+      checkpointOk = false;
+    }
+
+    if (!checkpointOk) {
+      if (fs.existsSync(candidatePath)) {
+        try { fs.unlinkSync(candidatePath); } catch (_) {}
+      }
+      throw new Error("SQLite backup fallback failed: WAL checkpoint did not complete cleanly (busy or locked). Existing backup preserved.");
+    }
+
+    try {
+      fs.copyFileSync(dbPath, candidatePath);
+    } catch (copyErr) {
+      if (fs.existsSync(candidatePath)) {
+        try { fs.unlinkSync(candidatePath); } catch (_) {}
+      }
+      throw new Error(`SQLite backup fallback failed to copy database file: ${copyErr.message}. Existing backup preserved.`);
+    }
   }
 
-  // 5. Verify backup integrity
-  const verifyDb = openDatabase(backupPath, { readonly: true });
+  // 5. Verify candidate backup integrity in complete isolation
+  let verifyDb;
   try {
+    verifyDb = openDatabase(candidatePath, { readonly: true });
     const check = verifyDb.prepare("PRAGMA quick_check;").get();
     const resultVal = check ? Object.values(check)[0] : "ok";
     if (resultVal !== "ok") {
       throw new Error(`Backup quick_check returned: ${resultVal}`);
     }
+  } catch (verifyErr) {
+    if (verifyDb) {
+      try { verifyDb.close(); } catch (_) {}
+    }
+    if (fs.existsSync(candidatePath)) {
+      try { fs.unlinkSync(candidatePath); } catch (_) {}
+    }
+    throw new Error(`Backup verification failed: ${verifyErr.message}. Existing backup preserved.`);
   } finally {
-    verifyDb.close();
+    if (verifyDb) {
+      try { verifyDb.close(); } catch (_) {}
+    }
+  }
+
+  // 6. Safe atomic replacement: only replace previous backup after candidate is confirmed valid
+  try {
+    if (fs.existsSync(backupPath)) {
+      try { fs.unlinkSync(backupPath); } catch (_) {}
+    }
+    fs.renameSync(candidatePath, backupPath);
+  } catch (replaceErr) {
+    try {
+      fs.copyFileSync(candidatePath, backupPath);
+      try { fs.unlinkSync(candidatePath); } catch (_) {}
+    } catch (copyFallbackErr) {
+      throw new Error(`Failed to promote verified backup candidate to target path: ${copyFallbackErr.message}`);
+    }
   }
 
   return true;

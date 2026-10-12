@@ -37,8 +37,10 @@ test.describe("Limitless Claude Setup Integrity", () => {
   });
 
   test.after(() => {
-    // Cleanup mock directory
-    fs.rmSync(TEST_DIR, { recursive: true, force: true });
+    // Cleanup mock directory safely
+    try {
+      fs.rmSync(TEST_DIR, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
+    } catch (_) {}
   });
 
   test.it("should execute setup.js without crashing and handle transactions safely", () => {
@@ -176,15 +178,24 @@ test.describe("Limitless Claude Setup Integrity", () => {
     assert.match(sh, /PID=\$!/);
   });
 
-  test.it("should resolve model aliases correctly according to pattern priority", () => {
+  test.it("should resolve model aliases correctly according to OmniRoute's exact mapping semantics", () => {
     const db = openDatabase(DB_PATH, { readonly: true });
-    const mappings = db.prepare("SELECT pattern, combo_id, priority FROM model_combo_mappings ORDER BY priority DESC").all();
+    // OmniRoute upstream query order: ORDER BY m.priority DESC, m.created_at ASC
+    const mappings = db.prepare("SELECT pattern, combo_id, priority FROM model_combo_mappings WHERE enabled = 1 ORDER BY priority DESC, created_at ASC").all();
     db.close();
+
+    // Exact globToRegex from OmniRoute src/shared/utils/globPattern.ts
+    function omnirouteGlobToRegex(pattern) {
+      const escaped = pattern
+        .replace(/[.+^${}()|[\]\\]/g, "\\$&")
+        .replace(/\*/g, ".*")
+        .replace(/\?/g, ".");
+      return new RegExp(`^${escaped}$`, "i");
+    }
 
     function resolveCombo(modelName) {
       for (const m of mappings) {
-        const regexStr = "^" + m.pattern.split("*").map(s => s.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join(".*") + "$";
-        if (new RegExp(regexStr, "i").test(modelName)) {
+        if (omnirouteGlobToRegex(m.pattern).test(modelName)) {
           return m.combo_id;
         }
       }
@@ -200,6 +211,89 @@ test.describe("Limitless Claude Setup Integrity", () => {
     assert.strictEqual(resolveCombo("claude-sonnet[1m]"), "combo/limitless-sonnet");
     assert.strictEqual(resolveCombo("claude-opus[1m]"), "combo/limitless-opus");
     assert.strictEqual(resolveCombo("default-fallback"), "combo/limitless-opus");
+
+    // Regression check: verify that if opusplan priority were lower (9), *opus* (10) would shadow it
+    const shadowedMappings = mappings.map(m => m.pattern === "*opusplan*" ? { ...m, priority: 9 } : m)
+      .sort((a, b) => b.priority - a.priority);
+    function resolveShadowed(modelName) {
+      for (const m of shadowedMappings) {
+        if (omnirouteGlobToRegex(m.pattern).test(modelName)) {
+          return m.combo_id;
+        }
+      }
+      return null;
+    }
+    assert.strictEqual(resolveShadowed("opusplan-custom"), "combo/limitless-opus", "Proves that *opus* shadows *opusplan* if opusplan has lower priority");
+  });
+
+  test.it("should enforce paid-model safety guard when LIMITLESS_EXCLUDE_PAID is set", () => {
+    const paidTestDir = path.join(TEST_DIR, "paid-guard-test");
+    const paidDbPath = path.join(paidTestDir, "storage.sqlite");
+    const paidConfigDir = path.join(paidTestDir, "config");
+    fs.mkdirSync(paidTestDir, { recursive: true });
+    fs.mkdirSync(paidConfigDir, { recursive: true });
+
+    // Seed database
+    const db = openDatabase(paidDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, allowed_models TEXT, allowed_combos TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys (key, model_access_mode, allowed_combos, is_active, created_at) VALUES ('paid-test-key', 'all', '["combo/*"]', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+    `);
+    db.close();
+
+    execSync("node scripts/setup.js", {
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        OMNIROUTE_DIR: paidTestDir,
+        LIMITLESS_CONFIG_DIR: paidConfigDir,
+        TEST_STARTUP_DIR: STARTUP_DIR,
+        LIMITLESS_EXCLUDE_PAID: "true"
+      }
+    });
+
+    const verifyDb = openDatabase(paidDbPath, { readonly: true });
+    const opusRow = verifyDb.prepare("SELECT data FROM combos WHERE id = 'combo/limitless-opus'").get();
+    const opusData = JSON.parse(opusRow.data);
+
+    // mistral/codestral-latest is classified as 'paid', must be excluded
+    const hasMistral = opusData.models.some(m => m.provider === "mistral" || m.model.includes("codestral"));
+    assert.strictEqual(hasMistral, false, "Paid model mistral/codestral-latest must be excluded from Opus combo when LIMITLESS_EXCLUDE_PAID=true");
+
+    const fableRow = verifyDb.prepare("SELECT data FROM combos WHERE id = 'combo/limitless-fable'").get();
+    const fableData = JSON.parse(fableRow.data);
+    // OpenRouter models without :free must be excluded
+    const hasPaidOpenRouter = fableData.models.some(m => m.provider === "openrouter" && !m.model.includes(":free"));
+    assert.strictEqual(hasPaidOpenRouter, false, "Paid OpenRouter models without :free must be excluded from Fable combo");
+
+    verifyDb.close();
+
+    const config = JSON.parse(fs.readFileSync(path.join(paidConfigDir, "tier-configuration.json"), "utf8"));
+    assert.strictEqual(config.metadata.paid_models_excluded, true);
+  });
+
+  test.it("should accurately classify model billing categories", () => {
+    const { classifyModelBilling, filterCandidatesByBilling } = require("../scripts/setup");
+    assert.strictEqual(classifyModelBilling("openrouter", "z-ai/glm-5.2:free"), "zero-marginal-cost");
+    assert.strictEqual(classifyModelBilling("openrouter", "deepseek/deepseek-chat"), "paid");
+    assert.strictEqual(classifyModelBilling("mistral", "codestral-latest"), "paid");
+    assert.strictEqual(classifyModelBilling("github", "gpt-4o-mini"), "subscription-entitled");
+    assert.strictEqual(classifyModelBilling("antigravity", "claude-sonnet-4-6"), "subscription-entitled");
+    assert.strictEqual(classifyModelBilling("groq", "llama-3.1-8b-instant"), "zero-marginal-cost");
+    assert.strictEqual(classifyModelBilling("unknown-provider", "some-model"), "unknown");
+
+    const candidates = [
+      { provider: "github", model: "gpt-4o" },
+      { provider: "mistral", model: "codestral-latest" },
+      { provider: "openrouter", model: "free-model:free" },
+      { provider: "custom", model: "mystery-model" }
+    ];
+
+    const filtered = filterCandidatesByBilling(candidates, true, false);
+    assert.strictEqual(filtered.length, 2);
+    assert.deepStrictEqual(filtered.map(c => c.provider), ["github", "openrouter"]);
   });
 
   test.it("should be fully idempotent when run repeatedly", () => {

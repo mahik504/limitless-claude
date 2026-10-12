@@ -22,6 +22,7 @@ test.describe("OmniRoute API Key Permission Safety", () => {
         allowed_combos TEXT,
         catalog_scope TEXT,
         is_active INTEGER,
+        revoked_at DATETIME,
         created_at DATETIME,
         last_used_at DATETIME
       );
@@ -92,5 +93,68 @@ test.describe("OmniRoute API Key Permission Safety", () => {
     const res2 = safelyConfigureComboPermissions(db, "key-restricted", ["combo/limitless-fable"]);
     assert.strictEqual(res2.changed, false);
     assert.strictEqual(res2.reason, "already_permitted");
+  });
+
+  test.it("should reject inactive, revoked, or banned keys", () => {
+    // Explicit lookup of inactive key must return null
+    const inactive = findTargetApiKey(db, "key-inactive");
+    assert.strictEqual(inactive, null, "Explicit inactive key must not be selected");
+
+    // Add a revoked key and verify it is not selected
+    db.prepare("INSERT INTO api_keys (key, model_access_mode, is_active, revoked_at) VALUES ('key-revoked', 'all', 1, datetime('now'))").run();
+    const revoked = findTargetApiKey(db, "key-revoked");
+    assert.strictEqual(revoked, null, "Explicit revoked key must not be selected");
+  });
+
+  test.it("should fail-closed with diagnostic when restricted key exists in schema lacking allowed_combos", () => {
+    const minDir = path.join(os.tmpdir(), "perm-no-combos-" + Date.now());
+    fs.mkdirSync(minDir, { recursive: true });
+    const minDb = openDatabase(path.join(minDir, "test.sqlite"));
+    minDb.exec(`
+      CREATE TABLE api_keys (
+        key TEXT PRIMARY KEY,
+        model_access_mode TEXT,
+        allowed_models TEXT,
+        is_active INTEGER
+      );
+      INSERT INTO api_keys VALUES ('restricted-no-col', 'restricted', '["model-a"]', 1);
+    `);
+
+    const result = safelyConfigureComboPermissions(minDb, "restricted-no-col", ["combo/limitless-opus"]);
+    assert.strictEqual(result.changed, false);
+    assert.strictEqual(result.status, "unsupported_schema");
+    assert.strictEqual(result.reason, "missing_allowed_combos_column");
+    assert.match(result.message, /lacks 'allowed_combos' column/);
+
+    minDb.close();
+    fs.rmSync(minDir, { recursive: true, force: true });
+  });
+
+  test.it("should safely repair and handle malformed JSON in allowed_combos without crashing", () => {
+    db.prepare("INSERT INTO api_keys (key, model_access_mode, allowed_combos, is_active) VALUES ('key-corrupt', 'restricted', '{bad json}', 1)").run();
+    const result = safelyConfigureComboPermissions(db, "key-corrupt", ["combo/limitless-haiku"]);
+    assert.strictEqual(result.changed, true);
+
+    const row = db.prepare("SELECT * FROM api_keys WHERE key = 'key-corrupt'").get();
+    const combos = JSON.parse(row.allowed_combos);
+    assert.ok(Array.isArray(combos));
+    assert.ok(combos.includes("combo/limitless-haiku"));
+  });
+
+  test.it("should handle minimal schema with only key column", () => {
+    const minDir = path.join(os.tmpdir(), "perm-minimal-" + Date.now());
+    fs.mkdirSync(minDir, { recursive: true });
+    const minDb = openDatabase(path.join(minDir, "test.sqlite"));
+    minDb.exec("CREATE TABLE api_keys (key TEXT PRIMARY KEY); INSERT INTO api_keys VALUES ('minimal-key');");
+
+    const found = findTargetApiKey(minDb);
+    assert.ok(found);
+    assert.strictEqual(found.key, "minimal-key");
+
+    const result = safelyConfigureComboPermissions(minDb, "minimal-key", ["combo/limitless-opus"]);
+    assert.strictEqual(result.changed, false);
+
+    minDb.close();
+    fs.rmSync(minDir, { recursive: true, force: true });
   });
 });

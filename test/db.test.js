@@ -79,4 +79,60 @@ test.describe("SQLite Driver Adapter & WAL-Safe Backup", () => {
 
     db.close();
   });
+
+  test.it("should safely use checkpoint-and-copy fallback when VACUUM INTO fails", () => {
+    const db = openDatabase(dbPath);
+    const origExec = db.exec.bind(db);
+    db.exec = (sql) => {
+      if (typeof sql === "string" && sql.startsWith("VACUUM INTO")) {
+        throw new Error("Simulated VACUUM INTO failure");
+      }
+      return origExec(sql);
+    };
+
+    const fallbackBackupPath = path.join(tmpDir, "fallback.sqlite.bak");
+    const ok = backupDatabase(db, dbPath, fallbackBackupPath);
+    assert.strictEqual(ok, true);
+    assert.strictEqual(fs.existsSync(fallbackBackupPath), true);
+
+    const verifyDb = openDatabase(fallbackBackupPath, { readonly: true });
+    const count = verifyDb.prepare("SELECT count(*) as cnt FROM records").get();
+    assert.ok(count.cnt >= 2, "Fallback backup must contain valid records");
+    verifyDb.close();
+    db.close();
+  });
+
+  test.it("should fail safely and preserve existing backup when WAL checkpoint is busy or fails", () => {
+    assert.strictEqual(fs.existsSync(backupPath), true);
+
+    const db = openDatabase(dbPath);
+    const origExec = db.exec.bind(db);
+    const origPrepare = db.prepare.bind(db);
+
+    db.exec = (sql) => {
+      if (typeof sql === "string" && sql.startsWith("VACUUM INTO")) {
+        throw new Error("VACUUM INTO failed");
+      }
+      return origExec(sql);
+    };
+    db.prepare = (sql) => {
+      if (typeof sql === "string" && sql.includes("wal_checkpoint")) {
+        return { get: () => ({ busy: 1, log: 10, checkpointed: 0 }) };
+      }
+      return origPrepare(sql);
+    };
+
+    assert.throws(() => {
+      backupDatabase(db, dbPath, backupPath);
+    }, /checkpoint did not complete cleanly/);
+
+    // Verify existing backup was NOT deleted or corrupted
+    assert.strictEqual(fs.existsSync(backupPath), true, "Previous backup file must remain intact");
+    const verifyDb = openDatabase(backupPath, { readonly: true });
+    const check = verifyDb.prepare("PRAGMA quick_check").get();
+    assert.strictEqual(Object.values(check)[0], "ok");
+    verifyDb.close();
+
+    db.close();
+  });
 });

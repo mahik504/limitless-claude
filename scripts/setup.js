@@ -54,19 +54,46 @@ function resolvePreferredApiKey() {
 }
 
 function classifyModelBilling(provider, model) {
-  if (provider === "openrouter") {
-    return model.includes(":free") ? "zero-marginal-cost" : "paid";
-  }
-  if (["groq", "huggingchat", "ollama-cloud", "opencode", "muse-spark-web"].includes(provider)) {
+  if (!provider || !model) return "unknown";
+  const p = String(provider).toLowerCase();
+  const m = String(model).toLowerCase();
+
+  // Explicit free model suffix/tag
+  if (m.includes(":free") || m.endsWith("-free")) {
     return "zero-marginal-cost";
   }
-  if (["github", "antigravity", "bluesminds", "kiro"].includes(provider)) {
-    return "subscription-entitled";
-  }
-  if (["mistral"].includes(provider)) {
+
+  // OpenRouter models without :free tag are metered/paid
+  if (p === "openrouter") {
     return "paid";
   }
+
+  // Explicitly metered / commercial paid API providers
+  if (["mistral", "openai", "anthropic"].includes(p)) {
+    return "paid";
+  }
+
+  // Verified developer subscription / quota-entitled endpoints
+  if (["github", "antigravity", "bluesminds", "kiro"].includes(p)) {
+    return "subscription-entitled";
+  }
+
+  // Free community / web interface providers
+  if (["groq", "huggingchat", "ollama-cloud", "opencode", "muse-spark-web"].includes(p)) {
+    return "zero-marginal-cost";
+  }
+
   return "unknown";
+}
+
+function filterCandidatesByBilling(candidates, excludePaid = false, allowUnknown = false) {
+  if (!excludePaid) return candidates;
+  return candidates.filter(c => {
+    const billing = c.billing || classifyModelBilling(c.provider, c.model);
+    if (billing === "paid") return false;
+    if (billing === "unknown" && !allowUnknown) return false;
+    return true;
+  });
 }
 
 async function runSetup() {
@@ -234,7 +261,23 @@ async function runSetup() {
     { provider: "openrouter", model: "qwen/qwen-3.8-coder-32b-instruct" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  const totalCandidates = haikuRaw.length + sonnetRaw.length + opusRaw.length + fableRaw.length;
+  const excludePaid = process.env.LIMITLESS_EXCLUDE_PAID === "true" || process.env.LIMITLESS_EXCLUDE_PAID === "1";
+  const allowUnknown = process.env.LIMITLESS_ALLOW_UNKNOWN_BILLING === "true" || process.env.LIMITLESS_ALLOW_UNKNOWN_BILLING === "1";
+
+  let haikuCandidates = haikuRaw;
+  let sonnetCandidates = sonnetRaw;
+  let opusCandidates = opusRaw;
+  let fableCandidates = fableRaw;
+
+  if (excludePaid) {
+    haikuCandidates = filterCandidatesByBilling(haikuCandidates, true, allowUnknown);
+    sonnetCandidates = filterCandidatesByBilling(sonnetCandidates, true, allowUnknown);
+    opusCandidates = filterCandidatesByBilling(opusCandidates, true, allowUnknown);
+    fableCandidates = filterCandidatesByBilling(fableCandidates, true, allowUnknown);
+    console.log("Enforced paid-model safety guard: excluded chargeable/unknown candidates from routing combos.");
+  }
+
+  const totalCandidates = haikuCandidates.length + sonnetCandidates.length + opusCandidates.length + fableCandidates.length;
   if (totalCandidates === 0) {
     console.error("\x1b[31m[ERROR] No usable candidate models found across any tier.\x1b[0m");
     console.error("Please connect at least one provider (e.g. OpenRouter, GitHub, Groq) in OmniRoute at http://localhost:20128 and try again.");
@@ -266,7 +309,7 @@ async function runSetup() {
       name: "Limitless Haiku Tier",
       strategy: "priority",
       description: "Fastest reliable models.",
-      models: haikuRaw
+      models: haikuCandidates
     }), "You are an advanced assistant optimized for rapid syntax lookups and lightning-fast codebase searches. Do not output conversational filler. Execute tool calls instantly. Your priority is absolute speed and precision.");
 
     // Sonnet
@@ -274,7 +317,7 @@ async function runSetup() {
       name: "Limitless Sonnet Tier",
       strategy: "priority",
       description: "Best planning / architecture / reasoning",
-      models: sonnetRaw
+      models: sonnetCandidates
     }), "You are an advanced architectural model. You excel at chain-of-thought reasoning, medium-effort architectural tasks, and multi-agent development environments. Plan carefully before writing code, and ensure flawless tool execution.");
 
     // Opus
@@ -282,7 +325,7 @@ async function runSetup() {
       name: "Limitless Opus Tier",
       strategy: "round-robin",
       description: "Largest free coding reservoir (Load-Balanced)",
-      models: opusRaw
+      models: opusCandidates
     }), "You are a massive reasoning and coding powerhouse. You possess deep knowledge of backend development, frontend design, and multi-agent architectures. You effortlessly handle high-effort tasks and massive refactors. Write flawless, production-ready code.");
 
     // Fable
@@ -290,7 +333,7 @@ async function runSetup() {
       name: "Limitless Fable Tier",
       strategy: "round-robin",
       description: "Maximum capability-per-dollar (Load-Balanced)",
-      models: fableRaw
+      models: fableCandidates
     }), "You are a premium model designed for extreme intelligence and balance. You synthesize massive context windows seamlessly and deploy flawless architectural decisions. Use tools autonomously and authoritatively.");
 
     // Mappings
@@ -320,20 +363,23 @@ async function runSetup() {
     // Safe API Key Permission Check / Update
     if (apiKey) {
       const permResult = safelyConfigureComboPermissions(db, apiKey, Object.values(COMBO_IDS));
+      const maskedKey = apiKey.length > 8 ? `${apiKey.slice(0, 6)}...` : "[redacted]";
       if (permResult.changed) {
-        console.log(`Configured combo access for key [${apiKey.slice(0, 6)}...]: preserved mode '${permResult.mode}', permitted combos.`);
+        console.log(`Configured combo access for key [${maskedKey}]: preserved mode '${permResult.mode}', permitted combos.`);
+      } else if (permResult.status === "unsupported_schema") {
+        console.warn(`\x1b[33m[WARNING] Could not configure permissions for key [${maskedKey}]: ${permResult.message}\x1b[0m`);
       }
     }
 
     return {
-      haikuCandidates: haikuRaw,
-      sonnetCandidates: sonnetRaw,
-      opusCandidates: opusRaw,
-      fableCandidates: fableRaw,
-      haikuAnnotated: mapWithBilling(haikuRaw),
-      sonnetAnnotated: mapWithBilling(sonnetRaw),
-      opusAnnotated: mapWithBilling(opusRaw),
-      fableAnnotated: mapWithBilling(fableRaw)
+      haikuCandidates,
+      sonnetCandidates,
+      opusCandidates,
+      fableCandidates,
+      haikuAnnotated: mapWithBilling(haikuCandidates),
+      sonnetAnnotated: mapWithBilling(sonnetCandidates),
+      opusAnnotated: mapWithBilling(opusCandidates),
+      fableAnnotated: mapWithBilling(fableCandidates)
     };
   });
 
@@ -368,6 +414,7 @@ async function runSetup() {
       version: "4.5.0",
       source: isLiveCatalog ? "live_gateway" : "offline_cache",
       last_scanned: new Date().toISOString(),
+      paid_models_excluded: excludePaid,
       models_with_billing: {
         haiku: results.haikuAnnotated,
         sonnet: results.sonnetAnnotated,
@@ -434,7 +481,7 @@ async function runSetup() {
     // Unix / macOS launcher script
     const shDir = process.env.TEST_STARTUP_DIR || path.join(__dirname, '..');
     const shPath = path.join(shDir, 'start-daemon.sh');
-    const shContent = `#!/bin/bash\n# Limitless Claude Auto-Start Daemon for Linux / macOS\n\nif ! command -v npx &> /dev/null && ! command -v omniroute &> /dev/null; then\n    echo "Error: Neither 'omniroute' nor 'npx' was found in PATH."\n    exit 1\nfi\n\nCMD="npx omniroute"\nif command -v omniroute &> /dev/null; then\n    CMD="omniroute"\nfi\n\necho "Starting Limitless Claude (OmniRoute) in the background..."\nnohup $CMD serve > omniroute.log 2>&1 &\nPID=$!\necho "Daemon started with PID $PID."\necho "You can now run 'claude' in your terminal."\n`;
+    const shContent = `#!/bin/bash\n# Limitless Claude Background Launcher for Linux / macOS\n# Note: Launches OmniRoute in the background using nohup. It is not an auto-restarting service.\n\nif command -v nc >/dev/null 2>&1 && nc -z 127.0.0.1 20128 2>/dev/null; then\n    echo "OmniRoute gateway is already running and listening on port 20128."\n    echo "You can now run 'claude' in your terminal."\n    exit 0\nfi\n\nif ! command -v npx &> /dev/null && ! command -v omniroute &> /dev/null; then\n    echo "Error: Neither 'omniroute' nor 'npx' was found in PATH."\n    echo "Please ensure Node.js and npm are installed: https://nodejs.org/"\n    exit 1\nfi\n\nCMD="npx omniroute"\nif command -v omniroute &> /dev/null; then\n    CMD="omniroute"\nfi\n\necho "Starting Limitless Claude (OmniRoute) in the background..."\nnohup $CMD serve > omniroute.log 2>&1 &\nPID=$!\necho "Daemon started with PID $PID."\necho "Logs streaming to ./omniroute.log"\necho "You can now run 'claude' in your terminal."\n`;
     fs.writeFileSync(shPath, shContent);
     try {
       fs.chmodSync(shPath, 0o755);
@@ -452,7 +499,17 @@ async function runSetup() {
   console.log("You can now run \x1b[1mclaude\x1b[0m in your terminal.");
 }
 
-runSetup().catch(err => {
-  console.error("Fatal setup error:", err);
-  process.exit(1);
-});
+module.exports = {
+  runSetup,
+  classifyModelBilling,
+  filterCandidatesByBilling,
+  COMBO_IDS,
+  MAPPING_IDS
+};
+
+if (require.main === module) {
+  runSetup().catch(err => {
+    console.error("Fatal setup error:", err);
+    process.exit(1);
+  });
+}

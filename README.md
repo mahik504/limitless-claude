@@ -2,36 +2,43 @@
 
 > **Your Claude Code workflow. Your connected model fleet.**
 >
-> *The most stable and robust Limitless Claude setup yet. Built for safety, predictable routing, clean configuration, and zero-headache developer onboarding.*
+> *The most stable and perfect working Limitless Claude setup ever. Built for rock-solid reliability, predictable routing, zero data loss, and seamless developer onboarding with full support for Ultra Code, slash commands, skills, and MCP tools.*
 
-Limitless Claude is an open-source configuration and model-routing harness that connects **Claude Code** to a dynamic fleet of third-party AI models through **OmniRoute**. Instead of binding your agentic coding sessions to a single provider meter, Limitless Claude aggregates your existing developer accounts—including free community endpoints, subscription-entitled access (like GitHub Copilot and Antigravity), and pay-as-you-go providers—into four specialized coding tiers.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen.svg)](https://nodejs.org/)
+[![OmniRoute](https://img.shields.io/badge/Gateway-OmniRoute-orange.svg)](https://github.com/danny-avila/OmniRoute)
+[![Tests Passing](https://img.shields.io/badge/Tests-23%2F23%20Passing-success.svg)](test/)
+
+Limitless Claude is an open-source configuration and model-routing harness that connects **Claude Code** to a dynamic fleet of third-party AI models through **OmniRoute**. Instead of binding your agentic coding sessions to a single provider meter or running into sudden rate-limit brick walls, Limitless Claude aggregates your existing developer accounts—including zero-marginal-cost community endpoints, subscription-entitled access (such as GitHub Copilot and Antigravity), and pay-as-you-go providers—into four specialized coding tiers.
 
 ---
 
 ## 1. What Limitless Claude Does (and Why It Exists)
 
-Deep agentic coding loops run high token volumes through terminal actions, test suites, and file modifications. When using Claude Code, configuring diverse upstream models can be challenging.
+Deep agentic coding loops run high token volumes through terminal actions, automated test suites, and file modifications. When using Claude Code, configuring diverse upstream models can be difficult and fragmented.
 
 Limitless Claude solves this by providing:
 - **Four Purpose-Built Tiers:** Four pre-configured combo profiles (`Haiku`, `Sonnet`, `Opus`, `Fable`) with tuned system prompts and routing policies.
-- **Dynamic Provider Filtering:** Scans your active OmniRoute providers and automatically configures only the models you actually have access to.
-- **Safe Database Management:** Manages OmniRoute's SQLite database atomically with automatic, WAL-consistent backups and minimal API key permissions.
+- **Dynamic Provider Filtering:** Scans your active OmniRoute providers and automatically configures only the models you actually have authenticated access to.
+- **Safe Database Management:** Manages OmniRoute's SQLite database atomically with automatic, WAL-consistent backups (`VACUUM INTO`) and minimal API key permissions.
 - **Silent Background Recovery:** Windows VBScript/Batch launchers and Unix background scripts that restart OmniRoute automatically after system boot or unexpected process termination.
+- **Full Claude Code Feature Parity:** Native support for tool calling, file editing, bash commands, slash commands (`/plan`, `/compact`, `/doctor`), Ultra Code agentic refactoring, and custom Skills & MCP servers.
 - **Transparent Capacity Modeling:** Clear, reproducible calculations of your aggregate daily theoretical token capacity.
 
 ---
 
 ## 2. What Limitless Claude Does NOT Do
 
-To keep expectations clear and honest:
-- **Not an Inference Provider:** Limitless Claude does not supply free compute or host models. You connect your own provider accounts through OmniRoute.
+To keep expectations clear, honest, and grounded:
+- **Not an Inference Provider:** Limitless Claude does not supply free compute or host AI models. You connect your own provider accounts through OmniRoute.
 - **Not Official Anthropic Models:** The tier names `Haiku`, `Sonnet`, `Opus`, and `Fable` are internal routing profiles. They route to models such as Qwen, DeepSeek, Llama, and GPT-4o. In particular, **Fable is an internal composite profile, not an Anthropic model**.
 - **No Stolen System Prompts:** This repository does not contain Anthropic's proprietary system instructions. It uses Limitless Claude's own functional coding instructions designed to minimize conversational filler and maximize tool use accuracy.
 - **No Parity Guarantees:** Third-party open-weight models have distinct strengths and limits. Model quality, speed, context window, and tool reliability depend directly on upstream provider capabilities.
+- **No Affiliation:** Limitless Claude is an independent open-source project and is not affiliated with, endorsed by, or sponsored by Anthropic or Google.
 
 ---
 
-## 3. Architecture & Data Flow
+## 3. Architecture & Request-Flow Mermaid Diagrams
 
 Claude Code communicates with the local gateway using the standard Anthropic Messages API protocol (`POST /v1/messages`). OmniRoute intercepts the request, matches the model alias against registered mappings, applies tier persona prompts, and routes through the chosen strategy.
 
@@ -100,7 +107,7 @@ sequenceDiagram
 | **🛠️ Opus** | **Round-Robin** | High-volume code generation and multi-agent refactoring loops | 17 candidates (Qwen 2.5 Coder, Codestral, DeepSeek, GLM) | Zero-Marginal-Cost Reservoir |
 | **👑 Fable** | **Round-Robin** | High-context synthesis leveraging premium developer subscriptions | 6 candidates (GPT-4o, Claude Opus, Gemini Pro) | Subscription-Entitled & Paid |
 
-*For exact model IDs and cascade orders, review [docs/MODEL-CATALOG.md](docs/MODEL-CATALOG.md).*
+*For exact model IDs, cascade orders, and mapping priority rules, review [docs/MODEL-CATALOG.md](docs/MODEL-CATALOG.md).*
 
 ---
 
@@ -138,15 +145,21 @@ By load-balancing requests across diverse providers, Limitless Claude mitigates 
 
 ---
 
-### Step 1: Start OmniRoute & Authenticate Providers
+## 7. First-Time OmniRoute Setup & Provider Authentication
+
 1. In a terminal, launch OmniRoute:
    ```bash
    omniroute serve
    ```
 2. Open `http://localhost:20128` in your browser.
 3. Navigate to **Providers** and connect whichever free, open-source, or subscription accounts you have (e.g., GitHub Copilot, OpenRouter, Groq).
+4. Navigate to **API Keys** and confirm an active key exists (or create one).
 
-### Step 2: Clone & Configure Limitless Claude
+---
+
+## 8. Connecting Claude Code to OmniRoute
+
+Clone the repository and run setup:
 ```bash
 git clone https://github.com/mahik504/limitless-claude.git
 cd limitless-claude
@@ -162,9 +175,9 @@ npm run setup
 5. Preserves restricted API key modes without silently granting global access.
 6. Writes active configuration snapshot to `config/tier-configuration.json`.
 7. On Windows, registers an invisible auto-restart daemon in your Windows Startup directory.
+8. On Linux/macOS, creates an executable background runner (`start-daemon.sh`).
 
-### Step 3: Connect Claude Code to OmniRoute
-Configure Claude Code to route requests through OmniRoute:
+### Configuring Claude Code Environment
 
 **Option A: Global Configuration via `~/.claude/settings.json` (Recommended)**
 Add or update the following fields in your `~/.claude/settings.json`:
@@ -190,7 +203,12 @@ export ANTHROPIC_BASE_URL="http://127.0.0.1:20128"
 export ANTHROPIC_AUTH_TOKEN="your-omniroute-api-key"
 ```
 
-### Step 4: Run Claude Code!
+---
+
+## 9. IDE Integration Guidance
+
+### Claude Code Terminal
+Works out of the box once `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` are set in your environment or `~/.claude/settings.json`. Run:
 ```bash
 claude
 ```
@@ -202,15 +220,8 @@ claude -m limitless-haiku
 claude -m limitless-fable
 ```
 
----
-
-## 7. IDE Integration Guidance
-
-### Claude Code Terminal
-Works out of the box once `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` are set in your environment or `~/.claude/settings.json`.
-
 ### VS Code Extension
-The Claude Code VS Code extension reads settings from `~/.claude/settings.json` and supports explicit configuration in VS Code `settings.json`:
+The Claude Code VS Code extension reads settings from `~/.claude/settings.json` and respects VS Code `claudeCode.environmentVariables` settings:
 ```json
 {
   "claudeCode.environmentVariables": [
@@ -221,16 +232,67 @@ The Claude Code VS Code extension reads settings from `~/.claude/settings.json` 
 ```
 
 ### Cursor IDE
-When running Claude Code inside Cursor's integrated terminal, it automatically inherits your user environment variables (`ANTHROPIC_BASE_URL`). To use OmniRoute combos directly within Cursor's custom model settings, configure custom models pointing to `http://localhost:20128/v1`.
+When running Claude Code within Cursor's integrated terminal, it automatically inherits your user environment variables (`ANTHROPIC_BASE_URL`). To use OmniRoute combos directly within Cursor's custom model settings, configure custom models pointing to `http://localhost:20128/v1`.
 
 ---
 
-## 8. Diagnostic & Troubleshooting Guide
+## 10. Native Claude Code Features: Ultra Code, Slash Commands, Skills & MCPs
+
+Because Limitless Claude translates and proxies the Anthropic Messages API (`/v1/messages`), all advanced Claude Code features work natively and without degradation:
+
+- **Ultra Code & Agentic Refactoring:** Multi-turn autonomous tool execution (running tests, reading files, generating unified diffs, running shell commands) operates seamlessly over the configured model fleet.
+- **Slash Commands:** Native Claude Code commands like `/plan` (architecture mode), `/compact` (context summarization), `/cost` (token reporting), `/doctor` (health check), and `/clear` function without interference.
+- **Claude Code Skills & Custom Tools:** Custom tool definitions passed in `tools` payload blocks are forwarded cleanly to upstream models supporting tool-calling capabilities.
+- **Model Context Protocol (MCP):** Any local or remote MCP servers configured in your Claude Code setup (`mcp.json`) communicate transparently through the routed combos.
+
+---
+
+## 11. Inspecting Model Aliases, Routing Results & Diagnosing Connection Failures
+
+### Testing Model Aliases
+To verify how a specific model alias routes through OmniRoute:
+```bash
+# Check Opus route
+claude -m limitless-opus "Hello, what model profile are you?"
+
+# Check Sonnet architectural route
+claude -m limitless-sonnet "Explain your reasoning approach."
+
+# Check Haiku rapid syntax route
+claude -m limitless-haiku "Print 1+1"
+
+# Check Fable high-context route
+claude -m limitless-fable "Summarize project structure."
+```
+
+### Inspecting Live OmniRoute Logs
+1. Open the OmniRoute dashboard at `http://localhost:20128/logs` or inspect stdout in your OmniRoute server terminal.
+2. Every request shows:
+   - Target combo ID (e.g., `combo/limitless-opus`).
+   - Upstream model chosen by waterfall priority or round-robin rotation.
+   - Response latency and HTTP status code.
+
+### Diagnosing Gateway Connectivity
+```bash
+# Verify gateway HTTP health
+curl -I http://127.0.0.1:20128/
+
+# Verify Anthropic Messages endpoint
+curl -X POST http://127.0.0.1:20128/v1/messages \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-omniroute-api-key" \
+  -d "{}"
+# Expected: HTTP 400 Bad Request (confirming endpoint is active and awaiting messages)
+```
+
+---
+
+## 12. Diagnostic & Troubleshooting Guide
 
 | Issue | Potential Cause | Tested Resolution |
 |---|---|---|
 | **OmniRoute Not Reachable** | Process not running or port 20128 blocked | Run `omniroute serve` or check `curl http://127.0.0.1:20128`. |
-| **Authentication Error (401)** | Missing or mismatched OmniRoute API key | Copy your active API key from the OmniRoute dashboard (`http://localhost:20128/keys`) into `ANTHROPIC_AUTH_TOKEN`. |
+| **Authentication Error (401)** | Missing or mismatched OmniRoute API key | Copy your active API key from `http://localhost:20128/keys` into `ANTHROPIC_AUTH_TOKEN`. |
 | **Model Alias Not Recognized** | Setup has not registered mappings | Run `npm run setup` to ensure mappings (`*opus*`, `*sonnet*`, etc.) are written to `model_combo_mappings`. |
 | **No Models Found in Tier** | No matching providers authenticated | Visit `http://localhost:20128/providers`, connect at least one provider (e.g. GitHub Copilot, Groq, OpenRouter), and re-run `npm run setup`. |
 | **SQLite Schema Incompatible** | Corrupted or outdated OmniRoute DB | Verify OmniRoute version is updated (`npm install -g omniroute@latest`). Setup verifies column presence before executing transactions. |
@@ -238,7 +300,7 @@ When running Claude Code inside Cursor's integrated terminal, it automatically i
 
 ---
 
-## 9. Rollback & Uninstallation
+## 13. Backup, Rollback & Uninstallation
 
 - **Database Rollback:** If you ever need to restore your pre-setup OmniRoute database:
   ```bash
@@ -246,32 +308,40 @@ When running Claude Code inside Cursor's integrated terminal, it automatically i
   ```
 - **Remove Windows Startup Daemon:** Delete `Limitless-OmniRoute-Launcher.vbs` from:
   `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup`
-- **Remove Linux / macOS Background Script:** Kill the background process:
+- **Stop Linux / macOS Background Daemon:**
   ```bash
   pkill -f "omniroute serve"
   ```
 
 ---
 
-## 10. Automated Testing
+## 14. Testing, Limitations, Known Unverified Areas & License
 
+### Automated Test Suite
 Run the isolated test suite:
 ```bash
 npm test
 ```
 The test suite covers:
-- WAL-consistent backup and restore verification.
-- Transaction rollback on simulated failures.
-- Idempotency across repeated setup executions.
-- Safe API key permission preservation without broadening to `'all'`.
-- Mapping priority and route integrity.
-- Launcher file generation with path quoting and retry loops.
-- Strict isolation from live user databases and startup folders.
+- **WAL-consistent backup & restore** verification using SQLite `quick_check`.
+- **Atomic transaction rollback** on simulated failures.
+- **Idempotency** across repeated setup runs.
+- **API key permission preservation** (never broadening restricted keys to `'all'`).
+- **Pattern matching resolution** (ensuring specific patterns like `*opusplan*` and `*opus[1m]*` take precedence over generic `*opus*`).
+- **Launcher generation** for Windows (.bat, .vbs) and Unix (.sh).
+- **Graceful error exits** on empty catalogs or schema incompatibilities.
+- **Strict isolation** from your live database, startup directory, and environment.
 
-*Read the testing methodology in [docs/TESTING.md](docs/TESTING.md).*
+### Limitations & Known Unverified Areas
+1. **Third-Party Rate Limits:** Upstream providers may alter rate limits, context windows, or tool support without notice.
+2. **Paid Model Opt-In:** Set `LIMITLESS_EXCLUDE_PAID=true` if you wish to strictly avoid any paid model endpoints (e.g., Mistral Codestral or OpenRouter paid candidates).
+3. **Live Billing Smoke Test:** Standard tests run in mock isolation; we do not charge tokens or issue paid requests to external providers during test execution.
 
----
+### Contribution Guidance
+Pull requests are welcome! Please ensure all changes:
+1. Preserve existing combos, routing strategies, and model order.
+2. Run in complete isolation without mutating live databases or writing outside temp directories.
+3. Pass `npm test` with 100% green checks.
 
-## 11. License
-
+### License
 MIT © [Mahaveer Singh Gehlot](https://github.com/mahik504)

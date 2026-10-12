@@ -78,7 +78,8 @@ async function runSetup() {
   if (!fs.existsSync(dbPath)) {
     console.error("Error: OmniRoute database not found at", dbPath);
     console.error("Please run `omniroute serve` at least once before setting up Limitless Claude.");
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
 
   let db;
@@ -87,7 +88,8 @@ async function runSetup() {
     db.pragma("busy_timeout = 8000");
   } catch (e) {
     console.error("Error: Could not open OmniRoute database:", e.message);
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
 
   // Backup Database using WAL-consistent backup
@@ -98,7 +100,8 @@ async function runSetup() {
   } catch (e) {
     console.error("Error: Could not backup database:", e.message);
     db.close();
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
 
   // Validate expected tables and columns
@@ -116,12 +119,20 @@ async function runSetup() {
   } catch (e) {
     console.error("Error: Incompatible database schema -", e.message);
     db.close();
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
+
+  const configDir = process.env.LIMITLESS_CONFIG_DIR || path.join(__dirname, "../config");
 
   const preferredKey = resolvePreferredApiKey();
   const apiKeyRow = findTargetApiKey(db, preferredKey);
   const apiKey = apiKeyRow ? apiKeyRow.key : "";
+
+  if (!apiKey) {
+    console.warn("\x1b[33m[WARNING] No active OmniRoute API key found.\x1b[0m");
+    console.warn("Please ensure you create an API key in the OmniRoute dashboard (http://localhost:20128/keys) or set ANTHROPIC_AUTH_TOKEN before running Claude Code.\n");
+  }
 
   let liveModels = [];
   let isLiveCatalog = false;
@@ -149,7 +160,10 @@ async function runSetup() {
 
   if (liveModels.length === 0) {
     try {
-      const cacheFile = path.join(__dirname, "../config/live_models.json");
+      let cacheFile = path.join(configDir, "live_models.json");
+      if (!fs.existsSync(cacheFile)) {
+        cacheFile = path.join(__dirname, "../config/live_models.json");
+      }
       if (fs.existsSync(cacheFile)) {
         const data = JSON.parse(fs.readFileSync(cacheFile, "utf8"));
         liveModels = data.data || [];
@@ -225,7 +239,8 @@ async function runSetup() {
     console.error("\x1b[31m[ERROR] No usable candidate models found across any tier.\x1b[0m");
     console.error("Please connect at least one provider (e.g. OpenRouter, GitHub, Groq) in OmniRoute at http://localhost:20128 and try again.");
     db.close();
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
 
   // Database Transaction to ensure atomicity
@@ -297,7 +312,7 @@ async function runSetup() {
     insertMap.run(...mapArgs(MAPPING_IDS.haiku, "*haiku*", COMBO_IDS.haiku, 10, "Haiku route"));
     insertMap.run(...mapArgs(MAPPING_IDS.fable, "*fable*", COMBO_IDS.fable, 10, "Fable route"));
     insertMap.run(...mapArgs(MAPPING_IDS.best, "*best*", COMBO_IDS.fable, 9, "Best route (Fable)"));
-    insertMap.run(...mapArgs(MAPPING_IDS.opusplan, "*opusplan*", COMBO_IDS.sonnet, 9, "Opusplan route (Sonnet)"));
+    insertMap.run(...mapArgs(MAPPING_IDS.opusplan, "*opusplan*", COMBO_IDS.sonnet, 11, "Opusplan route (Sonnet)"));
     insertMap.run(...mapArgs(MAPPING_IDS.default, "*default*", COMBO_IDS.opus, 8, "Default route (Opus)"));
     insertMap.run(...mapArgs(MAPPING_IDS.sonnet1m, "*sonnet[1m]*", COMBO_IDS.sonnet, 11, "Sonnet 1M context"));
     insertMap.run(...mapArgs(MAPPING_IDS.opus1m, "*opus[1m]*", COMBO_IDS.opus, 11, "Opus 1M context"));
@@ -328,11 +343,11 @@ async function runSetup() {
   } catch (err) {
     console.error("\x1b[31m[ERROR] Database transaction failed. Rolling back changes.\x1b[0m", err.message);
     db.close();
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
 
   // Save tier configuration correctly (Preserving existing benchmark / custom fields)
-  const configDir = process.env.LIMITLESS_CONFIG_DIR || path.join(__dirname, "../config");
   const tierConfigPath = path.join(configDir, "tier-configuration.json");
   let existingConfig = {};
   if (fs.existsSync(tierConfigPath)) {
@@ -368,13 +383,16 @@ async function runSetup() {
   } catch (err) {
     console.error("Error: Could not write tier-configuration.json:", err.message);
     db.close();
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
 
   // Phase 20: Auto-boot Daemon
   try {
     const isWindows = os.platform() === 'win32';
-    if (isWindows) {
+    const isTesting = !!process.env.TEST_STARTUP_DIR;
+
+    if (isWindows || isTesting) {
       const startupDir = process.env.TEST_STARTUP_DIR || path.join(os.homedir(), "AppData", "Roaming", "Microsoft", "Windows", "Start Menu", "Programs", "Startup");
       if (fs.existsSync(startupDir)) {
         // 1. Clean up old corrupted startup files precisely
@@ -412,8 +430,17 @@ async function runSetup() {
         console.log("Installed invisible OmniRoute auto-recovery daemon to Windows Startup.");
       }
     }
+
+    // Unix / macOS launcher script
+    const shDir = process.env.TEST_STARTUP_DIR || path.join(__dirname, '..');
+    const shPath = path.join(shDir, 'start-daemon.sh');
+    const shContent = `#!/bin/bash\n# Limitless Claude Auto-Start Daemon for Linux / macOS\n\nif ! command -v npx &> /dev/null && ! command -v omniroute &> /dev/null; then\n    echo "Error: Neither 'omniroute' nor 'npx' was found in PATH."\n    exit 1\nfi\n\nCMD="npx omniroute"\nif command -v omniroute &> /dev/null; then\n    CMD="omniroute"\nfi\n\necho "Starting Limitless Claude (OmniRoute) in the background..."\nnohup $CMD serve > omniroute.log 2>&1 &\nPID=$!\necho "Daemon started with PID $PID."\necho "You can now run 'claude' in your terminal."\n`;
+    fs.writeFileSync(shPath, shContent);
+    try {
+      fs.chmodSync(shPath, 0o755);
+    } catch (_) {}
   } catch (e) {
-    console.log("Could not install Windows Startup daemon:", e.message);
+    console.log("Could not install background startup daemon:", e.message);
   }
 
   db.close();

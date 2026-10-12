@@ -153,12 +153,14 @@ test.describe("Limitless Claude Setup Integrity", () => {
     db.close();
   });
 
-  test.it("should generate launcher in isolated directory with correct quoting and retry loop", () => {
+  test.it("should generate Windows and Unix launchers in isolated directory with correct quoting and retry loop", () => {
     const batPath = path.join(STARTUP_DIR, "omniroute-daemon.bat");
     const vbsPath = path.join(STARTUP_DIR, "Limitless-OmniRoute-Launcher.vbs");
+    const shPath = path.join(STARTUP_DIR, "start-daemon.sh");
 
     assert.strictEqual(fs.existsSync(batPath), true, "Daemon BAT should exist in test startup dir");
     assert.strictEqual(fs.existsSync(vbsPath), true, "Launcher VBS should exist in test startup dir");
+    assert.strictEqual(fs.existsSync(shPath), true, "Unix launcher script should exist in test startup dir");
 
     const bat = fs.readFileSync(batPath, "utf8");
     assert.match(bat, /:loop/);
@@ -168,6 +170,36 @@ test.describe("Limitless Claude Setup Integrity", () => {
     const vbs = fs.readFileSync(vbsPath, "utf8");
     assert.match(vbs, /WScript\.Sleep 10000/);
     assert.match(vbs, /WshShell\.Run/);
+
+    const sh = fs.readFileSync(shPath, "utf8");
+    assert.match(sh, /nohup \$CMD serve > omniroute\.log 2>&1 &/);
+    assert.match(sh, /PID=\$!/);
+  });
+
+  test.it("should resolve model aliases correctly according to pattern priority", () => {
+    const db = openDatabase(DB_PATH, { readonly: true });
+    const mappings = db.prepare("SELECT pattern, combo_id, priority FROM model_combo_mappings ORDER BY priority DESC").all();
+    db.close();
+
+    function resolveCombo(modelName) {
+      for (const m of mappings) {
+        const regexStr = "^" + m.pattern.split("*").map(s => s.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join(".*") + "$";
+        if (new RegExp(regexStr, "i").test(modelName)) {
+          return m.combo_id;
+        }
+      }
+      return null;
+    }
+
+    assert.strictEqual(resolveCombo("claude-opus-4-6"), "combo/limitless-opus");
+    assert.strictEqual(resolveCombo("claude-sonnet-4-6"), "combo/limitless-sonnet");
+    assert.strictEqual(resolveCombo("claude-haiku-4-5"), "combo/limitless-haiku");
+    assert.strictEqual(resolveCombo("limitless-fable"), "combo/limitless-fable");
+    assert.strictEqual(resolveCombo("best-model"), "combo/limitless-fable");
+    assert.strictEqual(resolveCombo("opusplan-custom"), "combo/limitless-sonnet");
+    assert.strictEqual(resolveCombo("claude-sonnet[1m]"), "combo/limitless-sonnet");
+    assert.strictEqual(resolveCombo("claude-opus[1m]"), "combo/limitless-opus");
+    assert.strictEqual(resolveCombo("default-fallback"), "combo/limitless-opus");
   });
 
   test.it("should be fully idempotent when run repeatedly", () => {
@@ -219,16 +251,15 @@ test.describe("Limitless Claude Setup Integrity", () => {
     fs.mkdirSync(emptyCacheDir, { recursive: true });
     fs.writeFileSync(path.join(emptyCacheDir, "live_models.json"), JSON.stringify({ data: [] }));
 
-    // Mock __dirname lookup by creating fake live_models
     try {
       execSync("node scripts/setup.js", {
         encoding: "utf8",
         env: { ...process.env, OMNIROUTE_DIR: emptyModelDir, LIMITLESS_CONFIG_DIR: emptyCacheDir, TEST_STARTUP_DIR: STARTUP_DIR }
       });
-      // Note: If fallback live_models.json in ../config has models, it will load that unless isolated.
-      // But we can check that it handles empty candidate catalogs cleanly.
+      assert.fail("Should have failed when candidate models are empty");
     } catch (e) {
       assert.strictEqual(e.status !== 0, true, "Exit status must be non-zero on failure");
+      assert.match((e.stdout || '') + (e.stderr || '') + e.message, /No usable candidate models found/);
     }
   });
 });

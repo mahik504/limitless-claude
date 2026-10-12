@@ -97,7 +97,7 @@ In OmniRoute's SQLite database, requests are routed based on pattern matching in
 | `mapping/limitless-haiku` | `*haiku*` | `combo/limitless-haiku` | 10 | Primary Haiku routing |
 | `mapping/limitless-fable` | `*fable*` | `combo/limitless-fable` | 10 | Primary Fable routing |
 | `mapping/limitless-best` | `*best*` | `combo/limitless-fable` | 9 | `best` alias routes to Fable |
-| `mapping/limitless-opusplan` | `*opusplan*` | `combo/limitless-sonnet` | 9 | `opusplan` alias routes to Sonnet |
+| `mapping/limitless-opusplan` | `*opusplan*` | `combo/limitless-sonnet` | 11 | `opusplan` alias routes to Sonnet (specific override over `*opus*`) |
 | `mapping/limitless-default` | `*default*` | `combo/limitless-opus` | 8 | Default fallback routes to Opus |
 | `mapping/limitless-opus1m` | `*opus[1m]*` | `combo/limitless-opus` | 11 | Extended context Opus alias |
 | `mapping/limitless-sonnet1m` | `*sonnet[1m]*` | `combo/limitless-sonnet` | 11 | Extended context Sonnet alias |

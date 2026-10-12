@@ -59,6 +59,7 @@ try {
   console.log("Wrote provider-inventory.json");
 } catch (e) {
   console.error("[ERROR] Failed to write provider-inventory.json:", e.message);
+  process.exitCode = 1;
 }
 
 // Read Live Models
@@ -134,6 +135,7 @@ async function fetchModels() {
     console.log(`Wrote model-inventory.json (${modelInventory.length} models)`);
   } catch (e) {
     console.error("[ERROR] Failed to write model-inventory.json:", e.message);
+    process.exitCode = 1;
   }
 
   db.close();
@@ -142,4 +144,5 @@ async function fetchModels() {
 fetchModels().catch(e => {
   console.error("[ERROR] Unhandled exception:", e.message);
   if (db) db.close();
+  process.exit(1);
 });

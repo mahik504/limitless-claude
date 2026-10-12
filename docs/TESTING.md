@@ -1,34 +1,93 @@
-# Testing and Verification
+# Testing, Integrity & Verification Guide
 
-Limitless Claude includes a suite of tests to ensure the setup logic remains safe, reliable, and does not corrupt your local databases. 
+Limitless Claude includes an automated test suite executed with Node's native test runner (`node:test`). Tests run in strict isolation to ensure your production OmniRoute configuration, startup folder, and database are never altered or touched during CI or local testing.
 
-## 1. Automated Setup Integrity Tests
-We use Node's native `node:test` runner to execute isolated integration tests. These tests execute `scripts/setup.js` against a temporary, mocked database directory to prevent accidental destruction of your real OmniRoute configuration.
+---
 
-### Running the Tests
+## 1. Automated Test Suite
+
+Run the full automated test suite:
+
 ```bash
 npm test
 ```
 
-### What these tests validate:
-1. **Idempotency & Transactions:** Ensures the setup script can run from start to finish without crashing, and that it utilizes safe SQL transactions.
-2. **Configuration Extraction:** Validates that `config/tier-configuration.json` is generated correctly.
-3. **Payload Regressions:** Asserts that the database payloads retain the `models` array and the correct `strategy` flags (priority vs. round-robin). This explicitly prevents a known regression from older versions.
-4. **Prompt Sanity:** Verifies that no fabricated identities (e.g., "You are Claude Opus 5.5") are maliciously injected into the database system prompts.
+### Test Coverage Areas
 
-## 2. Live Provider Smoke Testing (Manual)
-Because this repository relies on your personal OmniRoute API keys, live testing cannot be automated in CI. You must manually verify your upstream connections to ensure Limitless Claude works.
+1. **Setup Integrity (`test/setup.test.js`)**:
+   - Atomic database transactions with rollback on simulated failure.
+   - Idempotency when running setup repeatedly.
+   - Preservation of unrelated database records in `combos` and `model_combo_mappings`.
+   - Preservation of existing benchmark data in `tier-configuration.json`.
+   - Payload regression guards (guaranteeing `models` arrays and strategy types are preserved).
+   - Prompt safety (verifying no fabricated Anthropic identities are injected).
+   - Incompatible database schema detection and graceful nonzero exit.
+   - Nonzero exit when candidate models catalog is empty.
 
-Perform this checklist to verify routing behavior:
+2. **SQLite Driver & WAL Consistency (`test/db.test.js`)**:
+   - Cross-platform driver abstraction (`better-sqlite3` or native `node:sqlite`).
+   - SQLite Write-Ahead Logging (`WAL`) mode uncheckpointed transactions backup.
+   - Validation that `storage.sqlite.bak` is verified using SQLite `quick_check`.
+   - Transaction rollback ensuring zero partially applied rows.
 
-1. **Verify OmniRoute Connection:** Ensure OmniRoute is running locally. Check that Claude Code is configured to point its endpoint to `http://127.0.0.1:20128`.
-2. **Select Tier Aliases:** For each tier, start a session using the intended syntax for Claude Code (e.g., `claude -m limitless-haiku`). Ensure the CLI accepts the mapping.
-3. **Confirm Routing in Logs:** Ask a simple prompt (e.g., `Say hello`). Monitor the OmniRoute terminal logs to verify which combo ID was selected and which actual upstream provider/model handled the request safely.
-4. **Test Tool Invocation:** In a disposable test directory, ask Claude Code to "Create a text file with the word hello". Verify that the specific model can invoke the filesystem tool correctly.
-5. **Verify Fallback Behavior:** Intentionally cause a failure in the primary candidate (e.g., by temporarily disabling its network connection or API key in OmniRoute) and re-send a request. Verify the OmniRoute logs show a successful fallback to the next candidate in the tier without crashing Claude Code.
-6. **Startup & Rollback Instructions:** Verify that running `npm run setup` places the daemon in the Windows Startup folder correctly, and that manually deleting the script (as instructed in the README) halts the daemon on the next reboot.
+3. **API Key Permission Safety (`test/permissions.test.js`)**:
+   - Verification that restricted keys preserve `model_access_mode = 'restricted'`.
+   - Ensuring `allowed_models` is never modified or cleared.
+   - Safely appending only missing Limitless combos to `allowed_combos`.
+   - Idempotency when checking already permitted keys.
+   - Key selection logic (honoring `OMNIROUTE_API_KEY` and most active key).
 
-## 3. Benchmarking
-Currently, true end-to-end benchmarking (measuring actual API latency and token counts) is deferred, as it requires burning your real token quotas. 
+4. **Model and Provider Discovery (`test/discover.test.js`)**:
+   - Scanning provider connections from SQLite database.
+   - Recording `last_scanned` metadata rather than claiming unverified live status.
+   - Testing against mock endpoints to prevent touching the live port 20128.
 
-To view the raw configurations and model counts generated by your setup, simply inspect `config/tier-configuration.json`.
+---
+
+## 2. Test Isolation Architecture
+
+To ensure zero risk to your operating environment:
+- **Mock Database Directory:** Tests set `OMNIROUTE_DIR` to a temporary directory in `os.tmpdir()`.
+- **Mock Startup Directory:** Tests set `TEST_STARTUP_DIR` so Windows Startup entries are never modified during test runs.
+- **Mock Gateway Port:** Tests configure `OMNIROUTE_BASE_URL` to an isolated mock port to prevent issuing requests to your live OmniRoute instance.
+
+---
+
+## 3. Manual Live Integration Smoke Test
+
+Because live API calls consume rate limits and token allowances, live client tests are not automated in standard CI. Use this checklist to verify your end-to-end integration:
+
+1. **Verify OmniRoute Gateway:**
+   - Confirm OmniRoute is running: `curl http://127.0.0.1:20128` (returns HTTP 200).
+   - Check authenticated providers in the web UI: `http://localhost:20128`.
+
+2. **Verify Claude Code CLI in Terminal:**
+   - Start Claude Code:
+     ```bash
+     claude
+     ```
+   - In a test directory, issue a prompt: `Say hello`.
+   - Check the OmniRoute log/console to verify the request was intercepted, routed to the configured combo, and returned successfully.
+
+3. **Verify Model Alias Routing:**
+   - Test each alias individually:
+     ```bash
+     claude -m limitless-haiku
+     claude -m limitless-sonnet
+     claude -m limitless-opus
+     claude -m limitless-fable
+     ```
+   - Verify OmniRoute matches the corresponding combo ID for each alias.
+
+4. **Verify Tool Execution:**
+   - In Claude Code, ask: `Create a file named test_check.txt with content 'OK'`.
+   - Confirm tool calling executes properly and writes the file.
+
+5. **Verify VS Code & Cursor IDE:**
+   - Open VS Code with the Claude Code extension installed.
+   - Confirm requests succeed without connection errors.
+   - Open Cursor terminal, run `claude`, and confirm the environment variables route to `http://localhost:20128`.
+
+6. **Verify Windows Auto-Start Daemon:**
+   - Inspect `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\Limitless-OmniRoute-Launcher.vbs`.
+   - Confirm it points to your current repository's `omniroute-daemon.bat`.

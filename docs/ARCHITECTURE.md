@@ -19,7 +19,7 @@ sequenceDiagram
     participant Combo as Limitless Tier Combo
     participant Upstream as Upstream Provider (Qwen, DeepSeek, Groq, etc.)
 
-    Developer->>CC: Run `claude` (or `claude -m limitless-opus`)
+    Developer->>CC: Run `claude` (or `claude --model limitless-opus`)
     Note over CC: Evaluates ANTHROPIC_BASE_URL (http://localhost:20128)
     CC->>OR: POST /v1/messages (Anthropic Messages API)
     OR->>Combo: Matches model alias (e.g., *opus*, *opus[1m]*, *sonnet*)

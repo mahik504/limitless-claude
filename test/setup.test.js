@@ -279,6 +279,8 @@ test.describe("Limitless Claude Setup Integrity", () => {
     assert.strictEqual(classifyModelBilling("openrouter", "z-ai/glm-5.2:free"), "zero-marginal-cost");
     assert.strictEqual(classifyModelBilling("openrouter", "deepseek/deepseek-chat"), "paid");
     assert.strictEqual(classifyModelBilling("mistral", "codestral-latest"), "paid");
+    assert.strictEqual(classifyModelBilling("together", "llama-3-70b"), "paid");
+    assert.strictEqual(classifyModelBilling("deepseek", "deepseek-coder"), "paid");
     assert.strictEqual(classifyModelBilling("github", "gpt-4o-mini"), "subscription-entitled");
     assert.strictEqual(classifyModelBilling("antigravity", "claude-sonnet-4-6"), "subscription-entitled");
     assert.strictEqual(classifyModelBilling("groq", "llama-3.1-8b-instant"), "zero-marginal-cost");
@@ -287,6 +289,7 @@ test.describe("Limitless Claude Setup Integrity", () => {
     const candidates = [
       { provider: "github", model: "gpt-4o" },
       { provider: "mistral", model: "codestral-latest" },
+      { provider: "together", model: "mistral-large" },
       { provider: "openrouter", model: "free-model:free" },
       { provider: "custom", model: "mystery-model" }
     ];
@@ -294,6 +297,79 @@ test.describe("Limitless Claude Setup Integrity", () => {
     const filtered = filterCandidatesByBilling(candidates, true, false);
     assert.strictEqual(filtered.length, 2);
     assert.deepStrictEqual(filtered.map(c => c.provider), ["github", "openrouter"]);
+  });
+
+  test.it("should enforce paid-model safety guard when --exclude-paid CLI argument is passed", () => {
+    const cliTestDir = path.join(TEST_DIR, "cli-paid-guard-test");
+    const cliDbPath = path.join(cliTestDir, "storage.sqlite");
+    const cliConfigDir = path.join(cliTestDir, "config");
+    fs.mkdirSync(cliTestDir, { recursive: true });
+    fs.mkdirSync(cliConfigDir, { recursive: true });
+
+    const db = openDatabase(cliDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, allowed_models TEXT, allowed_combos TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys (key, model_access_mode, allowed_combos, is_active, created_at) VALUES ('cli-test-key', 'all', '["combo/*"]', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+    `);
+    db.close();
+
+    const output = execSync("node scripts/setup.js --exclude-paid", {
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        OMNIROUTE_DIR: cliTestDir,
+        LIMITLESS_CONFIG_DIR: cliConfigDir,
+        TEST_STARTUP_DIR: STARTUP_DIR
+      }
+    });
+    assert.match(output, /Enforced paid-model safety guard/);
+
+    const verifyDb = openDatabase(cliDbPath, { readonly: true });
+    const opusRow = verifyDb.prepare("SELECT data FROM combos WHERE id = 'combo/limitless-opus'").get();
+    const opusData = JSON.parse(opusRow.data);
+    const hasPaid = opusData.models.some(m => m.provider === "mistral");
+    assert.strictEqual(hasPaid, false, "Paid models must be excluded when --exclude-paid CLI flag is provided");
+    verifyDb.close();
+  });
+
+  test.it("should promote opusplan priority to 11 when migrating an existing database snapshot", () => {
+    const migTestDir = path.join(TEST_DIR, "mig-test");
+    const migDbPath = path.join(migTestDir, "storage.sqlite");
+    const migConfigDir = path.join(migTestDir, "config");
+    fs.mkdirSync(migTestDir, { recursive: true });
+    fs.mkdirSync(migConfigDir, { recursive: true });
+
+    // Seed database mimicking the user's pre-existing state where *opus* is 10 and *opusplan* is 9
+    const db = openDatabase(migDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, allowed_models TEXT, allowed_combos TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys (key, model_access_mode, allowed_combos, is_active, created_at) VALUES ('mig-key', 'all', '["combo/*"]', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+
+      INSERT INTO model_combo_mappings (id, pattern, combo_id, priority, enabled, description, created_at, updated_at)
+      VALUES ('mapping/limitless-opus', '*opus*', 'combo/limitless-opus', 10, 1, 'Opus', datetime('now'), datetime('now'));
+      INSERT INTO model_combo_mappings (id, pattern, combo_id, priority, enabled, description, created_at, updated_at)
+      VALUES ('mapping/limitless-opusplan', '*opusplan*', 'combo/limitless-sonnet', 9, 1, 'Opusplan old', datetime('now'), datetime('now'));
+    `);
+    db.close();
+
+    execSync("node scripts/setup.js", {
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        OMNIROUTE_DIR: migTestDir,
+        LIMITLESS_CONFIG_DIR: migConfigDir,
+        TEST_STARTUP_DIR: STARTUP_DIR
+      }
+    });
+
+    const verifyDb = openDatabase(migDbPath, { readonly: true });
+    const opusplanMapping = verifyDb.prepare("SELECT priority FROM model_combo_mappings WHERE id = 'mapping/limitless-opusplan'").get();
+    assert.strictEqual(opusplanMapping.priority, 11, "Setup must update opusplan priority to 11 to prevent shadowing by *opus* (10)");
+    verifyDb.close();
   });
 
   test.it("should be fully idempotent when run repeatedly", () => {

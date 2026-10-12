@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen.svg)](https://nodejs.org/)
 [![OmniRoute](https://img.shields.io/badge/Gateway-OmniRoute-orange.svg)](https://github.com/danny-avila/OmniRoute)
-[![Tests Passing](https://img.shields.io/badge/Tests-31%2F31%20Passing-success.svg)](test/)
+[![Tests Passing](https://img.shields.io/badge/Tests-36%2F36%20Passing-success.svg)](test/)
 
 Limitless Claude is an open-source configuration and model-routing harness that connects **Claude Code** to a dynamic fleet of third-party AI models through **OmniRoute**. Instead of binding your agentic coding sessions to a single provider meter or running into sudden rate-limit brick walls, Limitless Claude aggregates your existing developer accounts—including zero-marginal-cost community endpoints, subscription-entitled access (such as GitHub Copilot and Antigravity), and pay-as-you-go providers—into four specialized coding tiers.
 
@@ -83,7 +83,7 @@ sequenceDiagram
     participant Tier as Limitless Tier Combo
     participant Upstream as Upstream Provider (Qwen, DeepSeek, Groq)
 
-    Dev->>CC: Run `claude` (or `claude -m limitless-opus`)
+    Dev->>CC: Run `claude` (or `claude --model limitless-opus`)
     CC->>OR: POST /v1/messages (ANTHROPIC_BASE_URL: 127.0.0.1:20128)
     OR->>Tier: Matches alias pattern (*opus*, *sonnet*, *haiku*, *fable*)
     Note over Tier: Injects tier system instructions & applies routing strategy
@@ -214,10 +214,10 @@ claude
 ```
 Or target a specific routing profile:
 ```bash
-claude -m limitless-opus
-claude -m limitless-sonnet
-claude -m limitless-haiku
-claude -m limitless-fable
+claude --model limitless-opus
+claude --model limitless-sonnet
+claude --model limitless-haiku
+claude --model limitless-fable
 ```
 
 ### VS Code Extension
@@ -253,16 +253,16 @@ Because Limitless Claude configures OmniRoute to translate and proxy Claude Code
 To verify how a specific model alias routes through OmniRoute:
 ```bash
 # Check Opus route
-claude -m limitless-opus "Hello, what model profile are you?"
+claude --model limitless-opus "Hello, what model profile are you?"
 
 # Check Sonnet architectural route
-claude -m limitless-sonnet "Explain your reasoning approach."
+claude --model limitless-sonnet "Explain your reasoning approach."
 
 # Check Haiku rapid syntax route
-claude -m limitless-haiku "Print 1+1"
+claude --model limitless-haiku "Print 1+1"
 
 # Check Fable high-context route
-claude -m limitless-fable "Summarize project structure."
+claude --model limitless-fable "Summarize project structure."
 ```
 
 ### Inspecting Live OmniRoute Logs

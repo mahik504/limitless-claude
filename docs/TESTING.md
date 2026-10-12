@@ -72,10 +72,10 @@ Because live API calls consume rate limits and token allowances, live client tes
 3. **Verify Model Alias Routing:**
    - Test each alias individually:
      ```bash
-     claude -m limitless-haiku
-     claude -m limitless-sonnet
-     claude -m limitless-opus
-     claude -m limitless-fable
+     claude --model limitless-haiku
+     claude --model limitless-sonnet
+     claude --model limitless-opus
+     claude --model limitless-fable
      ```
    - Verify OmniRoute matches the corresponding combo ID for each alias.
 

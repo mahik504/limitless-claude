@@ -171,7 +171,7 @@ function backupDatabase(db, dbPath, backupPath) {
     }
   }
 
-  // 5. Verify candidate backup integrity in complete isolation
+  // 5. Verify candidate backup integrity and data consistency in complete isolation
   let verifyDb;
   try {
     verifyDb = openDatabase(candidatePath, { readonly: true });
@@ -180,9 +180,24 @@ function backupDatabase(db, dbPath, backupPath) {
     if (resultVal !== "ok") {
       throw new Error(`Backup quick_check returned: ${resultVal}`);
     }
+
+    // Verify expected tables and rows from source database are present in candidate
+    const sourceTables = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'").all().map(r => r.name);
+    const candidateTables = verifyDb.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'").all().map(r => r.name);
+    for (const tbl of sourceTables) {
+      if (!candidateTables.includes(tbl)) {
+        throw new Error(`missing table '${tbl}'`);
+      }
+      const srcCount = db.prepare(`SELECT count(*) as cnt FROM "${tbl}"`).get().cnt;
+      const candCount = verifyDb.prepare(`SELECT count(*) as cnt FROM "${tbl}"`).get().cnt;
+      if (candCount < srcCount) {
+        throw new Error(`table '${tbl}' has fewer rows (${candCount}) than source database (${srcCount})`);
+      }
+    }
   } catch (verifyErr) {
     if (verifyDb) {
       try { verifyDb.close(); } catch (_) {}
+      verifyDb = null;
     }
     if (fs.existsSync(candidatePath)) {
       try { fs.unlinkSync(candidatePath); } catch (_) {}
@@ -194,19 +209,41 @@ function backupDatabase(db, dbPath, backupPath) {
     }
   }
 
-  // 6. Safe atomic replacement: only replace previous backup after candidate is confirmed valid
-  try {
-    if (fs.existsSync(backupPath)) {
-      try { fs.unlinkSync(backupPath); } catch (_) {}
+  // 6. Safe atomic replacement: preserve previous backup until candidate is safely in place
+  const prevBackupPath = fs.existsSync(backupPath) ? `${backupPath}.prev.${Date.now()}.${Math.random().toString(36).slice(2, 8)}` : null;
+  if (prevBackupPath) {
+    try {
+      fs.renameSync(backupPath, prevBackupPath);
+    } catch (movePrevErr) {
+      if (fs.existsSync(candidatePath)) {
+        try { fs.unlinkSync(candidatePath); } catch (_) {}
+      }
+      throw new Error(`Failed to stage existing backup before promotion: ${movePrevErr.message}. Existing backup preserved.`);
     }
+  }
+
+  let promoted = false;
+  try {
     fs.renameSync(candidatePath, backupPath);
+    promoted = true;
   } catch (replaceErr) {
     try {
       fs.copyFileSync(candidatePath, backupPath);
       try { fs.unlinkSync(candidatePath); } catch (_) {}
+      promoted = true;
     } catch (copyFallbackErr) {
-      throw new Error(`Failed to promote verified backup candidate to target path: ${copyFallbackErr.message}`);
+      if (prevBackupPath && fs.existsSync(prevBackupPath)) {
+        try { fs.renameSync(prevBackupPath, backupPath); } catch (_) {}
+      }
+      if (fs.existsSync(candidatePath)) {
+        try { fs.unlinkSync(candidatePath); } catch (_) {}
+      }
+      throw new Error(`Failed to promote verified backup candidate to target path: ${copyFallbackErr.message}. Previous backup preserved.`);
     }
+  }
+
+  if (promoted && prevBackupPath && fs.existsSync(prevBackupPath)) {
+    try { fs.unlinkSync(prevBackupPath); } catch (_) {}
   }
 
   return true;

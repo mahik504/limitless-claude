@@ -23,6 +23,7 @@ test.describe("OmniRoute API Key Permission Safety", () => {
         catalog_scope TEXT,
         is_active INTEGER,
         revoked_at DATETIME,
+        expires_at DATETIME,
         created_at DATETIME,
         last_used_at DATETIME
       );
@@ -153,8 +154,16 @@ test.describe("OmniRoute API Key Permission Safety", () => {
 
     const result = safelyConfigureComboPermissions(minDb, "minimal-key", ["combo/limitless-opus"]);
     assert.strictEqual(result.changed, false);
+    assert.strictEqual(result.status, "unsupported_schema");
+    assert.strictEqual(result.reason, "missing_allowed_combos_column");
 
     minDb.close();
     fs.rmSync(minDir, { recursive: true, force: true });
+  });
+
+  test.it("should reject an explicit key if it is expired", () => {
+    db.prepare("INSERT INTO api_keys (key, model_access_mode, is_active, expires_at) VALUES ('key-expired', 'all', 1, '2020-01-01 00:00:00')").run();
+    const found = findTargetApiKey(db, "key-expired");
+    assert.strictEqual(found, null, "Explicit expired key must not be selected");
   });
 });

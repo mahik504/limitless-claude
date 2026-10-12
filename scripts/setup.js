@@ -69,7 +69,7 @@ function classifyModelBilling(provider, model) {
   }
 
   // Explicitly metered / commercial paid API providers
-  if (["mistral", "openai", "anthropic"].includes(p)) {
+  if (["mistral", "openai", "anthropic", "together", "fireworks", "cohere", "deepseek", "anyscale", "replicate", "perplexity"].includes(p)) {
     return "paid";
   }
 
@@ -261,8 +261,11 @@ async function runSetup() {
     { provider: "openrouter", model: "qwen/qwen-3.8-coder-32b-instruct" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  const excludePaid = process.env.LIMITLESS_EXCLUDE_PAID === "true" || process.env.LIMITLESS_EXCLUDE_PAID === "1";
-  const allowUnknown = process.env.LIMITLESS_ALLOW_UNKNOWN_BILLING === "true" || process.env.LIMITLESS_ALLOW_UNKNOWN_BILLING === "1";
+  const cliArgs = process.argv.slice(2);
+  const excludePaid = cliArgs.includes("--exclude-paid") || cliArgs.includes("--free-only") ||
+    process.env.LIMITLESS_EXCLUDE_PAID === "true" || process.env.LIMITLESS_EXCLUDE_PAID === "1";
+  const allowUnknown = cliArgs.includes("--allow-unknown") ||
+    process.env.LIMITLESS_ALLOW_UNKNOWN_BILLING === "true" || process.env.LIMITLESS_ALLOW_UNKNOWN_BILLING === "1";
 
   let haikuCandidates = haikuRaw;
   let sonnetCandidates = sonnetRaw;
@@ -275,6 +278,10 @@ async function runSetup() {
     opusCandidates = filterCandidatesByBilling(opusCandidates, true, allowUnknown);
     fableCandidates = filterCandidatesByBilling(fableCandidates, true, allowUnknown);
     console.log("Enforced paid-model safety guard: excluded chargeable/unknown candidates from routing combos.");
+    if (haikuCandidates.length === 0) console.warn("\x1b[33m[WARNING] Haiku tier has 0 candidates after applying paid model guard.\x1b[0m");
+    if (sonnetCandidates.length === 0) console.warn("\x1b[33m[WARNING] Sonnet tier has 0 candidates after applying paid model guard.\x1b[0m");
+    if (opusCandidates.length === 0) console.warn("\x1b[33m[WARNING] Opus tier has 0 candidates after applying paid model guard.\x1b[0m");
+    if (fableCandidates.length === 0) console.warn("\x1b[33m[WARNING] Fable tier has 0 candidates after applying paid model guard.\x1b[0m");
   }
 
   const totalCandidates = haikuCandidates.length + sonnetCandidates.length + opusCandidates.length + fableCandidates.length;
@@ -481,7 +488,7 @@ async function runSetup() {
     // Unix / macOS launcher script
     const shDir = process.env.TEST_STARTUP_DIR || path.join(__dirname, '..');
     const shPath = path.join(shDir, 'start-daemon.sh');
-    const shContent = `#!/bin/bash\n# Limitless Claude Background Launcher for Linux / macOS\n# Note: Launches OmniRoute in the background using nohup. It is not an auto-restarting service.\n\nif command -v nc >/dev/null 2>&1 && nc -z 127.0.0.1 20128 2>/dev/null; then\n    echo "OmniRoute gateway is already running and listening on port 20128."\n    echo "You can now run 'claude' in your terminal."\n    exit 0\nfi\n\nif ! command -v npx &> /dev/null && ! command -v omniroute &> /dev/null; then\n    echo "Error: Neither 'omniroute' nor 'npx' was found in PATH."\n    echo "Please ensure Node.js and npm are installed: https://nodejs.org/"\n    exit 1\nfi\n\nCMD="npx omniroute"\nif command -v omniroute &> /dev/null; then\n    CMD="omniroute"\nfi\n\necho "Starting Limitless Claude (OmniRoute) in the background..."\nnohup $CMD serve > omniroute.log 2>&1 &\nPID=$!\necho "Daemon started with PID $PID."\necho "Logs streaming to ./omniroute.log"\necho "You can now run 'claude' in your terminal."\n`;
+    const shContent = `#!/bin/bash\n# Limitless Claude Background Launcher for Linux / macOS\n# Note: Launches OmniRoute in the background using nohup. It is not an auto-restarting service.\n\nif command -v nc >/dev/null 2>&1 && nc -z 127.0.0.1 20128 2>/dev/null; then\n    echo "OmniRoute gateway is already running and listening on port 20128."\n    echo "You can now run 'claude' in your terminal."\n    exit 0\nfi\n\nif ! command -v npx >/dev/null 2>&1 && ! command -v omniroute >/dev/null 2>&1; then\n    echo "Error: Neither 'omniroute' nor 'npx' was found in PATH."\n    echo "Please ensure Node.js and npm are installed: https://nodejs.org/"\n    exit 1\nfi\n\nCMD="npx omniroute"\nif command -v omniroute >/dev/null 2>&1; then\n    CMD="omniroute"\nfi\n\necho "Starting Limitless Claude (OmniRoute) in the background..."\nnohup $CMD serve > omniroute.log 2>&1 &\nPID=$!\necho "Daemon started with PID $PID."\necho "Logs streaming to ./omniroute.log"\necho "You can now run 'claude' in your terminal."\n`;
     fs.writeFileSync(shPath, shContent);
     try {
       fs.chmodSync(shPath, 0o755);

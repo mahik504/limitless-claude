@@ -8,14 +8,14 @@ if command -v nc >/dev/null 2>&1 && nc -z 127.0.0.1 20128 2>/dev/null; then
     exit 0
 fi
 
-if ! command -v npx &> /dev/null && ! command -v omniroute &> /dev/null; then
+if ! command -v npx >/dev/null 2>&1 && ! command -v omniroute >/dev/null 2>&1; then
     echo "Error: Neither 'omniroute' nor 'npx' was found in PATH."
     echo "Please ensure Node.js and npm are installed: https://nodejs.org/"
     exit 1
 fi
 
 CMD="npx omniroute"
-if command -v omniroute &> /dev/null; then
+if command -v omniroute >/dev/null 2>&1; then
     CMD="omniroute"
 fi
 

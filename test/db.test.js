@@ -135,4 +135,85 @@ test.describe("SQLite Driver Adapter & WAL-Safe Backup", () => {
 
     db.close();
   });
+
+  test.it("should fail candidate verification if candidate file has missing tables or rows compared to source", () => {
+    assert.strictEqual(fs.existsSync(backupPath), true);
+    const db = openDatabase(dbPath);
+
+    // Force fallback path by failing VACUUM INTO, and simulate a copy that truncates/drops records
+    const origExec = db.exec.bind(db);
+    const origCopy = fs.copyFileSync.bind(fs);
+
+    db.exec = (sql) => {
+      if (typeof sql === "string" && sql.startsWith("VACUUM INTO")) {
+        throw new Error("VACUUM INTO disabled for test");
+      }
+      return origExec(sql);
+    };
+
+    fs.copyFileSync = (src, dest) => {
+      // Instead of copying the real DB, create an empty valid DB without the 'records' table
+      const emptyDb = openDatabase(dest);
+      emptyDb.exec("CREATE TABLE unrelated_empty (id INTEGER PRIMARY KEY);");
+      emptyDb.close();
+    };
+
+    try {
+      assert.throws(() => {
+        backupDatabase(db, dbPath, backupPath);
+      }, /missing table 'records'/);
+    } finally {
+      fs.copyFileSync = origCopy;
+    }
+
+    // Previous backup must remain intact
+    assert.strictEqual(fs.existsSync(backupPath), true);
+    const verifyDb = openDatabase(backupPath, { readonly: true });
+    const count = verifyDb.prepare("SELECT count(*) as cnt FROM records").get();
+    assert.ok(count.cnt >= 2);
+    verifyDb.close();
+    db.close();
+  });
+
+  test.it("should safely preserve and restore existing backup if candidate promotion fails", () => {
+    assert.strictEqual(fs.existsSync(backupPath), true);
+    const db = openDatabase(dbPath);
+
+    const origRename = fs.renameSync.bind(fs);
+    const origCopy = fs.copyFileSync.bind(fs);
+
+    let renameAttempts = 0;
+    fs.renameSync = (src, dest) => {
+      renameAttempts++;
+      // Allow staging rename (backupPath -> prevBackupPath), but fail promotion (candidatePath -> backupPath)
+      if (src.includes(".candidate.")) {
+        throw new Error("Simulated candidate promotion rename failure");
+      }
+      return origRename(src, dest);
+    };
+
+    fs.copyFileSync = (src, dest) => {
+      if (src.includes(".candidate.")) {
+        throw new Error("Simulated candidate promotion copy failure");
+      }
+      return origCopy(src, dest);
+    };
+
+    try {
+      assert.throws(() => {
+        backupDatabase(db, dbPath, backupPath);
+      }, /Failed to promote verified backup candidate/);
+    } finally {
+      fs.renameSync = origRename;
+      fs.copyFileSync = origCopy;
+    }
+
+    // Verify existing backup was restored to backupPath without loss
+    assert.strictEqual(fs.existsSync(backupPath), true, "Existing backup must be restored");
+    const verifyDb = openDatabase(backupPath, { readonly: true });
+    const count = verifyDb.prepare("SELECT count(*) as cnt FROM records").get();
+    assert.ok(count.cnt >= 2);
+    verifyDb.close();
+    db.close();
+  });
 });

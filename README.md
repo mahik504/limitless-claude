@@ -1,93 +1,113 @@
-# Limitless Claude 
+# Limitless Claude 🚀
 
-**Your Coding Agent. Your Model Fleet. Your Rules.**
+> **Your Coding Agent. Your Model Fleet. Zero Sub Anxiety.**
 
-Limitless Claude is an open-source, student-friendly model-routing harness designed to wrap **Claude Code** and **OmniRoute**. It allows you to ditch expensive, single-vendor API bills and instead route your agentic coding workflows through a massive fleet of free, subscription-entitled, and open-weight AI models. 
+Limitless Claude is an open-source, student-friendly model-routing harness designed to power **Claude Code** through **OmniRoute**. Instead of getting locked into single-vendor API bills, Limitless Claude unleashes your agentic coding workflows across a massive, flexible fleet of free, open-weight, and subscription-entitled AI models.
 
-By combining provider access, dynamic model selection, custom internal tier personas, and intelligent fallback pools into one local workflow, this project unlocks an **estimated aggregate capacity of up to ~28 Million tokens per day**.
+By unifying multiple provider accounts, dynamic model cascading, specialized tier personas, and intelligent fallback pools into a seamless local proxy, this project unlocks an **estimated theoretical aggregate capacity of up to ~28 Million tokens per day**.
 
-[Architecture](#architecture) • [Tiers](#the-four-tiers) • [Token Estimates](#the-token-capacity-story) • [Installation](#installation) • [Testing](#testing)
+```
+   ┌──────────────────────────────────────────────────────────────┐
+   │  CLAUDE CODE CLI  ──>  LOCAL OMNIROUTE PROXY (127.0.0.1:20128)│
+   │                               │                              │
+   │  ┌───────────────┬────────────┴───┬───────────────┬──────────┴───┐
+   │  │ ⚡ HAIKU      │ 🧠 SONNET      │ 🛠️ OPUS       │ 👑 FABLE     │
+   │  │ Speed Cascade │ Deep Reasoning │ Coding Tank   │ Subscriptions│
+   │  └───────────────┴────────────────┴───────────────┴──────────────┘
+   │                               │                              │
+   │      ==> OpenRouter • HuggingChat • GitHub Copilot • Groq ==>   │
+   └──────────────────────────────────────────────────────────────┘
+```
+
+[Architecture](#architecture) • [The Four Tiers](#the-four-tiers) • [Token Estimates](#the-token-capacity-story) • [Installation](#installation) • [Testing](#tests-and-integrity) • [Docs](docs/)
 
 ---
 
-## Why it Exists
-AI inference is expensive, and provider access is heavily fragmented. If you want to use Anthropic's Claude Code for local agentic development, you typically have to pay Anthropic per-token. 
+## Why It Hits Different
 
-But what if you already have a GitHub Copilot subscription? Or free HuggingChat access? Or an OpenRouter account with massive free limits? 
+AI inference is fragmented, and official per-token API meters tick fast when you are running deep agentic loops. If you want to use Anthropic's official Claude Code CLI for building full-stack applications, single-vendor bills can quickly add up.
 
-Limitless Claude solves this. It acts as a bridge: you configure your various free and subscription accounts in OmniRoute, run our setup script, and immediately use the native Claude Code CLI. We seamlessly intercept Claude's model requests and intelligently cascade them across your connected providers.
+Meanwhile, chances are you already have access to an entire arsenal of unused AI bandwidth:
+- A student GitHub Copilot subscription.
+- Free HuggingChat and Groq quotas.
+- OpenRouter free model endpoints.
+- Cloud credits or secondary developer keys.
+
+**Limitless Claude bridges the gap.** You authenticate your preferred providers once in OmniRoute, run our one-command setup, and start Claude Code normally. We intercept Claude Code's model requests under the hood and intelligently route them across your available model armada—giving you high-throughput, multi-agent development without the paywall stress.
 
 ---
 
-## Architecture
+## Architecture & Data Flow
 
-Our architecture intercepts standard Claude Code strings, applies advanced routing strategies, and targets specific models based on their strengths.
+Limitless Claude operates strictly as a local configuration harness. Claude Code's CLI sends standard API calls to OmniRoute at `127.0.0.1:20128`, which dynamically executes your tier routing policies.
 
 ```mermaid
 flowchart TD
-    subgraph Client
-        CC[Claude Code CLI / IDE]
+    subgraph Client ["Client Environment"]
+        CC["Claude Code CLI (Terminal / VS Code)"]
     end
 
-    subgraph Limitless Proxy
-        OR[OmniRoute at 127.0.0.1:20128]
-        subgraph Tiers
-            H[Haiku - Speed]
-            S[Sonnet - Reasoning]
-            O[Opus - Code Reservoir]
-            F[Fable - Premium]
+    subgraph Proxy ["Local Gateway: 127.0.0.1:20128"]
+        OR["OmniRoute Engine"]
+        subgraph Combos ["Limitless Tier Strategies"]
+            H["⚡ Haiku (Priority Waterfall)"]
+            S["🧠 Sonnet (Priority Waterfall)"]
+            O["🛠️ Opus (Round-Robin Reservoir)"]
+            F["👑 Fable (Round-Robin Premium)"]
         end
     end
 
-    subgraph Providers
-        P1[OpenRouter]
-        P2[HuggingChat]
-        P3[GitHub Copilot]
-        P4[Antigravity]
-        P5[+ More]
+    subgraph Providers ["Upstream AI Armada"]
+        P1["OpenRouter (Free / Paid)"]
+        P2["HuggingChat (Open-Weight)"]
+        P3["GitHub Copilot (Subscription)"]
+        P4["Groq (Ultra-Low Latency)"]
+        P5["Ollama / Cloud Backends"]
     end
 
-    CC --> OR
-    OR --> Tiers
-    Tiers --> P1
-    Tiers --> P2
-    Tiers --> P3
-    Tiers --> P4
-    Tiers --> P5
+    CC -->|"POST /v1/chat/completions"| OR
+    OR --> Combos
+    H -->|"Lowest Latency Cascade"| P4 & P1
+    S -->|"Chain-of-Thought Cascade"| P1 & P3
+    O -->|"RPM Load-Balancing (17+ Models)"| P1 & P2
+    F -->|"Premium Subscription Pool"| P3 & P1
 ```
-For a deeper dive, read the [Architecture Documentation](docs/ARCHITECTURE.md).
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Dev as Developer
+    participant CC as Claude Code CLI
+    participant OR as OmniRoute (127.0.0.1:20128)
+    participant Tier as Limitless Tier Combo
+    participant Upstream as Upstream Provider (Qwen / DeepSeek / Groq)
+
+    Dev->>CC: Run `claude` (or `claude -m limitless-opus`)
+    CC->>OR: Intercepts request via localhost proxy
+    OR->>Tier: Applies tier persona & routing strategy
+    Tier->>Upstream: Dispatches prompt (falls back if rate-limited)
+    Upstream-->>Tier: Returns code tokens & tool-use calls
+    Tier-->>OR: Normalizes response payload
+    OR-->>CC: Returns Anthropic-compatible JSON
+    CC-->>Dev: Executes edits, terminal commands, or git diffs
+```
+
+For a deeper dive into the gateway semantics, read the [Architecture Documentation](docs/ARCHITECTURE.md).
 
 ---
 
 ## The Four Tiers
 
-We map your incoming requests to four purpose-built combos. *Note: The setup script filters these hard-coded candidates against your live providers. The final active list is written to `config/tier-configuration.json`.*
+Limitless Claude configures four dedicated combos. When running `npm run setup`, the candidates are safely filtered against your live active providers, writing the active manifest to `config/tier-configuration.json`.
 
-### 1. Haiku (Speed)
-* **Purpose:** Rapid syntax lookups, latency-sensitive edits, and instant file searches.
-* **Strategy:** Priority Cascade (Optimized for lowest latency fallback).
-* **Configured Candidates:** 7 (Groq Llama, Gemini Flash Lite, OpenRouter GLM/Qwen).
-* **Token Estimate:** ~1.5 to 3M Tokens/Day.
+| Tier | Persona / Vibe | Strategy | Primary Focus | Models Configured |
+|---|---|---|---|---|
+| **⚡ Haiku** | Fast, snappy, zero filler | **Priority Waterfall** | Quick syntax lookups, fuzzy file searches, instant tool checks | 7 (Groq Llama, Gemini Flash Lite, GLM) |
+| **🧠 Sonnet** | Deep systems thinker | **Priority Waterfall** | Architecture planning, complex debugging, refactors | 6 (Claude Thinking, DeepSeek Reasoner, Command R+) |
+| **🛠️ Opus** | The code generation workhorse | **Round-Robin** | High-volume code writing and multi-file synthesis | 17 (Qwen 2.5 Coder Next, Codestral, DeepSeek 3.2, GLM) |
+| **👑 Fable** | God-mode reasoning | **Round-Robin** | Massive context synthesis utilizing your premium subscriptions | 6 (GPT-4o, Claude Opus, Gemini Pro) |
 
-### 2. Sonnet (Reasoning)
-* **Purpose:** System design, architecture planning, and complex debugging.
-* **Strategy:** Priority Cascade (Optimized for reasoning consistency).
-* **Configured Candidates:** 6 (Claude Thinking, DeepSeek Reasoner, Command R).
-* **Token Estimate:** ~2.5M Tokens/Day.
-
-### 3. Opus (Free Coding Reservoir)
-* **Purpose:** The massive workhorse for raw code generation and multi-agent development.
-* **Strategy:** Round-Robin (Load-Balanced to bypass single-model rate limits).
-* **Configured Candidates:** 17 (Qwen Coder Next, Codestral, DeepSeek 3.2, GLM 5.3).
-* **Token Estimate:** ~14M Tokens/Day.
-
-### 4. Fable (Premium God-Mode)
-* **Purpose:** Complex context synthesis leveraging your paid subscriptions.
-* **Strategy:** Round-Robin (Load-Balanced).
-* **Configured Candidates:** 6 (GPT-4o, Claude Opus, Gemini Pro).
-* **Token Estimate:** ~10M Tokens/Day.
-
-For the exact model identifiers and priority order, see the [Model Catalog](docs/MODEL-CATALOG.md).
+*For exact upstream model IDs and priority rankings, explore the [Model Catalog](docs/MODEL-CATALOG.md).*
 
 ---
 
@@ -96,109 +116,132 @@ For the exact model identifiers and priority order, see the [Model Catalog](docs
 | Feature | Status | Notes |
 |---|---|---|
 | **Claude Code CLI** | `Manually Smoke-Tested` | Works natively for local terminal execution. |
-| **Model Aliases** | `Automated-test-verified` | `limitless-opus`, `limitless-sonnet`, etc. mappings are verified by isolated tests. |
-| **Tool Calling (MCP)** | `Manually Smoke-Tested` | Agentic file editing and skill execution verified through manual smoke tests. |
-| **Multi-Agent Prompts**| `Automated-test-verified` | Tier personas successfully injected into payload, verified by isolated tests. |
-| **Plan Mode** | `Unverified` | Works conditionally, but heavily dependent on the upstream provider's reasoning capability. |
-| **Streaming** | `Unverified` | Dependent on the specific upstream model/provider support. |
-| **Long Context** | `Unverified` | Context limits vary wildly between third-party open-weight models. |
+| **Model Aliases** | `Automated-test-verified` | `limitless-opus`, `limitless-sonnet`, etc. mappings verified by isolated test suite. |
+| **Tool Calling (MCP)** | `Manually Smoke-Tested` | File modifications, bash executions, and directory inspections operate normally. |
+| **Multi-Agent Prompts**| `Automated-test-verified` | Persona system prompts injected cleanly into OmniRoute payloads. |
+| **Background Daemon** | `Manually Smoke-Tested` | Invisible auto-restart daemon runs on Windows Startup and Linux/macOS background scripts. |
+| **Plan Mode** | `Unverified` | Supported conditionally; relies on reasoning depth of active upstream model. |
+| **Streaming** | `Unverified` | Dependent on individual upstream provider capabilities. |
+| **Long Context** | `Unverified` | Context limits depend on the underlying third-party models. |
 
 ---
 
 ## The Token-Capacity Story
 
-By load-balancing requests across multiple accounts, Limitless Claude aims to mitigate single-model rate limits. Based on published rate limits and an assumed 1.5k–3k context per request, **the theoretical estimated aggregate token capacity reaches ~28,000,000 tokens per day**.
+By load-balancing requests across multiple providers, Limitless Claude prevents your agent workflow from screeching to a halt on single-provider rate limits. Based on published rate limits and an assumed 1.5k–3k context window per prompt, **the theoretical estimated aggregate token capacity reaches ~28,000,000 tokens per day**.
 
-This is a theoretical maximum based on several assumptions:
-- **Per-tier assumptions:** Assumes all configured candidates in every tier remain active and available simultaneously.
-- **Concurrency/RPM/Quotas:** Assumes maximum utilization without hitting burst concurrency limits (RPM) before daily quotas reset.
-- **Filtering:** Assumes all active candidates pass health checks.
-- **Input/Output Ratio:** Assumes a balanced mix of input/output tokens. Output token limits are often much stricter than input.
-- **Capacity vs Real Usage:** Theoretical capacity is rarely achieved in practice, as human testing and agent iteration pauses limit continuous throughput.
+### Modeling Assumptions & Caveats:
+- **Concurrent Availability:** Assumes all configured candidates across all tiers remain available simultaneously.
+- **Concurrency & RPM:** Assumes steady throughput without exceeding burst concurrency limits before daily quotas reset.
+- **Input vs. Output Tokens:** Daily token volume includes both input reading and output generation; output quotas are typically stricter.
+- **Modeled vs. Real-World:** Human testing, thinking time, and command approval naturally reduce actual daily consumption compared to mathematical maximums.
+- **Historical OpenRouter Note:** Historical capacity estimates factored in an OpenRouter tier expansion (1,000 requests/day upon balance deposit). This behavior is documented as a theoretical assumption.
 
-### The OpenRouter Expansion Assumption
-Historical estimation assumed OpenRouter expanded free limits to 1,000 requests/day after a minimum $10 deposit. **This behavior is currently unverified.** If this historical assumption still holds, funding the balance alone would theoretically unlock an estimated 8M+ zero-marginal-cost tokens daily across the load-balanced pool.
-
-*Note: This is a modeled capacity estimate. Read our transparent methodology in [Token Capacity](docs/TOKEN-CAPACITY.md).*
+*Read the transparent methodology in [Token Capacity](docs/TOKEN-CAPACITY.md).*
 
 ---
 
 ## System Prompts and Personas
 
-Each tier is injected with a custom system prompt designed to optimize behavior:
-- **Speed (Haiku):** Instructed to omit conversational filler and execute tools instantly.
-- **Reasoning (Sonnet):** Instructed to deploy chain-of-thought planning before writing code.
-- **Coding (Opus/Fable):** Instructed to synthesize massive multi-agent architectures.
+Each tier is equipped with an engineered system prompt to maximize coding performance:
+- **⚡ Haiku (Speed):** Instructed to omit conversational chatter and execute tool operations immediately.
+- **🧠 Sonnet (Reasoning):** Instructed to perform thorough chain-of-thought analysis and architecture checks before touching files.
+- **🛠️ Opus / 👑 Fable (Coding):** Instructed to generate robust, modular code, preserve existing code integrity, and handle multi-agent handoffs cleanly.
 
-*Disclaimer: Limitless Claude configures Claude Code and OmniRoute to route requests to third-party models; it does not itself supply inference or guarantee native Claude parity. We use internal labels to describe behaviors, but we do not impersonate official Anthropic model versions.*
+> **Disclaimer:** Limitless Claude configures Claude Code and OmniRoute to route requests to third-party models; it does not itself supply inference or guarantee native Anthropic model parity. Internal tier labels represent routing profiles, not official Anthropic models.
 
 ---
 
 ## Supported Providers
 
-We utilize a hybrid ecosystem of Zero-Marginal-Cost, Subscription-Entitled, and Paid APIs:
-- **Zero-Marginal-Cost:** OpenRouter (`:free`), HuggingChat, Groq, Ollama Cloud, Muse Spark.
+We tap into a diverse ecosystem across three categories:
+- **Zero-Marginal-Cost:** OpenRouter (`:free` endpoints), HuggingChat, Groq, Ollama Cloud, Muse Spark.
 - **Subscription-Entitled:** GitHub Copilot, Antigravity, BluesMinds, Kiro.
-- **Paid Inference:** Mistral, OpenRouter (Premium).
+- **Paid Inference:** Mistral, OpenRouter (Pay-as-you-go).
 
-For a complete breakdown, read our [Providers Guide](docs/PROVIDERS.md).
+*See the complete connection guide in [Providers](docs/PROVIDERS.md).*
 
 ---
 
-## Installation
+## Installation & Quickstart
 
-**Prerequisites:**
-- Node.js v22 or later
-- `pnpm` installed globally
-- Claude Code installed (`npm install -g @anthropic-ai/claude-code`)
+### Prerequisites
+- **Node.js** v22 or later
+- **npm** (included with Node.js)
+- **Claude Code CLI** (`npm install -g @anthropic-ai/claude-code`)
 
-### Step 1: Install OmniRoute
+---
+
+### Step 1: Install & Start OmniRoute
 ```bash
 npm install -g omniroute@latest
 omniroute serve
 ```
-Leave this running.
+*Leave this terminal running during initial setup.*
 
-### Step 2: Authenticate
-Open `http://localhost:20128` in your browser and connect your preferred providers (e.g., OpenRouter, GitHub Copilot).
+### Step 2: Authenticate Your Providers
+Open your browser to:
+```
+http://localhost:20128
+```
+Navigate to **Providers** and connect whichever free, open-source, or subscription accounts you have available (e.g. OpenRouter, GitHub Copilot, Groq).
 
-### Step 3: Build the Limitless Tiers
+### Step 3: Setup Limitless Tiers
+Clone the repository and run the setup script:
 ```bash
 git clone https://github.com/mahik504/limitless-claude.git
 cd limitless-claude
 npm install
 npm run setup
 ```
-The setup script uses safe SQLite transactions to inject the tiers into OmniRoute and installs an invisible background auto-recovery daemon on Windows.
 
-### Step 4: Run Claude Code
+**What the setup script does:**
+1. Connects to your local OmniRoute SQLite database (`~/.omniroute/storage.sqlite`).
+2. Creates an automatic backup (`storage.sqlite.bak`).
+3. Discovers your active providers and injects the 4 optimized Limitless combos.
+4. Generates an active configuration snapshot at `config/tier-configuration.json`.
+5. **Auto-Recovery Daemon:** On Windows, installs an invisible background auto-restart script in your Windows Startup folder (`Limitless-OmniRoute-Launcher.vbs`) so OmniRoute is always available without manual terminal management. (On Linux/macOS, use `./start-daemon.sh`).
+
+### Step 4: Code!
+Run Claude Code directly in any project:
 ```bash
 claude
+```
+Or target a specific tier combo:
+```bash
+claude -m limitless-opus
+claude -m limitless-sonnet
+claude -m limitless-haiku
 ```
 
 ---
 
 ## Tests and Integrity
 
-We utilize Node's native test runner to execute deterministic, isolated tests that ensure your real database is never corrupted during validation. 
+We use Node's native test runner (`node:test`) to run isolated, deterministic checks without ever touching or risking your live database during CI:
 
-Run the tests locally:
 ```bash
 npm test
 ```
-*Note: These tests validate setup logic, payload structure, and fallback math using an isolated mock database. Live provider smoke-testing is deferred to manual verification using your own API keys.*
 
-Read more in [Testing](docs/TESTING.md).
+### What gets verified:
+- **Idempotent DB Transactions:** Safe atomic transactions that cleanly roll back if interrupted.
+- **Payload & Array Structure:** Guards against regressions in `models` arrays and routing strategies (`priority` vs `round-robin`).
+- **Prompt Safety:** Verifies system prompts contain functional coding instructions and no fabricated identities.
+- **Isolated Side Effects:** Tests write to temporary mock paths, ensuring no pollution of your actual startup directory or configurations.
+
+*Read more in [Testing](docs/TESTING.md).*
 
 ---
 
 ## Rollback & Recovery
 
-If `npm run setup` fails midway, it automatically rolls back its database transactions. It also creates a backup of your original database at `~/.omniroute/storage.sqlite.bak`.
-
-If you wish to remove the Windows background startup daemon, simply delete `Limitless-OmniRoute-Launcher.vbs` from your `AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup` directory.
+- **Database Rollback:** If needed, your previous OmniRoute database is preserved at `~/.omniroute/storage.sqlite.bak`.
+- **Remove Windows Startup Daemon:** Simply delete `Limitless-OmniRoute-Launcher.vbs` from:
+  `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup`
 
 ---
 
 ## License
-MIT
+
+MIT © [Mahaveer Singh Gehlot](https://github.com/mahik504)

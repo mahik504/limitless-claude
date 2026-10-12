@@ -256,10 +256,16 @@ async function runSetup() {
         // 2. Put the loop BAT file inside the startup directory or project directory, but isolate for tests
         const batDir = process.env.TEST_STARTUP_DIR || path.join(__dirname, '..');
         const batPath = path.join(batDir, 'omniroute-daemon.bat');
+        const npmBinPath = path.join(process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'), 'npm', 'omniroute.cmd');
         const pnpmBinPath = path.join(os.homedir(), 'AppData', 'Local', 'pnpm', 'bin', 'omniroute.CMD');
 
-        // If the direct pnpm path exists use it, otherwise fallback to npx
-        const cmdToRun = fs.existsSync(pnpmBinPath) ? `"${pnpmBinPath}"` : 'npx omniroute';
+        // Prefer global npm/pnpm executable if present; fallback to npx
+        let cmdToRun = 'npx omniroute';
+        if (fs.existsSync(npmBinPath)) {
+          cmdToRun = `"${npmBinPath}"`;
+        } else if (fs.existsSync(pnpmBinPath)) {
+          cmdToRun = `"${pnpmBinPath}"`;
+        }
 
         const batContent = `@echo off\r\n:loop\r\n${cmdToRun} serve\r\necho OmniRoute crashed. Restarting in 5 seconds...\r\ntimeout /t 5 >nul\r\ngoto loop`;
         fs.writeFileSync(batPath, batContent);

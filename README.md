@@ -1,15 +1,24 @@
-# Limitless Claude v4.5
+# Limitless Claude v5.0
 
 > **Your Claude Code workflow. Your connected model fleet.**
 >
-> *A robust, hardened configuration harness for routing Claude Code through OmniRoute to supported third-party models. Built for predictable routing, transactional SQLite state, isolated testing, and reproducible local developer setup.*
+> *A robust, safety-first configuration and routing SDK for connecting Claude Code through OmniRoute to supported third-party model fleets. Features transactional SQLite configuration, verified WAL-safe backups, strict isolation testing, heuristic paid-model guards, and reproducible local developer setup.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen.svg)](https://nodejs.org/)
 [![OmniRoute](https://img.shields.io/badge/Gateway-OmniRoute-orange.svg)](https://github.com/danny-avila/OmniRoute)
-[![Tests Passing](https://img.shields.io/badge/Tests-53%2F53%20Passing-success.svg)](test/)
+[![Tests Passing](https://img.shields.io/badge/Tests-54%2F54%20Passing-success.svg)](test/)
 
-Limitless Claude is an open-source configuration and model-routing harness that connects **Claude Code** to a dynamic fleet of third-party AI models through **OmniRoute**. Instead of binding your agentic coding sessions to a single provider meter or running into sudden rate-limit brick walls, Limitless Claude aggregates your existing developer accounts—including zero-marginal-cost community endpoints, subscription-entitled access (such as GitHub Copilot and Antigravity), and pay-as-you-go providers—into four specialized coding tiers.
+Limitless Claude is an open-source model-routing harness and developer SDK that seamlessly connects the **Claude Code CLI** to a dynamic fleet of third-party AI models via **OmniRoute** (`127.0.0.1:20128`). By proxying Claude Code's Anthropic Messages API (`POST /v1/messages`), Limitless Claude maps agentic sessions across four distinct routing profiles (`Haiku`, `Sonnet`, `Opus`, and `Fable`) backed by your authenticated provider accounts—including zero-marginal-cost endpoints, developer subscriptions (such as GitHub Copilot and Antigravity), and pay-as-you-go providers.
+
+### Core Architecture & Current Setup Behavior
+- **Live Catalog Default:** By default, setup contacts your live OmniRoute instance (`omniroute serve`) to verify active, reachable models before generating combos. Running offline is strictly opt-in via `--allow-offline-catalog`.
+- **Preflight Isolation & Empty-Tier Prevention:** Validates API key schema compatibility and ensures every required routing profile has valid candidates before beginning any database transaction. Empty tiers abort early to prevent overwriting working combos.
+- **Fail-Closed API Key Management:** Selects active keys transaction-safely, preserves existing restricted access modes without expanding permissions to global `'all'`, and fails closed when older schemas cannot configure combo permissions.
+- **WAL-Consistent Backup & Restoration:** Performs verified SQLite backups (`storage.sqlite.bak`) prior to database updates and restores safely if any operation fails.
+- **Four Purpose-Built Profiles:** `Haiku` (low-latency syntax waterfall), `Sonnet` (deep reasoning waterfall), `Opus` (high-capacity round-robin reservoir), and `Fable` (high-context composite pool).
+- **Requirements:** Node.js >= 22, npm >= 10, an active or accessible OmniRoute installation, and at least one connected AI provider account.
+- **Known Limitations:** Upstream model availability and rate limits depend on individual providers; `--exclude-paid` applies a conservative heuristic classification rather than an absolute billing guarantee; and Claude Code editor integration is verified via integrated terminal sessions.
 
 ---
 
@@ -167,12 +176,26 @@ npm install
 npm run setup
 ```
 
+> **First-Time Setup Requirement:** By default, setup contacts your live OmniRoute instance (`omniroute serve`) on port 20128. If running in an offline or pre-configured test environment without an active gateway, explicitly opt in to the offline cached model catalog:
+> ```bash
+> node scripts/setup.js --allow-offline-catalog
+> ```
+
+### Setup CLI Options
+```bash
+node scripts/setup.js [options]
+```
+- `--allow-offline-catalog` / `LIMITLESS_ALLOW_OFFLINE_CATALOG=true`: Permit using the checked-in offline model inventory if live OmniRoute discovery is unreachable.
+- `--exclude-paid`, `--free-only` / `LIMITLESS_EXCLUDE_PAID=true`: Exclude metered/chargeable models from routing combos using a conservative heuristic filter.
+- `--allow-unknown`: Permit models with unverified billing classification when `--exclude-paid` is active.
+- `--help`, `-h`: Show usage information and exit immediately without initializing database connections, backups, or filesystem modifications.
+
 **What `npm run setup` performs safely:**
 1. Connects to `~/.omniroute/storage.sqlite` and creates a WAL-consistent backup (`storage.sqlite.bak`).
-2. Validates schema compatibility.
-3. Filters tier candidates against your authenticated providers.
-4. Atomically registers combos, system instructions, and routing mappings.
-5. Preserves restricted API key modes without silently granting global access.
+2. Validates schema compatibility and isolates permission preflight checks (`dryRun`).
+3. Verifies candidate models exist across all four routing tiers before making database modifications (aborting safely on empty tiers).
+4. Atomically registers combos, system instructions, and routing mappings inside a single SQLite transaction.
+5. Preserves restricted API key modes without silently granting global access, failing closed if permissions cannot be configured.
 6. Writes active configuration snapshot to `config/tier-configuration.json`.
 7. On Windows, registers an invisible auto-restart daemon in your Windows Startup directory.
 8. On Linux/macOS, creates an executable background runner (`start-daemon.sh`).
@@ -315,14 +338,31 @@ curl -X POST http://127.0.0.1:20128/v1/messages \
 
 ---
 
-## 14. Testing, Limitations, Known Unverified Areas & License
+## 14. v5.0.0 Release Notes & Compatibility
+
+### What's New in v5.0.0
+- **Safety-First Live Catalog Requirement:** Setup requires a live, accessible OmniRoute gateway by default to prevent generating stale or broken model combos. Offline cached catalog usage is strictly opt-in via `--allow-offline-catalog`.
+- **Atomic Preflight & Empty-Tier Safety:** Introduced strict preflight validation with `{ dryRun: true }` isolation. Setup validates API key compatibility and checks that every routing tier has candidates before initiating database transactions, preventing destructive overwrites.
+- **Fail-Closed API Key Permissions:** Restricted API keys are never silently expanded to `'all'`. If an older database schema lacks the `allowed_combos` column, setup exits with a clear non-zero diagnostic rather than leaving permissions in an undefined state.
+- **WAL-Consistent Backup & Safe Restoration:** SQLite database backups use WAL-consistent backups verified with `PRAGMA quick_check`. Promotion copy failures safely clean up destination targets before restoring previous backups.
+- **Zero-DB CLI Help:** Running `node scripts/setup.js --help` outputs usage documentation immediately without initializing database connections, backups, or filesystem modifications.
+- **Verified Multi-OS CI:** Automated test suite expanded to 54 hermetic tests across 4 suites, verified and passing on Ubuntu, Windows, and macOS GitHub Actions runners.
+- **Documentation & Routing Alignment:** Standardized CLI invocation on `claude --model`, updated provider rate-limit and quota guidance, clarified Cursor terminal integration, and explicitly defined `--exclude-paid` as a heuristic classification.
+
+### Compatibility & Upgrading
+- **Backward Compatibility:** Existing `config/tier-configuration.json` snapshots and custom database records are preserved. Upgrading from v4.x only requires pulling `v5.0.0` and running `npm run setup`.
+- **Database Safety:** An automatic backup (`storage.sqlite.bak`) is created before any database mutations occur.
+
+---
+
+## 15. Testing, Limitations, Known Unverified Areas & License
 
 ### Automated Test Suite
 Run the isolated test suite:
 ```bash
 npm test
 ```
-The test suite covers 53 automated tests across 4 test suites:
+The test suite covers 54 automated tests across 4 test suites:
 - **WAL-consistent backup & restore** verification using SQLite `quick_check` and safe atomic restoration on promotion/copy failure.
 - **Live catalogue requirement by default** preventing stale configurations, with explicit opt-in for offline cached inventory (`--allow-offline-catalog`).
 - **Empty-tier prevention** ensuring setup never writes an empty models list to any routing combo.
@@ -335,6 +375,7 @@ The test suite covers 53 automated tests across 4 test suites:
 - **Launcher generation** for Windows (.bat, .vbs) and Unix (.sh).
 - **Graceful nonzero error exits** on failed discovery, empty catalogs, query errors, or schema incompatibilities.
 - **Strict isolation** from your live database, startup directory, and environment.
+- **Zero-DB CLI help verification** ensuring `--help` operates cleanly without database requirements or side effects.
 
 ### Limitations & Known Unverified Areas
 1. **Third-Party Rate Limits:** Upstream providers may alter rate limits, context windows, or tool support without notice.

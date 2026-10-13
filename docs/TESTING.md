@@ -6,7 +6,7 @@ Limitless Claude includes an automated test suite executed with Node's native te
 
 ## 1. Automated Test Suite
 
-Run the full automated test suite:
+Run the full automated test suite (54 hermetic tests across 4 suites):
 
 ```bash
 npm test
@@ -23,6 +23,7 @@ npm test
    - Prompt safety (verifying no fabricated Anthropic identities are injected).
    - Incompatible database schema detection and graceful nonzero exit.
    - Nonzero exit when candidate models catalog is empty.
+   - Zero-DB CLI help verification (`--help`) without database access or side effects.
 
 2. **SQLite Driver & WAL Consistency (`test/db.test.js`)**:
    - Cross-platform driver abstraction (`better-sqlite3` or native `node:sqlite`).

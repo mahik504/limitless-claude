@@ -864,4 +864,20 @@ test.describe("Limitless Claude Setup Integrity", () => {
     assert.deepStrictEqual(combos, ["combo/initial"], "preflight check must not mutate allowed_combos when setup aborts before transaction");
     verifyDb.close();
   });
+
+  test.it("should print help message and exit cleanly without requiring or touching database when --help is passed", () => {
+    const nonexistentDir = path.join(TEST_DIR, "nonexistent-db-dir-" + Date.now());
+    const result = execSync("node scripts/setup.js --help", {
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        OMNIROUTE_DIR: nonexistentDir
+      }
+    });
+
+    assert.match(result, /Limitless Claude Setup CLI/);
+    assert.match(result, /--exclude-paid/);
+    assert.match(result, /--allow-offline-catalog/);
+    assert.strictEqual(fs.existsSync(nonexistentDir), false, "Help execution should not create or touch database directory");
+  });
 });

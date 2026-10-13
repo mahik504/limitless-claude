@@ -77,6 +77,7 @@ test.describe("Limitless Claude Setup Integrity", () => {
     assert.ok(config.opus.length > 0, "Opus should have fallback models");
     assert.strictEqual(config.benchmarks && config.benchmarks["test-bench"], "123ms", "Existing benchmark data should be preserved");
     assert.ok(config.metadata, "Metadata object should be generated");
+    assert.strictEqual(config.metadata.version, "5.0.0", "Metadata version should match package version 5.0.0");
     assert.ok(config.metadata.models_with_billing, "Billing classifications should be attached");
   });
 

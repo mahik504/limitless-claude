@@ -545,7 +545,7 @@ Options:
     opus: results.opusCandidates,
     fable: results.fableCandidates,
     metadata: {
-      version: "4.5.0",
+      version: require("../package.json").version || "5.0.0",
       source: isLiveCatalog ? "live_gateway" : "offline_cache",
       last_scanned: new Date().toISOString(),
       paid_models_excluded: excludePaid,

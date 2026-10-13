@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen.svg)](https://nodejs.org/)
 [![OmniRoute](https://img.shields.io/badge/Gateway-OmniRoute-orange.svg)](https://github.com/danny-avila/OmniRoute)
-[![Tests Passing](https://img.shields.io/badge/Tests-54%2F54%20Passing-success.svg)](test/)
+[![Tests Passing](https://img.shields.io/badge/Tests-55%2F55%20Passing-success.svg)](test/)
 
 Limitless Claude is an open-source model-routing harness and developer SDK that seamlessly connects the **Claude Code CLI** to a dynamic fleet of third-party AI models via **OmniRoute** (`127.0.0.1:20128`). By proxying Claude Code's Anthropic Messages API (`POST /v1/messages`), Limitless Claude maps agentic sessions across four distinct routing profiles (`Haiku`, `Sonnet`, `Opus`, and `Fable`) backed by your authenticated provider accounts—including zero-marginal-cost endpoints, developer subscriptions (such as GitHub Copilot and Antigravity), and pay-as-you-go providers.
 
@@ -346,7 +346,7 @@ curl -X POST http://127.0.0.1:20128/v1/messages \
 - **Fail-Closed API Key Permissions:** Restricted API keys are never silently expanded to `'all'`. If an older database schema lacks the `allowed_combos` column, setup exits with a clear non-zero diagnostic rather than leaving permissions in an undefined state.
 - **WAL-Consistent Backup & Safe Restoration:** SQLite database backups use WAL-consistent backups verified with `PRAGMA quick_check`. Promotion copy failures safely clean up destination targets before restoring previous backups.
 - **Zero-DB CLI Help:** Running `node scripts/setup.js --help` outputs usage documentation immediately without initializing database connections, backups, or filesystem modifications.
-- **Verified Multi-OS CI:** Automated test suite expanded to 54 hermetic tests across 4 suites, verified and passing on Ubuntu, Windows, and macOS GitHub Actions runners.
+- **Verified Multi-OS CI:** Automated test suite expanded to 55 hermetic tests across 4 suites, verified and passing on Ubuntu, Windows, and macOS GitHub Actions runners.
 - **Documentation & Routing Alignment:** Standardized CLI invocation on `claude --model`, updated provider rate-limit and quota guidance, clarified Cursor terminal integration, and explicitly defined `--exclude-paid` as a heuristic classification.
 
 ### Compatibility & Upgrading
@@ -362,7 +362,7 @@ Run the isolated test suite:
 ```bash
 npm test
 ```
-The test suite covers 54 automated tests across 4 test suites:
+The test suite covers 55 automated tests across 4 test suites:
 - **WAL-consistent backup & restore** verification using SQLite `quick_check` and safe atomic restoration on promotion/copy failure.
 - **Live catalogue requirement by default** preventing stale configurations, with explicit opt-in for offline cached inventory (`--allow-offline-catalog`).
 - **Empty-tier prevention** ensuring setup never writes an empty models list to any routing combo.
@@ -375,7 +375,7 @@ The test suite covers 54 automated tests across 4 test suites:
 - **Launcher generation** for Windows (.bat, .vbs) and Unix (.sh).
 - **Graceful nonzero error exits** on failed discovery, empty catalogs, query errors, or schema incompatibilities.
 - **Strict isolation** from your live database, startup directory, and environment.
-- **Zero-DB CLI help verification** ensuring `--help` operates cleanly without database requirements or side effects.
+- **Zero-DB CLI help verification** ensuring both `setup.js --help` and `discover.js --help` operate cleanly without database requirements or side effects.
 
 ### Limitations & Known Unverified Areas
 1. **Third-Party Rate Limits:** Upstream providers may alter rate limits, context windows, or tool support without notice.

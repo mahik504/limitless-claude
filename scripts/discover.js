@@ -4,6 +4,19 @@ const os = require("os");
 const { openDatabase } = require("../src/omniroute/db");
 const { findTargetApiKey } = require("../src/omniroute/permissions");
 
+const cliArgs = process.argv.slice(2);
+if (cliArgs.includes("--help") || cliArgs.includes("-h")) {
+  console.log(`Limitless Claude Model & Provider Discovery CLI
+
+Usage:
+  node scripts/discover.js [options]
+
+Options:
+  --help, -h                     Show this help message.
+`);
+  process.exit(0);
+}
+
 const omnirouteDir = process.env.OMNIROUTE_DIR || path.join(os.homedir(), ".omniroute");
 const dbPath = path.join(omnirouteDir, "storage.sqlite");
 const configDir = process.env.LIMITLESS_CONFIG_DIR || path.join(__dirname, "../config");

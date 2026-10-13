@@ -203,4 +203,18 @@ test.describe("Model and Provider Discovery Script", () => {
       assert.strictEqual(fileContent, existingContent);
     }
   });
+
+  test.it("should print help message and exit cleanly without requiring or touching database when --help is passed", async () => {
+    const nonexistentDir = path.join(tmpDir, "nonexistent-disc-" + Date.now());
+    const { stdout } = await execAsync("node scripts/discover.js --help", {
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        OMNIROUTE_DIR: nonexistentDir
+      }
+    });
+
+    assert.match(stdout, /Limitless Claude Model & Provider Discovery CLI/);
+    assert.strictEqual(fs.existsSync(nonexistentDir), false, "Help execution should not create or touch database directory");
+  });
 });

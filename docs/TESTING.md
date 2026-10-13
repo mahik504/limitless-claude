@@ -6,7 +6,7 @@ Limitless Claude includes an automated test suite executed with Node's native te
 
 ## 1. Automated Test Suite
 
-Run the full automated test suite (54 hermetic tests across 4 suites):
+Run the full automated test suite (55 hermetic tests across 4 suites):
 
 ```bash
 npm test
@@ -18,7 +18,7 @@ npm test
    - Atomic database transactions with rollback on simulated failure.
    - Idempotency when running setup repeatedly.
    - Preservation of unrelated database records in `combos` and `model_combo_mappings`.
-   - Preservation of existing benchmark data in `tier-configuration.json`.
+   - Preservation of existing benchmark data in `tier-configuration.json` and verification of `metadata.version = 5.0.0`.
    - Payload regression guards (guaranteeing `models` arrays and strategy types are preserved).
    - Prompt safety (verifying no fabricated Anthropic identities are injected).
    - Incompatible database schema detection and graceful nonzero exit.
@@ -42,6 +42,7 @@ npm test
    - Scanning provider connections from SQLite database.
    - Recording `last_scanned` metadata rather than claiming unverified live status.
    - Testing against mock endpoints to prevent touching the live port 20128.
+   - Zero-DB CLI help verification (`discover.js --help`) ensuring clean exit without database access or filesystem mutations.
 
 ---
 

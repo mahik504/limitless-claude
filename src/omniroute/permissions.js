@@ -57,8 +57,9 @@ function findTargetApiKey(db, explicitKey = null) {
 
   try {
     return db.prepare(query).get();
-  } catch (_) {
-    return db.prepare("SELECT * FROM api_keys LIMIT 1").get();
+  } catch (err) {
+    console.error(`[ERROR] Failed to query active API keys from database: ${err.message}`);
+    return null;
   }
 }
 
@@ -77,14 +78,19 @@ function safelyConfigureComboPermissions(db, apiKey, requiredCombos = []) {
   const currentMode = hasModelAccessMode ? (row.model_access_mode || "all") : "all";
 
   // Fail-closed diagnostic: if schema lacks allowed_combos column, combo permissions cannot be configured.
-  // Report clear unsupported_schema diagnostic instead of misleading success or ambiguous no_action_needed.
+  // Distinguish harmless already-authorized keys (mode 'all') from incomplete restricted keys.
   if (!hasAllowedCombos) {
+    const isRestricted = currentMode === "restricted";
     return {
       changed: false,
       status: "unsupported_schema",
+      incomplete: isRestricted,
+      harmless: !isRestricted,
       reason: "missing_allowed_combos_column",
       mode: currentMode,
-      message: `Database schema lacks 'allowed_combos' column to grant Limitless profile access (key mode is '${currentMode}').`
+      message: isRestricted
+        ? `Database schema lacks 'allowed_combos' column to grant Limitless profile access (key mode is 'restricted'). Combo access remains unconfigured.`
+        : `Database schema lacks 'allowed_combos' column, but key mode is '${currentMode}' (already authorized for all models and combos).`
     };
   }
 

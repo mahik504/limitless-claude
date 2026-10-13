@@ -166,4 +166,45 @@ test.describe("OmniRoute API Key Permission Safety", () => {
     const found = findTargetApiKey(db, "key-expired");
     assert.strictEqual(found, null, "Explicit expired key must not be selected");
   });
+
+  test.it("should not select arbitrary key when API key query encounters an error and should fail safely returning null", () => {
+    const brokenDb = {
+      prepare: (sql) => {
+        if (sql.includes("PRAGMA table_info")) {
+          return { all: () => [{ name: "key" }, { name: "is_active" }] };
+        }
+        throw new Error("Simulated database query I/O failure");
+      }
+    };
+    const found = findTargetApiKey(brokenDb);
+    assert.strictEqual(found, null, "Must fail safely returning null rather than falling back to an arbitrary key");
+  });
+
+  test.it("should distinguish harmless already-authorized keys from incomplete restricted keys on unsupported schema", () => {
+    const minDir = path.join(os.tmpdir(), "perm-distinguish-" + Date.now());
+    fs.mkdirSync(minDir, { recursive: true });
+    const minDb = openDatabase(path.join(minDir, "test.sqlite"));
+    minDb.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, is_active INTEGER);
+      INSERT INTO api_keys VALUES ('restricted-key', 'restricted', 1);
+      INSERT INTO api_keys VALUES ('open-key', 'all', 1);
+    `);
+
+    // Restricted key cannot receive combo permissions -> incomplete
+    const resRestricted = safelyConfigureComboPermissions(minDb, "restricted-key", ["combo/limitless-opus"]);
+    assert.strictEqual(resRestricted.status, "unsupported_schema");
+    assert.strictEqual(resRestricted.incomplete, true);
+    assert.strictEqual(resRestricted.harmless, false);
+    assert.match(resRestricted.message, /Combo access remains unconfigured/);
+
+    // Open key in mode 'all' already has global access -> harmless
+    const resOpen = safelyConfigureComboPermissions(minDb, "open-key", ["combo/limitless-opus"]);
+    assert.strictEqual(resOpen.status, "unsupported_schema");
+    assert.strictEqual(resOpen.incomplete, false);
+    assert.strictEqual(resOpen.harmless, true);
+    assert.match(resOpen.message, /already authorized for all models/);
+
+    minDb.close();
+    fs.rmSync(minDir, { recursive: true, force: true });
+  });
 });

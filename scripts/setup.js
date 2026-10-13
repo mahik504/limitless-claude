@@ -161,8 +161,39 @@ async function runSetup() {
     console.warn("Please ensure you create an API key in the OmniRoute dashboard (http://localhost:20128/keys) or set ANTHROPIC_AUTH_TOKEN before running Claude Code.\n");
   }
 
+  const cliArgs = process.argv.slice(2);
+  if (cliArgs.includes("--help") || cliArgs.includes("-h")) {
+    console.log(`Limitless Claude Setup CLI
+
+Usage:
+  node scripts/setup.js [options]
+
+Options:
+  --exclude-paid, --free-only    Exclude metered/chargeable models from routing combos
+                                 (conservative heuristic based on provider names and model suffixes;
+                                  not an infallible billing guarantee).
+  --allow-unknown                Permit models with unverified billing classification when
+                                 --exclude-paid is active.
+  --allow-offline-catalog        Explicitly opt in to using checked-in offline cached model
+                                 inventory when live OmniRoute catalog is unreachable.
+  --help, -h                     Show this help message.
+`);
+    db.close();
+    return;
+  }
+
+  const excludePaid = cliArgs.includes("--exclude-paid") || cliArgs.includes("--free-only") ||
+    process.env.LIMITLESS_EXCLUDE_PAID === "true" || process.env.LIMITLESS_EXCLUDE_PAID === "1";
+  const allowUnknown = cliArgs.includes("--allow-unknown") ||
+    process.env.LIMITLESS_ALLOW_UNKNOWN_BILLING === "true" || process.env.LIMITLESS_ALLOW_UNKNOWN_BILLING === "1";
+  const allowOfflineCatalog = cliArgs.includes("--allow-offline-catalog") ||
+    cliArgs.includes("--offline-catalog") || cliArgs.includes("--offline") ||
+    process.env.LIMITLESS_ALLOW_OFFLINE_CATALOG === "true" || process.env.LIMITLESS_ALLOW_OFFLINE_CATALOG === "1" ||
+    process.env.LIMITLESS_OFFLINE === "true" || process.env.LIMITLESS_OFFLINE === "1";
+
   let liveModels = [];
   let isLiveCatalog = false;
+  let liveFetchError = null;
 
   const baseUrl = process.env.OMNIROUTE_BASE_URL || "http://127.0.0.1:20128";
 
@@ -174,18 +205,37 @@ async function runSetup() {
       });
       if (res.ok) {
         const data = await res.json();
-        if (data && data.data && data.data.length > 0) {
+        if (data && data.data && Array.isArray(data.data) && data.data.length > 0) {
           liveModels = data.data;
           isLiveCatalog = true;
           console.log(`Discovered ${liveModels.length} models from live OmniRoute gateway.`);
+        } else {
+          liveFetchError = "OmniRoute gateway returned empty or invalid model catalog";
         }
+      } else {
+        liveFetchError = `OmniRoute gateway returned HTTP ${res.status}`;
       }
     } catch (e) {
-      console.warn(`\x1b[33m[WARNING] Failed to fetch live models from OmniRoute (${e.message}). Falling back to cached inventory.\x1b[0m`);
+      liveFetchError = `HTTP request to OmniRoute failed (${e.message})`;
     }
+  } else {
+    liveFetchError = "No active OmniRoute API key found to query live model catalog";
   }
 
   if (liveModels.length === 0) {
+    if (!allowOfflineCatalog) {
+      console.error(`\x1b[31m[ERROR] Live model catalog required but unavailable: ${liveFetchError || "Unknown error"}.\x1b[0m`);
+      console.error("By default, setup requires an active live model catalog from OmniRoute to avoid writing stale configurations.");
+      console.error("Please ensure OmniRoute is running (\`omniroute serve\`) and at least one provider is connected.");
+      console.error("To explicitly permit using offline cached models, pass --allow-offline-catalog or set LIMITLESS_ALLOW_OFFLINE_CATALOG=true.");
+      db.close();
+      process.exitCode = 1;
+      return;
+    }
+
+    console.warn(`\x1b[33m[WARNING] ${liveFetchError || "Live catalog unavailable"}. Falling back to offline cached inventory (--allow-offline-catalog).\x1b[0m`);
+    console.warn("\x1b[33m[WARNING] Offline cached inventory may be stale or out of sync with your active OmniRoute providers.\x1b[0m");
+
     try {
       let cacheFile = path.join(configDir, "live_models.json");
       if (!fs.existsSync(cacheFile)) {
@@ -197,7 +247,14 @@ async function runSetup() {
         console.log(`Loaded ${liveModels.length} models from offline cached inventory.`);
       }
     } catch (e) {
-      console.error("Error: Failed to load cached models.");
+      console.error("Error: Failed to load cached models:", e.message);
+    }
+
+    if (liveModels.length === 0) {
+      console.error("\x1b[31m[ERROR] Offline cached inventory is empty or unavailable.\x1b[0m");
+      db.close();
+      process.exitCode = 1;
+      return;
     }
   }
 
@@ -261,12 +318,6 @@ async function runSetup() {
     { provider: "openrouter", model: "qwen/qwen-3.8-coder-32b-instruct" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  const cliArgs = process.argv.slice(2);
-  const excludePaid = cliArgs.includes("--exclude-paid") || cliArgs.includes("--free-only") ||
-    process.env.LIMITLESS_EXCLUDE_PAID === "true" || process.env.LIMITLESS_EXCLUDE_PAID === "1";
-  const allowUnknown = cliArgs.includes("--allow-unknown") ||
-    process.env.LIMITLESS_ALLOW_UNKNOWN_BILLING === "true" || process.env.LIMITLESS_ALLOW_UNKNOWN_BILLING === "1";
-
   let haikuCandidates = haikuRaw;
   let sonnetCandidates = sonnetRaw;
   let opusCandidates = opusRaw;
@@ -277,20 +328,93 @@ async function runSetup() {
     sonnetCandidates = filterCandidatesByBilling(sonnetCandidates, true, allowUnknown);
     opusCandidates = filterCandidatesByBilling(opusCandidates, true, allowUnknown);
     fableCandidates = filterCandidatesByBilling(fableCandidates, true, allowUnknown);
-    console.log("Enforced paid-model safety guard: excluded chargeable/unknown candidates from routing combos.");
+    console.log("Enforced paid-model safety guard: excluded chargeable/unknown candidates from routing combos (heuristic classification; not a zero-cost billing guarantee).");
     if (haikuCandidates.length === 0) console.warn("\x1b[33m[WARNING] Haiku tier has 0 candidates after applying paid model guard.\x1b[0m");
     if (sonnetCandidates.length === 0) console.warn("\x1b[33m[WARNING] Sonnet tier has 0 candidates after applying paid model guard.\x1b[0m");
     if (opusCandidates.length === 0) console.warn("\x1b[33m[WARNING] Opus tier has 0 candidates after applying paid model guard.\x1b[0m");
     if (fableCandidates.length === 0) console.warn("\x1b[33m[WARNING] Fable tier has 0 candidates after applying paid model guard.\x1b[0m");
   }
 
-  const totalCandidates = haikuCandidates.length + sonnetCandidates.length + opusCandidates.length + fableCandidates.length;
-  if (totalCandidates === 0) {
-    console.error("\x1b[31m[ERROR] No usable candidate models found across any tier.\x1b[0m");
-    console.error("Please connect at least one provider (e.g. OpenRouter, GitHub, Groq) in OmniRoute at http://localhost:20128 and try again.");
-    db.close();
-    process.exitCode = 1;
-    return;
+  const tierCandidateList = [
+    { name: "haiku", comboId: COMBO_IDS.haiku, candidates: haikuCandidates, rawCount: haikuRaw.length },
+    { name: "sonnet", comboId: COMBO_IDS.sonnet, candidates: sonnetCandidates, rawCount: sonnetRaw.length },
+    { name: "opus", comboId: COMBO_IDS.opus, candidates: opusCandidates, rawCount: opusRaw.length },
+    { name: "fable", comboId: COMBO_IDS.fable, candidates: fableCandidates, rawCount: fableRaw.length }
+  ];
+
+  const emptyTiers = tierCandidateList.filter(t => t.candidates.length === 0);
+
+  if (emptyTiers.length > 0) {
+    // Read existing combos from database to see if we can preserve valid existing tiers
+    const existingCombosMap = new Map();
+    try {
+      const rows = db.prepare("SELECT id, data FROM combos WHERE id IN (?, ?, ?, ?)").all(
+        COMBO_IDS.opus, COMBO_IDS.sonnet, COMBO_IDS.haiku, COMBO_IDS.fable
+      );
+      for (const r of rows) {
+        try {
+          const parsed = JSON.parse(r.data);
+          if (Array.isArray(parsed.models) && parsed.models.length > 0) {
+            existingCombosMap.set(r.id, parsed.models);
+          }
+        } catch (_) {}
+      }
+    } catch (_) {}
+
+    let cannotProceed = false;
+
+    for (const t of emptyTiers) {
+      let cause = "no candidate models matched active providers in live catalog";
+      if (excludePaid && t.rawCount > 0) {
+        cause = "paid-model guard (--exclude-paid) excluded all candidates";
+      }
+      console.error(`\x1b[31m[ERROR] Routing tier '${t.name}' has 0 candidate models (${cause}).\x1b[0m`);
+
+      const existingModels = existingCombosMap.get(t.comboId);
+      if (!existingModels || existingModels.length === 0) {
+        console.error(`\x1b[31m[ERROR] Fresh setup cannot populate required tier '${t.name}'. All four routing tiers must have at least one candidate model.\x1b[0m`);
+        cannotProceed = true;
+      } else if (excludePaid) {
+        const filteredExisting = filterCandidatesByBilling(existingModels, true, allowUnknown);
+        if (filteredExisting.length === 0) {
+          console.error(`\x1b[31m[ERROR] Existing models for tier '${t.name}' are chargeable/unknown and excluded by --exclude-paid. Overwriting with an empty tier is forbidden.\x1b[0m`);
+          cannotProceed = true;
+        } else {
+          console.warn(`\x1b[33m[WARNING] Preserving ${filteredExisting.length} existing eligible models for tier '${t.name}' from previous installation to avoid creating an empty tier.\x1b[0m`);
+          if (t.name === "haiku") haikuCandidates = filteredExisting;
+          if (t.name === "sonnet") sonnetCandidates = filteredExisting;
+          if (t.name === "opus") opusCandidates = filteredExisting;
+          if (t.name === "fable") fableCandidates = filteredExisting;
+        }
+      } else {
+        console.warn(`\x1b[33m[WARNING] Preserving ${existingModels.length} existing models for tier '${t.name}' from previous installation to avoid creating an empty tier.\x1b[0m`);
+        if (t.name === "haiku") haikuCandidates = existingModels;
+        if (t.name === "sonnet") sonnetCandidates = existingModels;
+        if (t.name === "opus") opusCandidates = existingModels;
+        if (t.name === "fable") fableCandidates = existingModels;
+      }
+    }
+
+    if (cannotProceed) {
+      console.error("\x1b[31m[ERROR] Aborting setup before database transaction to preserve database integrity and prevent unroutable empty tiers.\x1b[0m");
+      db.close();
+      process.exitCode = 1;
+      return;
+    }
+  }
+
+  // Preflight check: verify API key permissions compatibility before transaction
+  if (apiKey) {
+    const permPrecheck = safelyConfigureComboPermissions(db, apiKey, Object.values(COMBO_IDS));
+    if (permPrecheck.status === "unsupported_schema" && permPrecheck.incomplete) {
+      const maskedKey = apiKey.length > 8 ? `${apiKey.slice(0, 6)}...` : "[redacted]";
+      console.error(`\x1b[31m[ERROR] Setup incomplete: Selected API key [${maskedKey}] is in 'restricted' mode, but database schema lacks 'allowed_combos' column.\x1b[0m`);
+      console.error(`\x1b[31m[ERROR] ${permPrecheck.message}\x1b[0m`);
+      console.error("OmniRoute cannot grant combo permissions to this restricted key under the current schema. Aborting setup (fail-closed).");
+      db.close();
+      process.exitCode = 1;
+      return;
+    }
   }
 
   // Database Transaction to ensure atomicity
@@ -374,7 +498,11 @@ async function runSetup() {
       if (permResult.changed) {
         console.log(`Configured combo access for key [${maskedKey}]: preserved mode '${permResult.mode}', permitted combos.`);
       } else if (permResult.status === "unsupported_schema") {
-        console.warn(`\x1b[33m[WARNING] Could not configure permissions for key [${maskedKey}]: ${permResult.message}\x1b[0m`);
+        if (permResult.incomplete) {
+          throw new Error(`Incomplete permission configuration: key [${maskedKey}] is restricted, but schema lacks 'allowed_combos' column.`);
+        } else {
+          console.log(`Key [${maskedKey}] already authorized (mode '${permResult.mode}').`);
+        }
       }
     }
 

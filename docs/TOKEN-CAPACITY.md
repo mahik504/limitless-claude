@@ -91,8 +91,8 @@ To make this calculation reproducible for any engineer, all estimates use explic
   - `muse-spark-web/muse-spark` (ZMC)
 - **Primary Quota Driver & The OpenRouter Mechanism:**
   - OpenRouter normally throttles unverified free accounts to ~50 RPD.
-  - **Account Funding Mechanism:** If an account holds a $10 deposit balance, OpenRouter expands the free tier rate limit on all `:free` models to **1,000 requests/day** (10 RPM). Because the balance is not spent when calling `:free` endpoints, this unlocks high throughput at zero marginal cost.
-  - By rotating across 17 distinct candidate endpoints using round-robin distribution, the Opus tier evades single-model RPM throttling.
+  - **Account Funding Mechanism:** If an account holds at least $10 in credits, OpenRouter expands the free tier rate limit on all `:free` models to **1,000 requests/day** (20 RPM). Because credits are not deducted when querying `:free` endpoints, this allows higher throughput at zero marginal cost. Source: [OpenRouter Rate Limits Guide](https://openrouter.ai/docs/limits).
+  - By rotating across 17 distinct candidate endpoints using round-robin distribution, the Opus tier spreads requests across multiple endpoints to stay within per-model rate limits subject to upstream provider quotas, policies, and terms.
 - **Assumed Operational Allocation:** ~4,500 to 5,500 requests/day distributed across the 17-model pool.
 - **Estimated Average Round-Trip:** 2,500 to 3,000 tokens (bulk coding generation).
 - **Modeled Daily Capacity:** **~14,000,000 tokens/day**.

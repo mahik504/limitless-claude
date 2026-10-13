@@ -232,8 +232,18 @@ function backupDatabase(db, dbPath, backupPath) {
       try { fs.unlinkSync(candidatePath); } catch (_) {}
       promoted = true;
     } catch (copyFallbackErr) {
+      if (fs.existsSync(backupPath)) {
+        try { fs.unlinkSync(backupPath); } catch (_) {}
+      }
       if (prevBackupPath && fs.existsSync(prevBackupPath)) {
-        try { fs.renameSync(prevBackupPath, backupPath); } catch (_) {}
+        try {
+          fs.renameSync(prevBackupPath, backupPath);
+        } catch (_) {
+          try {
+            fs.copyFileSync(prevBackupPath, backupPath);
+            fs.unlinkSync(prevBackupPath);
+          } catch (_) {}
+        }
       }
       if (fs.existsSync(candidatePath)) {
         try { fs.unlinkSync(candidatePath); } catch (_) {}

@@ -2,7 +2,10 @@ const test = require("node:test");
 const assert = require("node:assert");
 const fs = require("fs");
 const path = require("path");
-const { execSync } = require("child_process");
+const http = require("http");
+const { execSync, exec } = require("child_process");
+const util = require("util");
+const execAsync = util.promisify(exec);
 const os = require("os");
 const { openDatabase } = require("../src/omniroute/db");
 
@@ -47,7 +50,7 @@ test.describe("Limitless Claude Setup Integrity", () => {
     // Pass OMNIROUTE_DIR to isolate database execution
     const output = execSync("node scripts/setup.js", {
       encoding: "utf8",
-      env: { ...process.env, OMNIROUTE_DIR: TEST_DIR, LIMITLESS_CONFIG_DIR: CONFIG_DIR, TEST_STARTUP_DIR: STARTUP_DIR }
+      env: { ...process.env, OMNIROUTE_DIR: TEST_DIR, LIMITLESS_CONFIG_DIR: CONFIG_DIR, TEST_STARTUP_DIR: STARTUP_DIR, LIMITLESS_ALLOW_OFFLINE_CATALOG: "true" }
     });
     assert.match(output, /=== Limitless Claude Setup Complete! ===/);
     assert.strictEqual(fs.existsSync(DB_PATH + ".bak"), true, "Database backup should exist");
@@ -250,7 +253,8 @@ test.describe("Limitless Claude Setup Integrity", () => {
         OMNIROUTE_DIR: paidTestDir,
         LIMITLESS_CONFIG_DIR: paidConfigDir,
         TEST_STARTUP_DIR: STARTUP_DIR,
-        LIMITLESS_EXCLUDE_PAID: "true"
+        LIMITLESS_EXCLUDE_PAID: "true",
+        LIMITLESS_ALLOW_OFFLINE_CATALOG: "true"
       }
     });
 
@@ -315,7 +319,7 @@ test.describe("Limitless Claude Setup Integrity", () => {
     `);
     db.close();
 
-    const output = execSync("node scripts/setup.js --exclude-paid", {
+    const output = execSync("node scripts/setup.js --exclude-paid --allow-offline-catalog", {
       encoding: "utf8",
       env: {
         ...process.env,
@@ -341,7 +345,6 @@ test.describe("Limitless Claude Setup Integrity", () => {
     fs.mkdirSync(migTestDir, { recursive: true });
     fs.mkdirSync(migConfigDir, { recursive: true });
 
-    // Seed database mimicking the user's pre-existing state where *opus* is 10 and *opusplan* is 9
     const db = openDatabase(migDbPath);
     db.exec(`
       CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, allowed_models TEXT, allowed_combos TEXT, is_active INTEGER, created_at DATETIME);
@@ -362,7 +365,8 @@ test.describe("Limitless Claude Setup Integrity", () => {
         ...process.env,
         OMNIROUTE_DIR: migTestDir,
         LIMITLESS_CONFIG_DIR: migConfigDir,
-        TEST_STARTUP_DIR: STARTUP_DIR
+        TEST_STARTUP_DIR: STARTUP_DIR,
+        LIMITLESS_ALLOW_OFFLINE_CATALOG: "true"
       }
     });
 
@@ -375,7 +379,7 @@ test.describe("Limitless Claude Setup Integrity", () => {
   test.it("should be fully idempotent when run repeatedly", () => {
     const output = execSync("node scripts/setup.js", {
       encoding: "utf8",
-      env: { ...process.env, OMNIROUTE_DIR: TEST_DIR, LIMITLESS_CONFIG_DIR: CONFIG_DIR, TEST_STARTUP_DIR: STARTUP_DIR }
+      env: { ...process.env, OMNIROUTE_DIR: TEST_DIR, LIMITLESS_CONFIG_DIR: CONFIG_DIR, TEST_STARTUP_DIR: STARTUP_DIR, LIMITLESS_ALLOW_OFFLINE_CATALOG: "true" }
     });
     assert.match(output, /=== Limitless Claude Setup Complete! ===/);
 
@@ -396,7 +400,7 @@ test.describe("Limitless Claude Setup Integrity", () => {
     try {
       execSync("node scripts/setup.js", {
         encoding: "utf8",
-        env: { ...process.env, OMNIROUTE_DIR: badDbDir, LIMITLESS_CONFIG_DIR: CONFIG_DIR, TEST_STARTUP_DIR: STARTUP_DIR }
+        env: { ...process.env, OMNIROUTE_DIR: badDbDir, LIMITLESS_CONFIG_DIR: CONFIG_DIR, TEST_STARTUP_DIR: STARTUP_DIR, LIMITLESS_ALLOW_OFFLINE_CATALOG: "true" }
       });
       assert.fail("Should have thrown an error due to invalid schema");
     } catch (e) {
@@ -424,12 +428,389 @@ test.describe("Limitless Claude Setup Integrity", () => {
     try {
       execSync("node scripts/setup.js", {
         encoding: "utf8",
-        env: { ...process.env, OMNIROUTE_DIR: emptyModelDir, LIMITLESS_CONFIG_DIR: emptyCacheDir, TEST_STARTUP_DIR: STARTUP_DIR }
+        env: { ...process.env, OMNIROUTE_DIR: emptyModelDir, LIMITLESS_CONFIG_DIR: emptyCacheDir, TEST_STARTUP_DIR: STARTUP_DIR, LIMITLESS_ALLOW_OFFLINE_CATALOG: "true" }
       });
       assert.fail("Should have failed when candidate models are empty");
     } catch (e) {
       assert.strictEqual(e.status !== 0, true, "Exit status must be non-zero on failure");
-      assert.match((e.stdout || '') + (e.stderr || '') + e.message, /No usable candidate models found/);
+      assert.match((e.stdout || '') + (e.stderr || '') + e.message, /Offline cached inventory is empty or unavailable|No usable candidate models found/);
     }
+  });
+
+  // --- NEW SAFETY TESTS (Live Catalogue Safety, Empty-Tier Safety, Permissions Safety) ---
+
+  test.it("should fail safely with nonzero code and NOT mutate database when live catalog fetch fails and offline cache is not opted in", () => {
+    const liveFailDir = path.join(TEST_DIR, "live-fail-test");
+    fs.mkdirSync(liveFailDir, { recursive: true });
+    const liveFailDbPath = path.join(liveFailDir, "storage.sqlite");
+    const liveFailConfigDir = path.join(liveFailDir, "config");
+    fs.mkdirSync(liveFailConfigDir, { recursive: true });
+
+    // Seed database with pre-existing custom combo and mapping
+    const db = openDatabase(liveFailDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, allowed_models TEXT, allowed_combos TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys VALUES ('live-fail-key', 'all', '[]', '["combo/*"]', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+
+      INSERT INTO combos VALUES ('combo/pre-existing', 'Pre-existing', '{"models":[{"id":"safe"}]}', '', datetime('now'), datetime('now'));
+      INSERT INTO model_combo_mappings VALUES ('mapping/pre-existing', '*pre*', 'combo/pre-existing', 5, 1, 'Safe', datetime('now'), datetime('now'));
+    `);
+    db.close();
+
+    try {
+      execSync("node scripts/setup.js", {
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          OMNIROUTE_DIR: liveFailDir,
+          LIMITLESS_CONFIG_DIR: liveFailConfigDir,
+          TEST_STARTUP_DIR: STARTUP_DIR,
+          OMNIROUTE_BASE_URL: "http://127.0.0.1:59999" // unreachable port
+        }
+      });
+      assert.fail("Setup must fail when live catalog fetch fails and offline cache is not opted in");
+    } catch (e) {
+      assert.strictEqual(e.status !== 0, true, "Exit status must be non-zero");
+      assert.match((e.stdout || '') + (e.stderr || ''), /Live model catalog required but unavailable/);
+    }
+
+    // Verify existing combos and mappings in database were NOT modified or dropped
+    const verifyDb = openDatabase(liveFailDbPath, { readonly: true });
+    const existingCombo = verifyDb.prepare("SELECT * FROM combos WHERE id = 'combo/pre-existing'").get();
+    assert.ok(existingCombo, "Pre-existing combo must remain untouched");
+    const limitlessCombos = verifyDb.prepare("SELECT * FROM combos WHERE id LIKE 'combo/limitless-%'").all();
+    assert.strictEqual(limitlessCombos.length, 0, "No Limitless combos should have been created on failed live catalog fetch");
+    verifyDb.close();
+
+    // Verify tier-configuration.json was not created
+    assert.strictEqual(fs.existsSync(path.join(liveFailConfigDir, "tier-configuration.json")), false, "Config file must not be written on failure");
+  });
+
+  test.it("should discover models from live OmniRoute gateway and configure combos without requiring offline cache opt-in", async () => {
+    const liveSuccessDir = path.join(TEST_DIR, "live-success-test");
+    fs.mkdirSync(liveSuccessDir, { recursive: true });
+    const liveSuccessDbPath = path.join(liveSuccessDir, "storage.sqlite");
+    const liveSuccessConfigDir = path.join(liveSuccessDir, "config");
+    fs.mkdirSync(liveSuccessConfigDir, { recursive: true });
+
+    const db = openDatabase(liveSuccessDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, allowed_models TEXT, allowed_combos TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys VALUES ('live-key', 'all', '[]', '["combo/*"]', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+    `);
+    db.close();
+
+    // Mock live gateway returning complete models across all 4 tiers
+    const liveServer = http.createServer((req, res) => {
+      if (req.url === "/v1/models") {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({
+          data: [
+            { id: "github/gpt-4o-mini" },
+            { id: "antigravity/claude-sonnet-4-6" },
+            { id: "openrouter/z-ai/glm-5.2:free" },
+            { id: "github/gpt-4o-2024-11-20" }
+          ]
+        }));
+      } else {
+        res.writeHead(404);
+        res.end();
+      }
+    });
+
+    await new Promise((resolve) => liveServer.listen(0, "127.0.0.1", resolve));
+    const port = liveServer.address().port;
+
+    try {
+      const output = await execAsync("node scripts/setup.js", {
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          OMNIROUTE_DIR: liveSuccessDir,
+          LIMITLESS_CONFIG_DIR: liveSuccessConfigDir,
+          TEST_STARTUP_DIR: STARTUP_DIR,
+          OMNIROUTE_BASE_URL: `http://127.0.0.1:${port}`
+        }
+      });
+      assert.match(output.stdout, /Discovered 4 models from live OmniRoute gateway/);
+      assert.match(output.stdout, /=== Limitless Claude Setup Complete! ===/);
+
+      const verifyDb = openDatabase(liveSuccessDbPath, { readonly: true });
+      const combos = verifyDb.prepare("SELECT id FROM combos WHERE id LIKE 'combo/limitless-%'").all();
+      assert.strictEqual(combos.length, 4, "All 4 limitless combos must be created from live discovery");
+      verifyDb.close();
+    } finally {
+      await new Promise((resolve) => liveServer.close(resolve));
+    }
+  });
+
+  test.it("should fail safely and exit with nonzero code when live OmniRoute gateway returns HTTP 500 error", async () => {
+    const httpFailDir = path.join(TEST_DIR, "http-fail-test");
+    fs.mkdirSync(httpFailDir, { recursive: true });
+    const httpFailDbPath = path.join(httpFailDir, "storage.sqlite");
+    const httpFailConfigDir = path.join(httpFailDir, "config");
+    fs.mkdirSync(httpFailConfigDir, { recursive: true });
+
+    const db = openDatabase(httpFailDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, allowed_models TEXT, allowed_combos TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys VALUES ('http-fail-key', 'all', '[]', '["combo/*"]', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+    `);
+    db.close();
+
+    const errorServer = http.createServer((req, res) => {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "Internal Gateway Error" }));
+    });
+
+    await new Promise((resolve) => errorServer.listen(0, "127.0.0.1", resolve));
+    const port = errorServer.address().port;
+
+    try {
+      await execAsync("node scripts/setup.js", {
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          OMNIROUTE_DIR: httpFailDir,
+          LIMITLESS_CONFIG_DIR: httpFailConfigDir,
+          TEST_STARTUP_DIR: STARTUP_DIR,
+          OMNIROUTE_BASE_URL: `http://127.0.0.1:${port}`
+        }
+      });
+      assert.fail("Should have failed on HTTP 500");
+    } catch (e) {
+      assert.strictEqual(e.code !== 0, true);
+      assert.match(e.stdout + e.stderr, /Live model catalog required but unavailable: OmniRoute gateway returned HTTP 500/);
+    } finally {
+      await new Promise((resolve) => errorServer.close(resolve));
+    }
+  });
+
+  test.it("should fail safely and exit with nonzero code when live gateway returns empty models array without offline cache opt-in", async () => {
+    const emptyLiveDir = path.join(TEST_DIR, "empty-live-test");
+    fs.mkdirSync(emptyLiveDir, { recursive: true });
+    const emptyLiveDbPath = path.join(emptyLiveDir, "storage.sqlite");
+    const emptyLiveConfigDir = path.join(emptyLiveDir, "config");
+    fs.mkdirSync(emptyLiveConfigDir, { recursive: true });
+
+    const db = openDatabase(emptyLiveDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, allowed_models TEXT, allowed_combos TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys VALUES ('empty-live-key', 'all', '[]', '["combo/*"]', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+    `);
+    db.close();
+
+    const emptyServer = http.createServer((req, res) => {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ data: [] }));
+    });
+
+    await new Promise((resolve) => emptyServer.listen(0, "127.0.0.1", resolve));
+    const port = emptyServer.address().port;
+
+    try {
+      await execAsync("node scripts/setup.js", {
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          OMNIROUTE_DIR: emptyLiveDir,
+          LIMITLESS_CONFIG_DIR: emptyLiveConfigDir,
+          TEST_STARTUP_DIR: STARTUP_DIR,
+          OMNIROUTE_BASE_URL: `http://127.0.0.1:${port}`
+        }
+      });
+      assert.fail("Should have failed on empty live catalog");
+    } catch (e) {
+      assert.strictEqual(e.code !== 0, true);
+      assert.match(e.stdout + e.stderr, /returned empty or invalid model catalog/);
+    } finally {
+      await new Promise((resolve) => emptyServer.close(resolve));
+    }
+  });
+
+  test.it("should abort safely before transaction on fresh setup when paid-model guard produces an empty tier while other tiers have candidates", () => {
+    const emptyTierDir = path.join(TEST_DIR, "empty-tier-test");
+    fs.mkdirSync(emptyTierDir, { recursive: true });
+    const emptyTierDbPath = path.join(emptyTierDir, "storage.sqlite");
+    const emptyTierConfigDir = path.join(emptyTierDir, "config");
+    fs.mkdirSync(emptyTierConfigDir, { recursive: true });
+
+    // Seed mock live_models where Haiku, Sonnet, Opus have models, but Fable has ONLY paid models
+    // Fable models: openrouter/moonshotai/kimi-k3 (paid) and openrouter/z-ai/glm-5.3 (paid)
+    fs.writeFileSync(path.join(emptyTierConfigDir, "live_models.json"), JSON.stringify({
+      data: [
+        { id: "github/gpt-4o-mini" }, // Haiku
+        { id: "antigravity/claude-sonnet-4-6" }, // Sonnet
+        { id: "openrouter/z-ai/glm-5.2:free" }, // Opus
+        { id: "openrouter/moonshotai/kimi-k3" } // Fable - paid!
+      ]
+    }));
+
+    const db = openDatabase(emptyTierDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, allowed_models TEXT, allowed_combos TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys VALUES ('empty-tier-key', 'all', '[]', '["combo/*"]', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+    `);
+    db.close();
+
+    try {
+      execSync("node scripts/setup.js --exclude-paid --allow-offline-catalog", {
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          OMNIROUTE_DIR: emptyTierDir,
+          LIMITLESS_CONFIG_DIR: emptyTierConfigDir,
+          TEST_STARTUP_DIR: STARTUP_DIR
+        }
+      });
+      assert.fail("Setup must fail when a tier is emptied by paid-model guard on fresh setup");
+    } catch (e) {
+      assert.strictEqual(e.status !== 0, true);
+      const out = (e.stdout || '') + (e.stderr || '');
+      assert.match(out, /Routing tier 'fable' has 0 candidate models/);
+      assert.match(out, /Aborting setup before database transaction/);
+    }
+
+    // Verify transaction was aborted before touching combos
+    const verifyDb = openDatabase(emptyTierDbPath, { readonly: true });
+    const combos = verifyDb.prepare("SELECT count(*) as cnt FROM combos").get();
+    assert.strictEqual(combos.cnt, 0, "No combos should be created when a tier cannot be populated");
+    verifyDb.close();
+  });
+
+  test.it("should not destroy previously working tier by replacing it with an empty list", async () => {
+    const preserveDir = path.join(TEST_DIR, "preserve-tier-test");
+    fs.mkdirSync(preserveDir, { recursive: true });
+    const preserveDbPath = path.join(preserveDir, "storage.sqlite");
+    const preserveConfigDir = path.join(preserveDir, "config");
+    fs.mkdirSync(preserveConfigDir, { recursive: true });
+
+    // Seed database with working existing Fable combo
+    const db = openDatabase(preserveDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, allowed_models TEXT, allowed_combos TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys VALUES ('preserve-key', 'all', '[]', '["combo/*"]', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+
+      INSERT INTO combos VALUES (
+        'combo/limitless-fable',
+        'Limitless Fable Tier',
+        '{"name":"Limitless Fable Tier","strategy":"round-robin","models":[{"provider":"existing","model":"working-fable"}]}',
+        'test prompt',
+        datetime('now'),
+        datetime('now')
+      );
+    `);
+    db.close();
+
+    // Catalog has models for Haiku, Sonnet, Opus, but NO candidates for Fable
+    fs.writeFileSync(path.join(preserveConfigDir, "live_models.json"), JSON.stringify({
+      data: [
+        { id: "github/gpt-4o-mini" },
+        { id: "antigravity/claude-sonnet-4-6" },
+        { id: "openrouter/z-ai/glm-5.2:free" }
+      ]
+    }));
+
+    // Run setup without exclude-paid
+    const { stdout, stderr } = await execAsync("node scripts/setup.js --allow-offline-catalog", {
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        OMNIROUTE_DIR: preserveDir,
+        LIMITLESS_CONFIG_DIR: preserveConfigDir,
+        TEST_STARTUP_DIR: STARTUP_DIR
+      }
+    });
+
+    assert.match(stdout + stderr, /Preserving 1 existing models for tier 'fable'/);
+
+    // Verify Fable combo in database was preserved and NEVER replaced with empty array []
+    const verifyDb = openDatabase(preserveDbPath, { readonly: true });
+    const fableRow = verifyDb.prepare("SELECT data FROM combos WHERE id = 'combo/limitless-fable'").get();
+    assert.ok(fableRow);
+    const parsed = JSON.parse(fableRow.data);
+    assert.ok(Array.isArray(parsed.models));
+    assert.strictEqual(parsed.models.length, 1);
+    assert.strictEqual(parsed.models[0].model, "working-fable");
+    verifyDb.close();
+  });
+
+  test.it("should fail setup and exit with nonzero code when restricted key cannot receive combo permissions due to missing allowed_combos column", () => {
+    const permFailDir = path.join(TEST_DIR, "perm-fail-test");
+    fs.mkdirSync(permFailDir, { recursive: true });
+    const permFailDbPath = path.join(permFailDir, "storage.sqlite");
+    const permFailConfigDir = path.join(permFailDir, "config");
+    fs.mkdirSync(permFailConfigDir, { recursive: true });
+
+    // Seed database with a restricted key in a schema that lacks allowed_combos column
+    const db = openDatabase(permFailDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys VALUES ('restricted-test-key', 'restricted', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+    `);
+    db.close();
+
+    try {
+      execSync("node scripts/setup.js --allow-offline-catalog", {
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          OMNIROUTE_DIR: permFailDir,
+          LIMITLESS_CONFIG_DIR: permFailConfigDir,
+          TEST_STARTUP_DIR: STARTUP_DIR
+        }
+      });
+      assert.fail("Setup must fail when restricted key cannot receive combo permissions");
+    } catch (e) {
+      assert.strictEqual(e.status !== 0, true);
+      const out = (e.stdout || '') + (e.stderr || '');
+      assert.match(out, /Setup incomplete: Selected API key/);
+      assert.match(out, /lacks 'allowed_combos' column/);
+      assert.doesNotMatch(out, /=== Limitless Claude Setup Complete! ===/);
+    }
+  });
+
+  test.it("should succeed when key is in 'all' mode even if schema lacks allowed_combos column (harmless already-authorized case)", () => {
+    const permAllDir = path.join(TEST_DIR, "perm-all-test");
+    fs.mkdirSync(permAllDir, { recursive: true });
+    const permAllDbPath = path.join(permAllDir, "storage.sqlite");
+    const permAllConfigDir = path.join(permAllDir, "config");
+    fs.mkdirSync(permAllConfigDir, { recursive: true });
+
+    // Seed database with an open key ('all' mode) in a schema that lacks allowed_combos column
+    const db = openDatabase(permAllDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys VALUES ('open-test-key', 'all', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+    `);
+    db.close();
+
+    const output = execSync("node scripts/setup.js --allow-offline-catalog", {
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        OMNIROUTE_DIR: permAllDir,
+        LIMITLESS_CONFIG_DIR: permAllConfigDir,
+        TEST_STARTUP_DIR: STARTUP_DIR
+      }
+    });
+
+    assert.match(output, /=== Limitless Claude Setup Complete! ===/);
   });
 });

@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen.svg)](https://nodejs.org/)
 [![OmniRoute](https://img.shields.io/badge/Gateway-OmniRoute-orange.svg)](https://github.com/danny-avila/OmniRoute)
-[![Tests Passing](https://img.shields.io/badge/Tests-36%2F36%20Passing-success.svg)](test/)
+[![Tests Passing](https://img.shields.io/badge/Tests-49%2F49%20Passing-success.svg)](test/)
 
 Limitless Claude is an open-source configuration and model-routing harness that connects **Claude Code** to a dynamic fleet of third-party AI models through **OmniRoute**. Instead of binding your agentic coding sessions to a single provider meter or running into sudden rate-limit brick walls, Limitless Claude aggregates your existing developer accounts—including zero-marginal-cost community endpoints, subscription-entitled access (such as GitHub Copilot and Antigravity), and pay-as-you-go providers—into four specialized coding tiers.
 
@@ -232,7 +232,7 @@ The Claude Code VS Code extension reads settings from `~/.claude/settings.json` 
 ```
 
 ### Cursor IDE
-When running Claude Code within Cursor's integrated terminal, it automatically inherits your user environment variables (`ANTHROPIC_BASE_URL`). To use OmniRoute combos directly within Cursor's custom model settings, configure custom models pointing to `http://localhost:20128/v1`.
+When running Claude Code within Cursor's integrated terminal, the process automatically inherits system and user environment variables (`ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN`). This is the verified method for using Limitless Claude inside Cursor. Note that Cursor's own custom model configuration has known limitations regarding custom Anthropic base-URL overrides; do not assume direct editor completion proxying through OmniRoute is supported unless verified for your specific Cursor version.
 
 ---
 
@@ -322,19 +322,22 @@ Run the isolated test suite:
 ```bash
 npm test
 ```
-The test suite covers:
-- **WAL-consistent backup & restore** verification using SQLite `quick_check`.
+The test suite covers 49 automated tests across 4 test suites:
+- **WAL-consistent backup & restore** verification using SQLite `quick_check` and safe atomic restoration on promotion/copy failure.
+- **Live catalogue requirement by default** preventing stale configurations, with explicit opt-in for offline cached inventory (`--allow-offline-catalog`).
+- **Empty-tier prevention** ensuring setup never writes an empty models list to any routing combo.
+- **Fail-closed API key permissions** reporting incomplete setup if a restricted key cannot receive combo permissions under older schemas.
 - **Atomic transaction rollback** on simulated failures.
 - **Idempotency** across repeated setup runs.
 - **API key permission preservation** (never broadening restricted keys to `'all'`).
 - **Pattern matching resolution** (ensuring specific patterns like `*opusplan*` and `*opus[1m]*` take precedence over generic `*opus*`).
 - **Launcher generation** for Windows (.bat, .vbs) and Unix (.sh).
-- **Graceful error exits** on empty catalogs or schema incompatibilities.
+- **Graceful nonzero error exits** on failed discovery, empty catalogs, or schema incompatibilities.
 - **Strict isolation** from your live database, startup directory, and environment.
 
 ### Limitations & Known Unverified Areas
 1. **Third-Party Rate Limits:** Upstream providers may alter rate limits, context windows, or tool support without notice.
-2. **Paid Model Opt-In:** Set `LIMITLESS_EXCLUDE_PAID=true` if you wish to strictly avoid any paid model endpoints (e.g., Mistral Codestral or OpenRouter paid candidates).
+2. **Paid-Model Guard Heuristic:** `--exclude-paid` / `LIMITLESS_EXCLUDE_PAID=true` applies a conservative heuristic classification based on provider names and model ID suffixes (e.g. filtering metered OpenRouter models or commercial API providers). It is not an infallible or legally binding guarantee of zero upstream charges; provider billing rules, quota classifications, or third-party proxy tiers may change.
 3. **Live Billing Smoke Test:** Standard tests run in mock isolation; we do not charge tokens or issue paid requests to external providers during test execution.
 
 ### Contribution Guidance

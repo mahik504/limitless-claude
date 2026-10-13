@@ -208,11 +208,57 @@ test.describe("SQLite Driver Adapter & WAL-Safe Backup", () => {
       fs.copyFileSync = origCopy;
     }
 
-    // Verify existing backup was restored to backupPath without loss
+    // Verify existing backup was restored to backupPath without loss and passes integrity check
     assert.strictEqual(fs.existsSync(backupPath), true, "Existing backup must be restored");
     const verifyDb = openDatabase(backupPath, { readonly: true });
     const count = verifyDb.prepare("SELECT count(*) as cnt FROM records").get();
     assert.ok(count.cnt >= 2);
+    const check = verifyDb.prepare("PRAGMA quick_check").get();
+    assert.strictEqual(Object.values(check)[0], "ok", "Restored backup must pass SQLite integrity check");
+    verifyDb.close();
+    db.close();
+  });
+
+  test.it("should clean up partial target file and restore intact previous backup if promotion copy fails partway", () => {
+    assert.strictEqual(fs.existsSync(backupPath), true);
+    const db = openDatabase(dbPath);
+
+    const origRename = fs.renameSync.bind(fs);
+    const origCopy = fs.copyFileSync.bind(fs);
+
+    fs.renameSync = (src, dest) => {
+      // Force promotion into copy fallback
+      if (src.includes(".candidate.")) {
+        throw new Error("Simulated candidate rename failure forcing copy fallback");
+      }
+      return origRename(src, dest);
+    };
+
+    fs.copyFileSync = (src, dest) => {
+      if (src.includes(".candidate.")) {
+        // Simulate partial write failure leaving a corrupt file at target destination
+        fs.writeFileSync(dest, "CORRUPTED_PARTIAL_FILE_DATA");
+        throw new Error("Simulated partial write failure during promotion copy");
+      }
+      return origCopy(src, dest);
+    };
+
+    try {
+      assert.throws(() => {
+        backupDatabase(db, dbPath, backupPath);
+      }, /Failed to promote verified backup candidate/);
+    } finally {
+      fs.renameSync = origRename;
+      fs.copyFileSync = origCopy;
+    }
+
+    // Previous backup must be restored intact, not overwritten by partial corrupted copy
+    assert.strictEqual(fs.existsSync(backupPath), true, "Previous backup file must be restored");
+    const verifyDb = openDatabase(backupPath, { readonly: true });
+    const check = verifyDb.prepare("PRAGMA quick_check").get();
+    assert.strictEqual(Object.values(check)[0], "ok", "Restored backup must pass SQLite integrity check");
+    const count = verifyDb.prepare("SELECT count(*) as cnt FROM records").get();
+    assert.ok(count.cnt >= 2, "Restored backup must have all original records");
     verifyDb.close();
     db.close();
   });

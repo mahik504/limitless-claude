@@ -97,6 +97,26 @@ function filterCandidatesByBilling(candidates, excludePaid = false, allowUnknown
 }
 
 async function runSetup() {
+  const cliArgs = process.argv.slice(2);
+  if (cliArgs.includes("--help") || cliArgs.includes("-h")) {
+    console.log(`Limitless Claude Setup CLI
+
+Usage:
+  node scripts/setup.js [options]
+
+Options:
+  --exclude-paid, --free-only    Exclude metered/chargeable models from routing combos
+                                 (conservative heuristic based on provider names and model suffixes;
+                                  not an infallible billing guarantee).
+  --allow-unknown                Permit models with unverified billing classification when
+                                 --exclude-paid is active.
+  --allow-offline-catalog        Explicitly opt in to using checked-in offline cached model
+                                 inventory when live OmniRoute catalog is unreachable.
+  --help, -h                     Show this help message.
+`);
+    return;
+  }
+
   console.log("Restoring Limitless Claude Architecture...");
 
   const omnirouteDir = process.env.OMNIROUTE_DIR || path.join(os.homedir(), ".omniroute");
@@ -159,27 +179,6 @@ async function runSetup() {
   if (!apiKey) {
     console.warn("\x1b[33m[WARNING] No active OmniRoute API key found.\x1b[0m");
     console.warn("Please ensure you create an API key in the OmniRoute dashboard (http://localhost:20128/keys) or set ANTHROPIC_AUTH_TOKEN before running Claude Code.\n");
-  }
-
-  const cliArgs = process.argv.slice(2);
-  if (cliArgs.includes("--help") || cliArgs.includes("-h")) {
-    console.log(`Limitless Claude Setup CLI
-
-Usage:
-  node scripts/setup.js [options]
-
-Options:
-  --exclude-paid, --free-only    Exclude metered/chargeable models from routing combos
-                                 (conservative heuristic based on provider names and model suffixes;
-                                  not an infallible billing guarantee).
-  --allow-unknown                Permit models with unverified billing classification when
-                                 --exclude-paid is active.
-  --allow-offline-catalog        Explicitly opt in to using checked-in offline cached model
-                                 inventory when live OmniRoute catalog is unreachable.
-  --help, -h                     Show this help message.
-`);
-    db.close();
-    return;
   }
 
   const excludePaid = cliArgs.includes("--exclude-paid") || cliArgs.includes("--free-only") ||

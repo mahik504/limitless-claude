@@ -64,8 +64,16 @@ try {
 
 // Read Live Models
 async function fetchModels() {
+  const warnStaleInventory = () => {
+    const existingModelInventory = path.join(configDir, "model-inventory.json");
+    if (fs.existsSync(existingModelInventory)) {
+      console.warn("[WARNING] Note: Existing model-inventory.json was not updated and is not evidence of a fresh successful scan.");
+    }
+  };
+
   if (!apiKey) {
     console.warn("[WARNING] No API key found in OmniRoute database; live model discovery cannot proceed.");
+    warnStaleInventory();
     process.exitCode = 1;
     db.close();
     return;
@@ -80,6 +88,7 @@ async function fetchModels() {
     });
   } catch (e) {
     console.warn(`[WARNING] HTTP request to OmniRoute failed (${e.message}). Live models unavailable.`);
+    warnStaleInventory();
     process.exitCode = 1;
     db.close();
     return;
@@ -87,6 +96,7 @@ async function fetchModels() {
 
   if (!res.ok) {
     console.warn(`[WARNING] OmniRoute returned HTTP ${res.status}. Live model discovery failed.`);
+    warnStaleInventory();
     process.exitCode = 1;
     db.close();
     return;
@@ -97,6 +107,7 @@ async function fetchModels() {
     data = await res.json();
   } catch (e) {
     console.error("[ERROR] Failed to parse JSON response from OmniRoute:", e.message);
+    warnStaleInventory();
     process.exitCode = 1;
     db.close();
     return;
@@ -104,6 +115,7 @@ async function fetchModels() {
 
   if (!data || !data.data || !Array.isArray(data.data)) {
     console.error("[ERROR] Invalid response format from OmniRoute: missing data array.");
+    warnStaleInventory();
     process.exitCode = 1;
     db.close();
     return;

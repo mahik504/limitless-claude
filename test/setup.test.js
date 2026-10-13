@@ -813,4 +813,55 @@ test.describe("Limitless Claude Setup Integrity", () => {
 
     assert.match(output, /=== Limitless Claude Setup Complete! ===/);
   });
+
+  test.it("should not mutate api_keys during preflight check if setup aborts before transaction", () => {
+    const preflightDir = path.join(TEST_DIR, "preflight-isolation-test");
+    fs.mkdirSync(preflightDir, { recursive: true });
+    const preflightDbPath = path.join(preflightDir, "storage.sqlite");
+    const preflightConfigDir = path.join(preflightDir, "config");
+    fs.mkdirSync(preflightConfigDir, { recursive: true });
+
+    // Seed database with a restricted key having initial combos
+    const db = openDatabase(preflightDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, allowed_models TEXT, allowed_combos TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys VALUES ('preflight-key', 'restricted', '[]', '["combo/initial"]', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+    `);
+    db.close();
+
+    // Catalog has only paid models for Fable, triggering an empty tier abort under --exclude-paid
+    fs.writeFileSync(path.join(preflightConfigDir, "live_models.json"), JSON.stringify({
+      data: [
+        { id: "github/gpt-4o-mini" },
+        { id: "antigravity/claude-sonnet-4-6" },
+        { id: "openrouter/z-ai/glm-5.2:free" },
+        { id: "openrouter/moonshotai/kimi-k3" } // paid model only in Fable
+      ]
+    }));
+
+    try {
+      execSync("node scripts/setup.js --exclude-paid --allow-offline-catalog", {
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          OMNIROUTE_DIR: preflightDir,
+          LIMITLESS_CONFIG_DIR: preflightConfigDir,
+          TEST_STARTUP_DIR: STARTUP_DIR
+        }
+      });
+      assert.fail("Setup should have aborted due to empty tier");
+    } catch (e) {
+      assert.strictEqual(e.status !== 0, true);
+    }
+
+    // Verify api_keys was NEVER mutated by preflight check
+    const verifyDb = openDatabase(preflightDbPath, { readonly: true });
+    const keyRow = verifyDb.prepare("SELECT allowed_combos FROM api_keys WHERE key = 'preflight-key'").get();
+    assert.ok(keyRow);
+    const combos = JSON.parse(keyRow.allowed_combos);
+    assert.deepStrictEqual(combos, ["combo/initial"], "preflight check must not mutate allowed_combos when setup aborts before transaction");
+    verifyDb.close();
+  });
 });

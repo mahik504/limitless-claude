@@ -162,4 +162,45 @@ test.describe("Model and Provider Discovery Script", () => {
       assert.match((e.stderr || '') + (e.stdout || ''), /OmniRoute database not found/);
     }
   });
+
+  test.it("should warn that existing model inventory is not evidence of fresh scan when live discovery fails", async () => {
+    const staleDir = path.join(tmpDir, "stale-inventory-test");
+    const staleConfigDir = path.join(tmpDir, "stale-config");
+    fs.mkdirSync(staleDir, { recursive: true });
+    fs.mkdirSync(staleConfigDir, { recursive: true });
+
+    // Seed database with valid key
+    const db = openDatabase(path.join(staleDir, "storage.sqlite"));
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, is_active INTEGER);
+      INSERT INTO api_keys VALUES ('stale-key', 1);
+      CREATE TABLE provider_connections (provider TEXT PRIMARY KEY, is_active INTEGER);
+      INSERT INTO provider_connections VALUES ('github', 1);
+    `);
+    db.close();
+
+    // Create existing model-inventory.json from prior run
+    const existingContent = JSON.stringify([{ id: "old/model", stale: true }]);
+    fs.writeFileSync(path.join(staleConfigDir, "model-inventory.json"), existingContent);
+
+    try {
+      await execAsync("node scripts/discover.js", {
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          OMNIROUTE_DIR: staleDir,
+          LIMITLESS_CONFIG_DIR: staleConfigDir,
+          OMNIROUTE_BASE_URL: "http://127.0.0.1:59999" // Unreachable port
+        }
+      });
+      assert.fail("Must exit non-zero when live gateway is unreachable");
+    } catch (e) {
+      assert.strictEqual(e.code !== 0, true);
+      const out = (e.stderr || '') + (e.stdout || '');
+      assert.match(out, /Note: Existing model-inventory\.json was not updated and is not evidence of a fresh successful scan/);
+      // Existing content must remain untouched
+      const fileContent = fs.readFileSync(path.join(staleConfigDir, "model-inventory.json"), "utf8");
+      assert.strictEqual(fileContent, existingContent);
+    }
+  });
 });

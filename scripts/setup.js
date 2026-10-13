@@ -403,9 +403,9 @@ Options:
     }
   }
 
-  // Preflight check: verify API key permissions compatibility before transaction
+  // Preflight check: verify API key permissions compatibility before transaction without mutating database
   if (apiKey) {
-    const permPrecheck = safelyConfigureComboPermissions(db, apiKey, Object.values(COMBO_IDS));
+    const permPrecheck = safelyConfigureComboPermissions(db, apiKey, Object.values(COMBO_IDS), { dryRun: true });
     if (permPrecheck.status === "unsupported_schema" && permPrecheck.incomplete) {
       const maskedKey = apiKey.length > 8 ? `${apiKey.slice(0, 6)}...` : "[redacted]";
       console.error(`\x1b[31m[ERROR] Setup incomplete: Selected API key [${maskedKey}] is in 'restricted' mode, but database schema lacks 'allowed_combos' column.\x1b[0m`);

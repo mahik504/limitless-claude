@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen.svg)](https://nodejs.org/)
 [![OmniRoute](https://img.shields.io/badge/Gateway-OmniRoute-orange.svg)](https://github.com/danny-avila/OmniRoute)
-[![Tests Passing](https://img.shields.io/badge/Tests-49%2F49%20Passing-success.svg)](test/)
+[![Tests Passing](https://img.shields.io/badge/Tests-53%2F53%20Passing-success.svg)](test/)
 
 Limitless Claude is an open-source configuration and model-routing harness that connects **Claude Code** to a dynamic fleet of third-party AI models through **OmniRoute**. Instead of binding your agentic coding sessions to a single provider meter or running into sudden rate-limit brick walls, Limitless Claude aggregates your existing developer accounts—including zero-marginal-cost community endpoints, subscription-entitled access (such as GitHub Copilot and Antigravity), and pay-as-you-go providers—into four specialized coding tiers.
 
@@ -322,17 +322,18 @@ Run the isolated test suite:
 ```bash
 npm test
 ```
-The test suite covers 49 automated tests across 4 test suites:
+The test suite covers 53 automated tests across 4 test suites:
 - **WAL-consistent backup & restore** verification using SQLite `quick_check` and safe atomic restoration on promotion/copy failure.
 - **Live catalogue requirement by default** preventing stale configurations, with explicit opt-in for offline cached inventory (`--allow-offline-catalog`).
 - **Empty-tier prevention** ensuring setup never writes an empty models list to any routing combo.
 - **Fail-closed API key permissions** reporting incomplete setup if a restricted key cannot receive combo permissions under older schemas.
+- **Preflight check isolation (`dryRun`)** ensuring preflight checks never prematurely mutate the database before atomic transactions.
 - **Atomic transaction rollback** on simulated failures.
 - **Idempotency** across repeated setup runs.
 - **API key permission preservation** (never broadening restricted keys to `'all'`).
 - **Pattern matching resolution** (ensuring specific patterns like `*opusplan*` and `*opus[1m]*` take precedence over generic `*opus*`).
 - **Launcher generation** for Windows (.bat, .vbs) and Unix (.sh).
-- **Graceful nonzero error exits** on failed discovery, empty catalogs, or schema incompatibilities.
+- **Graceful nonzero error exits** on failed discovery, empty catalogs, query errors, or schema incompatibilities.
 - **Strict isolation** from your live database, startup directory, and environment.
 
 ### Limitations & Known Unverified Areas

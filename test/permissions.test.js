@@ -207,4 +207,31 @@ test.describe("OmniRoute API Key Permission Safety", () => {
     minDb.close();
     fs.rmSync(minDir, { recursive: true, force: true });
   });
+
+  test.it("should safely return null when explicit key query encounters a database error", () => {
+    const brokenDb = {
+      prepare: (sql) => {
+        if (sql.includes("PRAGMA table_info")) {
+          return { all: () => [{ name: "key" }, { name: "is_active" }] };
+        }
+        throw new Error("Explicit key DB query error");
+      }
+    };
+    const found = findTargetApiKey(brokenDb, "any-key");
+    assert.strictEqual(found, null, "Must fail safely returning null on explicit key query error");
+  });
+
+  test.it("should support dryRun option without modifying database allowed_combos", () => {
+    const dryRunKey = "key-dry-run";
+    db.prepare("INSERT INTO api_keys (key, model_access_mode, allowed_combos, is_active) VALUES ('key-dry-run', 'restricted', '[\"combo/existing\"]', 1)").run();
+
+    const dryRes = safelyConfigureComboPermissions(db, dryRunKey, ["combo/limitless-opus"], { dryRun: true });
+    assert.strictEqual(dryRes.changed, true);
+    assert.strictEqual(dryRes.dryRun, true);
+
+    // Verify database was NOT modified
+    const row = db.prepare("SELECT allowed_combos FROM api_keys WHERE key = ?").get(dryRunKey);
+    const combos = JSON.parse(row.allowed_combos);
+    assert.deepStrictEqual(combos, ["combo/existing"], "dryRun must not mutate allowed_combos on disk");
+  });
 });

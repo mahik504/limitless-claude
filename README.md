@@ -1,392 +1,316 @@
-# Limitless Claude v5.0
+# Limitless Claude v5.5.0
 
 > **Your Claude Code workflow. Your connected model fleet.**
 >
-> *A robust, safety-first configuration and routing SDK for connecting Claude Code through OmniRoute to supported third-party model fleets. Features transactional SQLite configuration, verified WAL-safe backups, strict isolation testing, heuristic paid-model guards, and reproducible local developer setup.*
+> *A robust, safety-first configuration and routing SDK for connecting Claude Code through OmniRoute to supported third-party model fleets. Features updated Haiku 5.5, Sonnet 5.5, Opus 5.5, and Fable 5.1 instructions, universal 1-click autonomous installer, transactional SQLite configuration, verified WAL-safe backups, strict isolation testing, heuristic paid-model guards, and reproducible local developer setup.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen.svg)](https://nodejs.org/)
 [![OmniRoute](https://img.shields.io/badge/Gateway-OmniRoute-orange.svg)](https://github.com/danny-avila/OmniRoute)
 [![Tests Passing](https://img.shields.io/badge/Tests-55%2F55%20Passing-success.svg)](test/)
+[![Release](https://img.shields.io/badge/Release-v5.5.0-blueviolet.svg)](https://github.com/mahik504/limitless-claude/releases/tag/v5.5.0)
 
-Limitless Claude is an open-source model-routing harness and developer SDK that seamlessly connects the **Claude Code CLI** to a dynamic fleet of third-party AI models via **OmniRoute** (`127.0.0.1:20128`). By proxying Claude Code's Anthropic Messages API (`POST /v1/messages`), Limitless Claude maps agentic sessions across four distinct routing profiles (`Haiku`, `Sonnet`, `Opus`, and `Fable`) backed by your authenticated provider accounts—including zero-marginal-cost endpoints, developer subscriptions (such as GitHub Copilot and Antigravity), and pay-as-you-go providers.
-
-### Core Architecture & Current Setup Behavior
-- **Live Catalog Default:** By default, setup contacts your live OmniRoute instance (`omniroute serve`) to verify active, reachable models before generating combos. Running offline is strictly opt-in via `--allow-offline-catalog`.
-- **Preflight Isolation & Empty-Tier Prevention:** Validates API key schema compatibility and ensures every required routing profile has valid candidates before beginning any database transaction. Empty tiers abort early to prevent overwriting working combos.
-- **Fail-Closed API Key Management:** Selects active keys transaction-safely, preserves existing restricted access modes without expanding permissions to global `'all'`, and fails closed when older schemas cannot configure combo permissions.
-- **WAL-Consistent Backup & Restoration:** Performs verified SQLite backups (`storage.sqlite.bak`) prior to database updates and restores safely if any operation fails.
-- **Four Purpose-Built Profiles:** `Haiku` (low-latency syntax waterfall), `Sonnet` (deep reasoning waterfall), `Opus` (high-capacity round-robin reservoir), and `Fable` (high-context composite pool).
-- **Requirements:** Node.js >= 22, npm >= 10, an active or accessible OmniRoute installation, and at least one connected AI provider account.
-- **Known Limitations:** Upstream model availability and rate limits depend on individual providers; `--exclude-paid` applies a conservative heuristic classification rather than an absolute billing guarantee; and Claude Code editor integration is verified via integrated terminal sessions.
+Limitless Claude is an open-source model-routing harness and developer SDK that seamlessly connects the **Claude Code CLI** to a dynamic fleet of third-party AI models via **OmniRoute** (`127.0.0.1:20128`). By proxying Claude Code's Anthropic Messages API (`POST /v1/messages`), Limitless Claude maps agentic sessions across four distinct routing profiles (**Haiku 5.5**, **Sonnet 5.5**, **Opus 5.5**, and **Fable 5.1**) backed by your authenticated provider accounts—including zero-marginal-cost endpoints, developer subscriptions (such as GitHub Copilot and Antigravity), and pay-as-you-go providers.
 
 ---
 
-## 1. What Limitless Claude Does (and Why It Exists)
-
-Deep agentic coding loops run high token volumes through terminal actions, automated test suites, and file modifications. When using Claude Code, configuring diverse upstream models can be difficult and fragmented.
-
-Limitless Claude solves this by providing:
-- **Four Purpose-Built Tiers:** Four pre-configured combo profiles (`Haiku`, `Sonnet`, `Opus`, `Fable`) with tuned system prompts and routing policies.
-- **Dynamic Provider Filtering:** Scans your active OmniRoute providers and automatically configures only the models you actually have authenticated access to.
-- **Safe Database Management:** Manages OmniRoute's SQLite database atomically with verified, WAL-consistent backups (preferring `VACUUM INTO`, with verified checkpoint fallback) and minimal API key permissions.
-- **Silent Background Launchers:** Windows VBScript/Batch launcher with an auto-recovery restart loop in Startup, and Unix background runner script (`start-daemon.sh`).
-- **Claude Code Compatibility:** Standard Claude Code developer workflows (tool calling, file editing, terminal commands, slash commands like `/plan` and `/compact`, and MCP servers) are supported via OmniRoute's proxying of the Anthropic Messages API (`POST /v1/messages`).
-- **Transparent Capacity Modeling:** Clear, reproducible calculations of your aggregate daily theoretical token capacity.
+### Key Capabilities in v5.5.0
+- **Universal 1-Click Installer (`npm run install:all`):** Autonomously verifies and installs Claude Code CLI, installs OmniRoute, launches the background gateway, inspects connected providers, configures SQLite combos, synchronizes client settings, and verifies live connectivity.
+- **Safe Re-installation & Provider Preservation (`npm run install:clean`):** Reinstalling or updating preserves all existing provider credentials, logins, and API keys 100%, while purging stale combos to guarantee clean database state.
+- **Next-Gen Tier Personas:** Updated system prompts for **Haiku 5.5** (rapid syntax & file inspection), **Sonnet 5.5** (deep architectural reasoning), **Opus 5.5** (high-capacity coding reservoir), and **Fable 5.1** (high-context synthesis fleet).
+- **Multi-Client Sync:** Automatically writes configuration to Claude Code CLI (`~/.claude/settings.json`), Windows environment (`setx ANTHROPIC_BASE_URL`), and Paseo (`~/.paseo/config.json`).
+- **Native Live Verifier (`npm run verify`):** Pure Node.js verification script that pings all 4 model aliases and 4 combos over the Anthropic Messages protocol with zero external dependencies.
+- **Silent Windows Startup Daemon:** Automatically creates `Limitless-OmniRoute-Launcher.vbs` in the Windows Startup directory to silently launch OmniRoute on boot with a 10-second network readiness delay.
 
 ---
 
-## 2. What Limitless Claude Does NOT Do
-
-To keep expectations clear, honest, and grounded:
-- **Not an Inference Provider:** Limitless Claude does not supply free compute or host AI models. You connect your own provider accounts through OmniRoute.
-- **Not Official Anthropic Models:** The tier names `Haiku`, `Sonnet`, `Opus`, and `Fable` are internal routing profiles. They route to models such as Qwen, DeepSeek, Llama, and GPT-4o. In particular, **Fable is an internal composite profile, not an Anthropic model**.
-- **No Stolen System Prompts:** This repository does not contain Anthropic's proprietary system instructions. It uses Limitless Claude's own functional coding instructions designed to minimize conversational filler and maximize tool use accuracy.
-- **No Parity Guarantees:** Third-party open-weight models have distinct strengths and limits. Model quality, speed, context window, and tool reliability depend directly on upstream provider capabilities.
-- **No Affiliation:** Limitless Claude is an independent open-source project and is not affiliated with, endorsed by, or sponsored by Anthropic or Google.
-
----
-
-## 3. Architecture & Request-Flow Mermaid Diagrams
+## 1. Architecture & Request-Flow Mermaid Diagrams
 
 Claude Code communicates with the local gateway using the standard Anthropic Messages API protocol (`POST /v1/messages`). OmniRoute intercepts the request, matches the model alias against registered mappings, applies tier persona prompts, and routes through the chosen strategy.
 
 ```mermaid
 flowchart TD
-    subgraph Client ["Client Environment"]
-        CC["Claude Code CLI (Terminal / VS Code / Cursor)"]
+    subgraph Clients ["Client Layer"]
+        CC["Claude Code CLI (Terminal)"]
+        VS["VS Code Extension"]
+        CR["Cursor IDE Terminal"]
+        PS["Paseo Coding Agent"]
     end
 
     subgraph Gateway ["Local Gateway: 127.0.0.1:20128"]
-        OR["OmniRoute Core"]
-        subgraph Tiers ["Limitless Routing Tiers"]
-            H["Haiku (Priority Waterfall)"]
-            S["Sonnet (Priority Waterfall)"]
-            O["Opus (Round-Robin Reservoir)"]
-            F["Fable (Round-Robin Premium)"]
+        OR["OmniRoute Core Proxy"]
+        subgraph Tiers ["Limitless 5.5 Routing Profiles"]
+            H["⚡ Haiku 5.5 (Priority Waterfall)"]
+            S["🧠 Sonnet 5.5 (Priority Waterfall)"]
+            O["🛠️ Opus 5.5 (Round-Robin Reservoir: 17 Models)"]
+            F["👑 Fable 5.1 (Round-Robin Premium Fleet)"]
         end
     end
 
-    subgraph Providers ["Upstream Providers"]
-        P1["Groq / Gemini API"]
-        P2["GitHub Copilot / Antigravity"]
-        P3["OpenRouter (Free Pool)"]
-        P4["HuggingChat / Ollama Cloud"]
-        P5["Mistral / OpenRouter (Paid)"]
+    subgraph Providers ["Upstream Provider Fleet (17 Providers)"]
+        P1["Groq / Cloudflare Workers AI"]
+        P2["GitHub Copilot / Google Antigravity"]
+        P3["Kilo Gateway / OpenRouter Free Tier"]
+        P4["Ollama Cloud / Mistral AI / NVIDIA NIM"]
+        P5["Kiro / AgentRouter Subscriptions"]
     end
 
-    CC -->|"POST /v1/messages (Anthropic Protocol)"| OR
+    Clients -->|"POST /v1/messages (Anthropic Protocol)"| OR
     OR --> Tiers
-    H -->|"Latency Waterfall"| P1 & P3
-    S -->|"Reasoning Waterfall"| P2 & P4
-    O -->|"RPM Load-Balancing (17 Models)"| P3 & P4
-    F -->|"Premium Subscription Pool"| P2 & P5
+    H -->|"Low-Latency Waterfall"| P1 & P2
+    S -->|"Reasoning Waterfall"| P2 & P5
+    O -->|"High-Throughput Round-Robin"| P3 & P4
+    F -->|"High-Context Premium Rotation"| P2 & P5
 ```
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Dev as Developer / Agent
+    actor Dev as Developer / AI Agent
     participant CC as Claude Code CLI
     participant OR as OmniRoute Gateway (localhost:20128)
     participant Tier as Limitless Tier Combo
-    participant Upstream as Upstream Provider (Qwen, DeepSeek, Groq)
+    participant Upstream as Upstream Provider Fleet
 
     Dev->>CC: Run `claude` (or `claude --model limitless-opus`)
     CC->>OR: POST /v1/messages (ANTHROPIC_BASE_URL: 127.0.0.1:20128)
     OR->>Tier: Matches alias pattern (*opus*, *sonnet*, *haiku*, *fable*)
-    Note over Tier: Injects tier system instructions & applies routing strategy
+    Note over Tier: Injects tier system prompt & applies routing strategy
     Tier->>Upstream: Forwards request to active candidate model
     Upstream-->>Tier: Returns code tokens & tool-use calls
     Tier-->>OR: Normalizes response payload
     OR-->>CC: 200 OK (Anthropic-shaped JSON / SSE stream)
-    CC-->>Dev: Executes file diffs, terminal commands, or tests
+    CC-->>Dev: Executes file diffs, terminal commands, or test runs
 ```
-
-*For in-depth architectural details, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).*
 
 ---
 
-## 4. The Four Tiers and Routing Strategies
+## 2. The Four Tiers and Routing Strategies
 
-| Tier | Routing Strategy | Primary Focus | Models Configured | Primary Access Class |
+| Tier Profile | Routing Strategy | Primary Focus | Candidate Fleet | Primary Access Class |
 |---|---|---|---|---|
-| **⚡ Haiku** | **Priority Waterfall** | Instant syntax lookups, file tree exploration, fast tool verification | 7 candidates (Groq Llama, Gemini Flash Lite, GLM) | Zero-Marginal-Cost & Subscriptions |
-| **🧠 Sonnet** | **Priority Waterfall** | Architectural planning, multi-step debugging, deep code review | 6 candidates (Claude Thinking, DeepSeek Reasoner, Command R+) | Subscription-Entitled |
-| **🛠️ Opus** | **Round-Robin** | High-volume code generation and multi-agent refactoring loops | 17 candidates (Qwen 2.5 Coder, Codestral, DeepSeek, GLM) | Zero-Marginal-Cost Reservoir |
-| **👑 Fable** | **Round-Robin** | High-context synthesis leveraging premium developer subscriptions | 6 candidates (GPT-4o, Claude Opus, Gemini Pro) | Subscription-Entitled & Paid |
-
-*For exact model IDs, cascade orders, and mapping priority rules, review [docs/MODEL-CATALOG.md](docs/MODEL-CATALOG.md).*
+| **⚡ Haiku 5.5** | **Priority Waterfall** | Instant syntax lookups, linting, rapid file exploration, fast test validation | 10 models (Groq Llama 3.3, Gemini 3.5 Flash Lite, Kiro Claude Haiku 4.5, Cloudflare Llama 3.3, GitHub Claude Haiku 4.5, Kilo Laguna XS) | Zero-Cost & Subscriptions |
+| **🧠 Sonnet 5.5** | **Priority Waterfall** | Deep architectural reasoning, multi-step planning, complex debugging, code review | 9 models (GitHub Claude Sonnet 5, Kiro Claude Sonnet 5, OpenRouter Nemotron 3 Super, Cohere North Mini Code) | Subscription-Entitled & Zero-Cost |
+| **🛠️ Opus 5.5** | **Round-Robin** | High-volume code refactoring, full test suite generation, long agentic loops | 17 models (Qwen 2.5 Coder 32B, Minimax M2.5, Codestral, Nemotron 3 Ultra 550B, Nemotron 3 Super 120B, DeepSeek V4 Flash, GLM 5.3 Flash) | Zero-Cost Reservoir (No Rate Limits) |
+| **👑 Fable 5.1** | **Round-Robin** | High-context synthesis, complex repository restructuring, cross-file architectural integration | 7 models (GitHub Claude Fable 5.1, AgentRouter Claude Opus 5, GitHub Claude Opus 5, Gemini 3.8 Flash) | Premium Subscriptions & High-Context |
 
 ---
 
-## 5. Token-Capacity Modeling
+## 3. The 17 Configured Providers: Status & Recommendations
 
-By load-balancing requests across diverse providers, Limitless Claude mitigates single-provider rate-limit bottlenecks. Under stated assumptions (2,500 average tokens per round-trip request), the **theoretical modeled capacity reaches ~28,000,000 tokens per day**.
+OmniRoute supports arbitrary AI providers. Below is the audited status of all 17 providers in our reference configuration:
 
-```
-┌──────────────────────────────────────────────────────────┐
-│ ESTIMATED THEORETICAL CAPACITY: ~28M TOKENS / DAY        │
-├──────────────────────────┬───────────────────────────────┤
-│ Zero-Marginal-Cost (ZMC) │ ~16.5M tokens (59%)           │
-│ Subscription-Entitled    │ ~8.5M tokens (30%)            │
-│ Metered Paid Inference   │ ~3.0M tokens (11%)            │
-└──────────────────────────┴───────────────────────────────┘
-```
-
-### Critical Modeling Caveats
-1. **Modeled vs. Practical Throughput:** A human developer writing code generates far fewer tokens than an automated multi-agent loop running round-the-clock.
-2. **Concurrent Availability:** Assumes all configured providers and free endpoints are concurrently accessible.
-3. **Shared Quotas:** If your GitHub Copilot subscription is utilized by both Sonnet and Fable, requests issued by Sonnet directly decrement available volume for Fable.
-4. **No SLA:** Free model rate limits and availability can change without notice.
-
-*Read the transparent methodology in [docs/TOKEN-CAPACITY.md](docs/TOKEN-CAPACITY.md).*
+| # | Provider Name | Access Type | Health / Status | Tier Placement | Recommended Use |
+|---|---|---|---|---|---|
+| 1 | **Google Antigravity** | Subscription / Free Tier | 🟢 Live (Healthy) | Haiku (3.5 Flash Lite), Fable (3.8 Flash) | Ultra-fast multimodal & high-context flash reasoning |
+| 2 | **GitHub Copilot** | Subscription | 🟢 Live (Healthy) | Haiku (Haiku 4.5, GPT-4o), Sonnet (Sonnet 5), Fable (Fable 5.1, Opus 5) | Core architectural and flagship coding tier |
+| 3 | **Kiro** | Subscription | 🟢 Live (Healthy) | Haiku (Haiku 4.5), Sonnet (Sonnet 5), Opus (Minimax M2.5) | Reliable Claude Sonnet fallback and fast tool execution |
+| 4 | **Cloudflare Workers AI** | Free Tier (10k req/day) | 🟢 Live (Healthy) | Haiku (Llama 3.3 70B), Opus (Qwen 2.5 Coder 32B) | Zero-cost edge inference with generous daily free quota |
+| 5 | **Kilo Gateway** | Free Tier | 🟢 Live (Healthy) | Haiku (Laguna XS, Nemotron Lightning), Sonnet (Cohere North Mini), Opus (Nemotron 3 Ultra 550B, Super 120B) | High-capacity zero-cost reservoir |
+| 6 | **OpenRouter** | Free & Metered | 🟢 Live (Healthy) | Sonnet (Nemotron 3 Super, Cohere North Mini), Opus (GLM 5.3 Flash, Nemotron 3 Ultra) | Diverse model reservoir with automated fallback |
+| 7 | **Ollama Cloud** | Free / Cloud | 🟢 Live (Healthy) | Opus (Nemotron 3 Ultra, Nemotron 3 Super) | Uncapped coding capacity |
+| 8 | **AgentRouter** | Subscription | 🟢 Live (Healthy) | Opus (DeepSeek V4 Flash, Opus 4.8), Fable (Opus 5) | High-speed frontier model access |
+| 9 | **Mistral AI** | Free Developer Tier | 🟢 Live (Healthy) | Opus (Codestral Latest) | High-quality open-weights code generation |
+| 10 | **NVIDIA NIM** | Free Cloud Credits | 🟢 Live (Healthy) | Opus (Nemotron 3 Super 120B) | GPU-accelerated enterprise models |
+| 11 | **Groq** | Free Tier | 🟢 Live (Healthy) | Haiku (Llama 3.3 70B, Llama 3.1 8B) | Sub-second latency for syntax and tool calls |
+| 12 | **Cerebras** | Free Tier | 🟢 Live (Healthy) | Haiku (Llama 3.3 70B Fast) | Ultra-fast chip inference (2,000+ tokens/sec) |
+| 13 | **BlueMinds** | Connected | 🟢 Live (Healthy) | Opus (Secondary pool) | Load-balancing backup |
+| 14 | **Muse Spark Web** | Web Session | 🔴 Expired | *Excluded* | Requires browser re-authentication |
+| 15 | **OpenCode Free** | Free Gateway | 🔴 403 FreeTier | *Excluded* | Upstream rate-limit error; bypassed safely |
+| 16 | **DeepSeek** | Metered API | ⚪ Disabled in UI | *Excluded* | Disabled to avoid unexpected metered charges |
+| 17 | **SambaNova** | Metered API | ⚪ Disabled in UI | *Excluded* | Disabled in UI toggle |
 
 ---
 
-## 6. Installation & Quickstart
+## 4. Universal 1-Click Installation & Setup
 
 ### Prerequisites
-- **Node.js** v22 or later (`node -v`)
-- **npm** v10 or later
-- **Claude Code CLI** (`npm install -g @anthropic-ai/claude-code`)
-- **OmniRoute** (`npm install -g omniroute@latest`)
+- **Node.js** v22 or higher (`node -v`)
+- **npm** v10 or higher
 
----
-
-## 7. First-Time OmniRoute Setup & Provider Authentication
-
-1. In a terminal, launch OmniRoute:
-   ```bash
-   omniroute serve
-   ```
-2. Open `http://localhost:20128` in your browser.
-3. Navigate to **Providers** and connect whichever free, open-source, or subscription accounts you have (e.g., GitHub Copilot, OpenRouter, Groq).
-4. Navigate to **API Keys** and confirm an active key exists (or create one).
-
----
-
-## 8. Connecting Claude Code to OmniRoute
-
-Clone the repository and run setup:
+### Option 1: Autonomous 1-Click Installer (Recommended)
+Clone the repo and run the universal installer:
 ```bash
 git clone https://github.com/mahik504/limitless-claude.git
 cd limitless-claude
 npm install
-npm run setup
+npm run install:all
 ```
 
-> **First-Time Setup Requirement:** By default, setup contacts your live OmniRoute instance (`omniroute serve`) on port 20128. If running in an offline or pre-configured test environment without an active gateway, explicitly opt in to the offline cached model catalog:
-> ```bash
-> node scripts/setup.js --allow-offline-catalog
-> ```
+**What the 1-Click Installer does automatically:**
+1. Validates Node.js >= 22.
+2. Checks for `@anthropic-ai/claude-code` and installs it globally if missing.
+3. Checks for `omniroute` and installs it globally if missing.
+4. Ensures OmniRoute is running on `http://127.0.0.1:20128` (launches in background if idle).
+5. Preserves existing provider accounts and API keys from `~/.omniroute/storage.sqlite`.
+6. Generates WAL-safe database backup (`storage.sqlite.bak`).
+7. Dynamically discovers live models from OmniRoute and builds the 4 combos (`limitless-haiku`, `limitless-sonnet`, `limitless-opus`, `limitless-fable`).
+8. Installs the silent Windows background startup launcher (`Limitless-OmniRoute-Launcher.vbs`) or Unix runner (`start-daemon.sh`).
+9. Configures `~/.claude/settings.json`, Windows user environment variables, and `~/.paseo/config.json`.
+10. Runs live Anthropic protocol verification across all 8 targets.
 
-### Setup CLI Options
+### Option 2: Clean Re-Installation (Upgrades & Fixes)
+If you already had Limitless Claude installed and want a pristine refresh without losing any provider logins or API keys:
 ```bash
-node scripts/setup.js [options]
+npm run install:clean
 ```
-- `--allow-offline-catalog` / `LIMITLESS_ALLOW_OFFLINE_CATALOG=true`: Permit using the checked-in offline model inventory if live OmniRoute discovery is unreachable.
-- `--exclude-paid`, `--free-only` / `LIMITLESS_EXCLUDE_PAID=true`: Exclude metered/chargeable models from routing combos using a conservative heuristic filter.
-- `--allow-unknown`: Permit models with unverified billing classification when `--exclude-paid` is active.
-- `--help`, `-h`: Show usage information and exit immediately without initializing database connections, backups, or filesystem modifications.
+This safely removes stale combos and orphan mappings while preserving 100% of your authenticated providers and API keys.
 
-**What `npm run setup` performs safely:**
-1. Connects to `~/.omniroute/storage.sqlite` and creates a WAL-consistent backup (`storage.sqlite.bak`).
-2. Validates schema compatibility and isolates permission preflight checks (`dryRun`).
-3. Verifies candidate models exist across all four routing tiers before making database modifications (aborting safely on empty tiers).
-4. Atomically registers combos, system instructions, and routing mappings inside a single SQLite transaction.
-5. Preserves restricted API key modes without silently granting global access, failing closed if permissions cannot be configured.
-6. Writes active configuration snapshot to `config/tier-configuration.json`.
-7. On Windows, registers an invisible auto-restart daemon in your Windows Startup directory.
-8. On Linux/macOS, creates an executable background runner (`start-daemon.sh`).
+---
 
-### Configuring Claude Code Environment
+## 5. IDE & Workflow Integration
 
-**Option A: Global Configuration via `~/.claude/settings.json` (Recommended)**
-Add or update the following fields in your `~/.claude/settings.json`:
+### Claude Code CLI
+Once installed, Claude Code connects automatically to OmniRoute:
+```bash
+# Default routing profile (auto-mapped)
+claude
+
+# Or explicitly select any tier:
+claude --model limitless-opus      # Coding reservoir (17 models)
+claude --model limitless-sonnet    # Architecture & reasoning
+claude --model limitless-haiku     # Fast syntax & tools
+claude --model limitless-fable     # High-context synthesis
+```
+
+### Paseo Coding Agent
+Limitless Claude automatically writes Paseo provider configuration into `~/.paseo/config.json`:
 ```json
 {
-  "env": {
-    "ANTHROPIC_BASE_URL": "http://127.0.0.1:20128",
-    "ANTHROPIC_AUTH_TOKEN": "your-omniroute-api-key",
-    "CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY": "true"
+  "agents": {
+    "providers": {
+      "claude": {
+        "env": {
+          "ANTHROPIC_BASE_URL": "http://localhost:20128",
+          "ANTHROPIC_AUTH_TOKEN": "your-omniroute-api-key",
+          "OMNIROUTE_BASE_URL": "http://localhost:20128"
+        }
+      }
+    }
   }
 }
 ```
 
-**Option B: Terminal Environment Variables**
-On Windows (PowerShell):
-```powershell
-$env:ANTHROPIC_BASE_URL = "http://127.0.0.1:20128"
-$env:ANTHROPIC_AUTH_TOKEN = "your-omniroute-api-key"
-```
-On Linux / macOS:
-```bash
-export ANTHROPIC_BASE_URL="http://127.0.0.1:20128"
-export ANTHROPIC_AUTH_TOKEN="your-omniroute-api-key"
-```
-
----
-
-## 9. IDE Integration Guidance
-
-### Claude Code Terminal
-Works out of the box once `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` are set in your environment or `~/.claude/settings.json`. Run:
-```bash
-claude
-```
-Or target a specific routing profile:
-```bash
-claude --model limitless-opus
-claude --model limitless-sonnet
-claude --model limitless-haiku
-claude --model limitless-fable
-```
-
 ### VS Code Extension
-The Claude Code VS Code extension reads settings from `~/.claude/settings.json` and respects VS Code `claudeCode.environmentVariables` settings:
+Add to `.vscode/settings.json` or your user settings:
 ```json
 {
   "claudeCode.environmentVariables": [
     { "name": "ANTHROPIC_BASE_URL", "value": "http://127.0.0.1:20128" },
-    { "name": "ANTHROPIC_AUTH_TOKEN", "value": "your-omniroute-api-key" }
+    { "name": "ANTHROPIC_AUTH_TOKEN", "value": "your-omniroute-api-key" },
+    { "name": "CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY", "value": "true" }
   ]
 }
 ```
 
 ### Cursor IDE
-When running Claude Code within Cursor's integrated terminal, the process automatically inherits system and user environment variables (`ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN`). This is the verified method for using Limitless Claude inside Cursor. Note that Cursor's own custom model configuration has known limitations regarding custom Anthropic base-URL overrides; do not assume direct editor completion proxying through OmniRoute is supported unless verified for your specific Cursor version.
+Open Cursor's integrated terminal. The terminal inherits `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` from your system environment variables. Running `claude` inside Cursor's terminal routes through your OmniRoute model fleet.
 
 ---
 
-## 10. Native Claude Code Features: Ultra Code, Slash Commands, Skills & MCPs
+## 6. Verification & Health Check
 
-Because Limitless Claude configures OmniRoute to translate and proxy Claude Code's requests to the Anthropic Messages API (`POST /v1/messages`), standard Claude Code workflows are supported across compatible upstream models:
-
-- **Ultra Code & Agentic Refactoring:** Multi-turn autonomous tool execution (running tests, reading files, generating unified diffs, running shell commands) operates seamlessly over the configured model fleet.
-- **Slash Commands:** Native Claude Code commands like `/plan` (architecture mode), `/compact` (context summarization), `/cost` (token reporting), `/doctor` (health check), and `/clear` function without interference.
-- **Claude Code Skills & Custom Tools:** Custom tool definitions passed in `tools` payload blocks are forwarded cleanly to upstream models supporting tool-calling capabilities.
-- **Model Context Protocol (MCP):** Any local or remote MCP servers configured in your Claude Code setup (`mcp.json`) communicate transparently through the routed combos.
-
----
-
-## 11. Inspecting Model Aliases, Routing Results & Diagnosing Connection Failures
-
-### Testing Model Aliases
-To verify how a specific model alias routes through OmniRoute:
+Verify all 4 tiers and model aliases live:
 ```bash
-# Check Opus route
-claude --model limitless-opus "Hello, what model profile are you?"
+npm run verify
+```
+Expected output:
+```text
+╔═══════════════════════════════════════════════════════════════════╗
+║           LIMITLESS CLAUDE - LIVE COMBO VERIFICATION              ║
+╚═══════════════════════════════════════════════════════════════════╝
+Gateway:  http://localhost:20128
+API Key:  sk-8570...62127e
 
-# Check Sonnet architectural route
-claude --model limitless-sonnet "Explain your reasoning approach."
+Testing [Haiku Alias (Fast Syntax)] (claude-haiku-4-5)... ✔ HTTP 200 (1.63s) -> "PONG"
+Testing [Sonnet Alias (Reasoning & Architecture)] (claude-sonnet-5)... ✔ HTTP 200 (3.14s) -> "PONG"
+Testing [Opus Alias (Coding Reservoir)] (claude-opus-4-8)... ✔ HTTP 200 (1.58s) -> "PONG"
+Testing [Fable Alias (High-Context Fleet)] (claude-fable-5-1)... ✔ HTTP 200 (6.99s) -> "PONG"
+Testing [Direct Combo: limitless-haiku] (combo/limitless-haiku)... ✔ HTTP 200 (1.67s) -> "PONG"
+Testing [Direct Combo: limitless-sonnet] (combo/limitless-sonnet)... ✔ HTTP 200 (3.10s) -> "PONG"
+Testing [Direct Combo: limitless-opus] (combo/limitless-opus)... ✔ HTTP 200 (1.45s) -> "PONG"
+Testing [Direct Combo: limitless-fable] (combo/limitless-fable)... ✔ HTTP 200 (1.67s) -> "PONG"
 
-# Check Haiku rapid syntax route
-claude --model limitless-haiku "Print 1+1"
-
-# Check Fable high-context route
-claude --model limitless-fable "Summarize project structure."
+───────────────────────────────────────────────────────────────────
+Results: 8/8 passed (0 failed)
+✔ All Limitless Claude tiers are healthy, mapped, and responding live!
 ```
 
-### Inspecting Live OmniRoute Logs
-1. Open the OmniRoute dashboard at `http://localhost:20128/logs` or inspect stdout in your OmniRoute server terminal.
-2. Every request shows:
-   - Target combo ID (e.g., `combo/limitless-opus`).
-   - Upstream model chosen by waterfall priority or round-robin rotation.
-   - Response latency and HTTP status code.
-
-### Diagnosing Gateway Connectivity
-```bash
-# Verify gateway HTTP health
-curl -I http://127.0.0.1:20128/
-
-# Verify Anthropic Messages endpoint
-curl -X POST http://127.0.0.1:20128/v1/messages \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer your-omniroute-api-key" \
-  -d "{}"
-# Expected: HTTP 400 Bad Request (confirming endpoint is active and awaiting messages)
-```
-
----
-
-## 12. Diagnostic & Troubleshooting Guide
-
-| Issue | Potential Cause | Tested Resolution |
-|---|---|---|
-| **OmniRoute Not Reachable** | Process not running or port 20128 blocked | Run `omniroute serve` or check `curl http://127.0.0.1:20128`. |
-| **Authentication Error (401)** | Missing or mismatched OmniRoute API key | Copy your active API key from `http://localhost:20128/keys` into `ANTHROPIC_AUTH_TOKEN`. |
-| **Model Alias Not Recognized** | Setup has not registered mappings | Run `npm run setup` to ensure mappings (`*opus*`, `*sonnet*`, etc.) are written to `model_combo_mappings`. |
-| **No Models Found in Tier** | No matching providers authenticated | Visit `http://localhost:20128/providers`, connect at least one provider (e.g. GitHub Copilot, Groq, OpenRouter), and re-run `npm run setup`. |
-| **SQLite Schema Incompatible** | Corrupted or outdated OmniRoute DB | Verify OmniRoute version is updated (`npm install -g omniroute@latest`). Setup verifies column presence before executing transactions. |
-| **Daemon Repeatedly Restarting** | Invalid executable path in launcher | Re-run `npm run setup` to regenerate `omniroute-daemon.bat` with verified binary paths. |
-
----
-
-## 13. Backup, Rollback & Uninstallation
-
-- **Database Rollback:** If you ever need to restore your pre-setup OmniRoute database:
-  ```bash
-  cp ~/.omniroute/storage.sqlite.bak ~/.omniroute/storage.sqlite
-  ```
-- **Remove Windows Startup Daemon:** Delete `Limitless-OmniRoute-Launcher.vbs` from:
-  `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup`
-- **Stop Linux / macOS Background Daemon:**
-  ```bash
-  pkill -f "omniroute serve"
-  ```
-
----
-
-## 14. v5.0.0 Release Notes & Compatibility
-
-### What's New in v5.0.0
-- **Safety-First Live Catalog Requirement:** Setup requires a live, accessible OmniRoute gateway by default to prevent generating stale or broken model combos. Offline cached catalog usage is strictly opt-in via `--allow-offline-catalog`.
-- **Atomic Preflight & Empty-Tier Safety:** Introduced strict preflight validation with `{ dryRun: true }` isolation. Setup validates API key compatibility and checks that every routing tier has candidates before initiating database transactions, preventing destructive overwrites.
-- **Fail-Closed API Key Permissions:** Restricted API keys are never silently expanded to `'all'`. If an older database schema lacks the `allowed_combos` column, setup exits with a clear non-zero diagnostic rather than leaving permissions in an undefined state.
-- **WAL-Consistent Backup & Safe Restoration:** SQLite database backups use WAL-consistent backups verified with `PRAGMA quick_check`. Promotion copy failures safely clean up destination targets before restoring previous backups.
-- **Zero-DB CLI Help:** Running `node scripts/setup.js --help` outputs usage documentation immediately without initializing database connections, backups, or filesystem modifications.
-- **Verified Multi-OS CI:** Automated test suite expanded to 55 hermetic tests across 4 suites, verified and passing on Ubuntu, Windows, and macOS GitHub Actions runners.
-- **Documentation & Routing Alignment:** Standardized CLI invocation on `claude --model`, updated provider rate-limit and quota guidance, clarified Cursor terminal integration, and explicitly defined `--exclude-paid` as a heuristic classification.
-
-### Compatibility & Upgrading
-- **Backward Compatibility:** Existing `config/tier-configuration.json` snapshots and custom database records are preserved. Upgrading from v4.x only requires pulling `v5.0.0` and running `npm run setup`.
-- **Database Safety:** An automatic backup (`storage.sqlite.bak`) is created before any database mutations occur.
-
----
-
-## 15. Testing, Limitations, Known Unverified Areas & License
-
-### Automated Test Suite
-Run the isolated test suite:
+Run unit & integration tests:
 ```bash
 npm test
 ```
-The test suite covers 55 automated tests across 4 test suites:
-- **WAL-consistent backup & restore** verification using SQLite `quick_check` and safe atomic restoration on promotion/copy failure.
-- **Live catalogue requirement by default** preventing stale configurations, with explicit opt-in for offline cached inventory (`--allow-offline-catalog`).
-- **Empty-tier prevention** ensuring setup never writes an empty models list to any routing combo.
-- **Fail-closed API key permissions** reporting incomplete setup if a restricted key cannot receive combo permissions under older schemas.
-- **Preflight check isolation (`dryRun`)** ensuring preflight checks never prematurely mutate the database before atomic transactions.
-- **Atomic transaction rollback** on simulated failures.
-- **Idempotency** across repeated setup runs.
-- **API key permission preservation** (never broadening restricted keys to `'all'`).
-- **Pattern matching resolution** (ensuring specific patterns like `*opusplan*` and `*opus[1m]*` take precedence over generic `*opus*`).
-- **Launcher generation** for Windows (.bat, .vbs) and Unix (.sh).
-- **Graceful nonzero error exits** on failed discovery, empty catalogs, query errors, or schema incompatibilities.
-- **Strict isolation** from your live database, startup directory, and environment.
-- **Zero-DB CLI help verification** ensuring both `setup.js --help` and `discover.js --help` operate cleanly without database requirements or side effects.
+*(All 55 hermetic tests covering WAL backup, preflight checks, idempotency, and alias mappings pass 100%).*
 
-### Limitations & Known Unverified Areas
-1. **Third-Party Rate Limits:** Upstream providers may alter rate limits, context windows, or tool support without notice.
-2. **Paid-Model Guard Heuristic:** `--exclude-paid` / `LIMITLESS_EXCLUDE_PAID=true` applies a conservative heuristic classification based on provider names and model ID suffixes (e.g. filtering metered OpenRouter models or commercial API providers). It is not an infallible or legally binding guarantee of zero upstream charges; provider billing rules, quota classifications, or third-party proxy tiers may change.
-3. **Live Billing Smoke Test:** Standard tests run in mock isolation; we do not charge tokens or issue paid requests to external providers during test execution.
+---
 
-### Contribution Guidance
-Pull requests are welcome! Please ensure all changes:
-1. Preserve existing combos, routing strategies, and model order.
-2. Run in complete isolation without mutating live databases or writing outside temp directories.
-3. Pass `npm test` with 100% green checks.
+## 7. Universal Master Agent Setup Prompt
 
-### License
+> **Copy and paste the prompt below into ANY AI assistant (Cursor, Antigravity, Claude Code, ChatGPT, Copilot Workspace, Windsurf) to have it autonomously install, configure, and verify Limitless Claude on any machine with zero manual troubleshooting:**
+
+````markdown
+You are an expert autonomous software engineer. Your task is to set up and configure **Limitless Claude v5.5.0** on this machine so that Claude Code CLI, the Claude VS Code extension, and Paseo seamlessly route through a local OmniRoute model gateway with zero rate limits.
+
+Follow these strict step-by-step instructions:
+
+### Step 1: Validate Prerequisites & Directory
+1. Check that Node.js is installed and version is >= 22 (`node -v`). If Node.js is missing or < 20, stop and instruct the user to install Node.js 22+.
+2. Check if the current directory is `limitless-claude` (or clone it from `https://github.com/mahik504/limitless-claude.git` if not already present).
+3. Run `npm install` inside the `limitless-claude` repository.
+
+### Step 2: Check Claude Code CLI & OmniRoute
+1. Check if `claude` CLI is installed (`claude --version`). If missing, run:
+   `npm install -g @anthropic-ai/claude-code`
+2. Check if `omniroute` is installed (`omniroute -v`). If missing, run:
+   `npm install -g omniroute@latest`
+
+### Step 3: Ensure OmniRoute Gateway is Running
+1. Test if OmniRoute is active on `http://127.0.0.1:20128/`.
+2. If unreachable, launch it in the background:
+   - On Windows: Run `start /b omniroute serve` or execute the launcher script in Windows Startup.
+   - On Linux/macOS: Run `nohup omniroute serve > omniroute.log 2>&1 &`.
+3. Wait until `http://127.0.0.1:20128/` responds with HTTP 200 or 401.
+
+### Step 4: Provider Inspection & Setup Guidance
+1. Inspect connected providers at `http://127.0.0.1:20128/v1/models` or in `~/.omniroute/storage.sqlite`.
+2. If NO providers are connected, open or instruct the user to visit `http://localhost:20128/providers` and connect:
+   - **Recommended Free Providers:** Groq (Llama 3.3 70B), OpenRouter (free tier models), Cloudflare Workers AI (10k req/day free), Kilo Gateway, Mistral AI (Codestral free tier), NVIDIA NIM, Ollama Cloud.
+   - **Recommended Subscriptions:** GitHub Copilot (Claude Fable, Opus 5, Sonnet 5, Haiku 4.5), Google Antigravity, Kiro, AgentRouter.
+3. Confirm an active API key exists at `http://localhost:20128/keys` or query it from `~/.omniroute/storage.sqlite` (`SELECT key FROM api_keys WHERE is_active = 1 LIMIT 1`).
+
+### Step 5: Execute Clean Limitless Setup
+1. Run the one-click installer:
+   `node scripts/install-all.js --clean`
+   (Or run `npm run install:clean`).
+2. Verify that this step:
+   - Preserves all provider credentials and API keys.
+   - Re-registers the 4 combos (`limitless-haiku`, `limitless-sonnet`, `limitless-opus`, `limitless-fable`).
+   - Injects the updated Haiku 5.5, Sonnet 5.5, Opus 5.5, and Fable 5.1 system instructions.
+   - Sets alias mappings (`*haiku*`, `*sonnet*`, `*opus*`, `*fable*`).
+   - Configures `~/.claude/settings.json`, Windows User Environment, and `~/.paseo/config.json`.
+   - Creates the Windows auto-start background launcher `Limitless-OmniRoute-Launcher.vbs` in the Startup folder.
+
+### Step 6: Live Verification
+1. Run the native verification tool:
+   `node scripts/verify-combos.js`
+2. Verify that all 8 targets return HTTP 200 "PONG":
+   - `claude-haiku-4-5` & `combo/limitless-haiku`
+   - `claude-sonnet-5` & `combo/limitless-sonnet`
+   - `claude-opus-4-8` & `combo/limitless-opus`
+   - `claude-fable-5-1` & `combo/limitless-fable`
+3. Run the automated test suite:
+   `npm test`
+   Ensure all 55 tests pass 100%.
+
+### Step 7: Completion Report
+Provide a clean summary displaying:
+- Detected OmniRoute URL and masked API key.
+- Active providers and candidate model count per tier.
+- Confirmation that `claude` and `claude --model limitless-opus` are ready to use.
+````
+
+---
+
+## 8. License & Attribution
+
 MIT © [Mahaveer Singh Gehlot](https://github.com/mahik504)

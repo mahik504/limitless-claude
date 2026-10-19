@@ -79,7 +79,7 @@ function classifyModelBilling(provider, model) {
   }
 
   // Free community / web interface providers
-  if (["groq", "huggingchat", "ollama-cloud", "opencode", "muse-spark-web"].includes(p)) {
+  if (["groq", "huggingchat", "ollama-cloud", "opencode", "muse-spark-web", "cloudflare-ai", "kilo-gateway", "agentrouter", "nvidia", "cerebras"].includes(p)) {
     return "zero-marginal-cost";
   }
 
@@ -265,56 +265,66 @@ Options:
     }));
   };
 
-  // Phase 7: Haiku (Speed)
+  // Phase 7: Haiku (Speed & Sub-Second Edits)
   const haikuRaw = [
+    { provider: "github", model: "claude-haiku-4.5" },
+    { provider: "kiro", model: "claude-haiku-4.5" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "antigravity", model: "gemini-3.5-flash-lite" },
+    { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning:free" },
+    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
+    { provider: "kilo-gateway", model: "poolside/laguna-xs-2.1:free" },
     { provider: "github", model: "gpt-4o-mini" },
     { provider: "antigravity", model: "gemini-3.1-flash-lite" },
-    { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "groq", model: "llama-3.1-8b-instant" },
-    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
-    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
-    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" }
+    { provider: "groq", model: "llama-3.1-8b-instant" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 8: Sonnet (Reasoning)
+  // Phase 8: Sonnet (Architectural Planning & Deep Reasoning)
   const sonnetRaw = [
+    { provider: "github", model: "claude-sonnet-5" },
+    { provider: "kiro", model: "claude-sonnet-5" },
     { provider: "antigravity", model: "claude-sonnet-4-6" },
-    { provider: "bluesminds", model: "deepseek-reasoner" },
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "github", model: "gpt-4o-2024-11-20" },
-    { provider: "kiro", model: "glm-5" },
-    { provider: "huggingchat", model: "CohereLabs/command-a-reasoning-08-2025" }
+    { provider: "openrouter", model: "nvidia/nemotron-3-super-120b-a12b:free" },
+    { provider: "kilo-gateway", model: "cohere/north-mini-code:free" },
+    { provider: "openrouter", model: "cohere/north-mini-code:free" },
+    { provider: "github", model: "claude-sonnet-4.6" },
+    { provider: "github", model: "claude-sonnet-4.5" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 9: Opus (Coding / Round-Robin)
+  // Phase 9: Opus (Large Refactor, Multi-File Generation & High-Capacity Coding)
   const opusRaw = [
-    { provider: "kiro", model: "qwen3-coder-next" },
+    { provider: "agentrouter", model: "claude-opus-4-8" },
     { provider: "mistral", model: "codestral-latest" },
+    { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
+    { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "kiro", model: "deepseek-3.2" },
-    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
-    { provider: "openrouter", model: "qwen/qwen3.8-27b:free" },
-    { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
-    { provider: "bluesminds", model: "gpt-5.5" },
-    { provider: "ollama-cloud", model: "glm-5.3" },
-    { provider: "bluesminds", model: "kimi-k3" },
+    { provider: "agentrouter", model: "deepseek-v4-flash" },
+    { provider: "nvidia", model: "nvidia/nemotron-3-super-120b-a12b" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
+    { provider: "openrouter", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3-super-120b-a12b:free" },
+    { provider: "ollama-cloud", model: "nemotron-3-ultra" },
+    { provider: "ollama-cloud", model: "nemotron-3-super" },
+    { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
     { provider: "kiro", model: "glm-5" },
-    { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
-    { provider: "huggingchat", model: "deepseek-ai/DeepSeek-V4-Pro" },
-    { provider: "huggingchat", model: "Qwen/Qwen3.6-27B" },
-    { provider: "opencode", model: "deepseek-v4-flash-free" },
-    { provider: "opencode", model: "big-pickle" },
-    { provider: "muse-spark-web", model: "muse-spark-thinking" },
-    { provider: "muse-spark-web", model: "muse-spark" }
+    { provider: "kiro", model: "minimax-m2.5" },
+    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
+    { provider: "github", model: "claude-opus-4.6" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 13: Fable (God-Mode / Round-Robin)
+  // Phase 13: Fable (God-Mode Composite Intelligence Tier)
   const fableRaw = [
-    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "github", model: "claude-fable-5" },
+    { provider: "github", model: "claude-fable-5.1" },
+    { provider: "github", model: "claude-opus-5" },
+    { provider: "agentrouter", model: "claude-opus-5" },
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
+    { provider: "antigravity", model: "gemini-3.8-flash-tiered" },
+    { provider: "github", model: "claude-opus-4.8" },
     { provider: "antigravity", model: "gemini-3.1-pro-low" },
-    { provider: "openrouter", model: "moonshotai/kimi-k3" },
-    { provider: "openrouter", model: "z-ai/glm-5.3" },
-    { provider: "openrouter", model: "qwen/qwen-3.8-coder-32b-instruct" }
+    { provider: "github", model: "gpt-4o-2024-11-20" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   let haikuCandidates = haikuRaw;
@@ -434,37 +444,37 @@ Options:
       "ON CONFLICT(id) DO UPDATE SET name = excluded.name, data = excluded.data, system_message = excluded.system_message, updated_at = datetime('now')"
     );
 
-    // Haiku
-    insertCombo.run(COMBO_IDS.haiku, "Limitless Haiku Tier", JSON.stringify({
-      name: "Limitless Haiku Tier",
+    // Haiku 5.5
+    insertCombo.run(COMBO_IDS.haiku, "Limitless Haiku 5.5 Tier", JSON.stringify({
+      name: "Limitless Haiku 5.5 Tier",
       strategy: "priority",
-      description: "Fastest reliable models.",
+      description: "Fastest syntax verification, atomic file edits, and rapid tool execution.",
       models: haikuCandidates
-    }), "You are an advanced assistant optimized for rapid syntax lookups and lightning-fast codebase searches. Do not output conversational filler. Execute tool calls instantly. Your priority is absolute speed and precision.");
+    }), "You are Haiku 5.5, an ultra-fast agentic coding engine engineered for rapid syntax verification, lightning-fast file edits, terminal operations, and sub-second code generation. Prioritize concise, atomic diffs and proactive tool calls. Execute tool use immediately without conversational filler. Your priority is absolute speed and precision.");
 
-    // Sonnet
-    insertCombo.run(COMBO_IDS.sonnet, "Limitless Sonnet Tier", JSON.stringify({
-      name: "Limitless Sonnet Tier",
+    // Sonnet 5.5
+    insertCombo.run(COMBO_IDS.sonnet, "Limitless Sonnet 5.5 Tier", JSON.stringify({
+      name: "Limitless Sonnet 5.5 Tier",
       strategy: "priority",
-      description: "Best planning / architecture / reasoning",
+      description: "Elite chain-of-thought planning, architectural analysis, and deep reasoning.",
       models: sonnetCandidates
-    }), "You are an advanced architectural model. You excel at chain-of-thought reasoning, medium-effort architectural tasks, and multi-agent development environments. Plan carefully before writing code, and ensure flawless tool execution.");
+    }), "You are Sonnet 5.5, an elite architectural reasoning model designed for deep codebase navigation, chain-of-thought architectural planning, multi-step debugging, and flawless tool execution. Plan systematically, inspect all relevant dependencies, and generate clean, hardened, production-grade code.");
 
-    // Opus
-    insertCombo.run(COMBO_IDS.opus, "Limitless Opus Tier", JSON.stringify({
-      name: "Limitless Opus Tier",
+    // Opus 5.5
+    insertCombo.run(COMBO_IDS.opus, "Limitless Opus 5.5 Tier", JSON.stringify({
+      name: "Limitless Opus 5.5 Tier",
       strategy: "round-robin",
-      description: "Largest free coding reservoir (Load-Balanced)",
+      description: "Massive load-balanced coding reservoir for multi-agent loops and large refactors.",
       models: opusCandidates
-    }), "You are a massive reasoning and coding powerhouse. You possess deep knowledge of backend development, frontend design, and multi-agent architectures. You effortlessly handle high-effort tasks and massive refactors. Write flawless, production-ready code.");
+    }), "You are Opus 5.5, a massive reasoning and coding powerhouse. You possess mastery over complex backend systems, distributed architectures, high-effort refactors, and multi-agent coordination. Effortlessly handle high-effort tasks and massive codebases. Write flawless, production-ready code with uncompromising precision.");
 
-    // Fable
-    insertCombo.run(COMBO_IDS.fable, "Limitless Fable Tier", JSON.stringify({
-      name: "Limitless Fable Tier",
+    // Fable 5.1
+    insertCombo.run(COMBO_IDS.fable, "Limitless Fable 5.1 Tier", JSON.stringify({
+      name: "Limitless Fable 5.1 Tier",
       strategy: "round-robin",
-      description: "Maximum capability-per-dollar (Load-Balanced)",
+      description: "Premier composite intelligence tier for maximum context synthesis and reasoning.",
       models: fableCandidates
-    }), "You are a premium model designed for extreme intelligence and balance. You synthesize massive context windows seamlessly and deploy flawless architectural decisions. Use tools autonomously and authoritatively.");
+    }), "You are Fable 5.1, the premier composite intelligence tier designed for extreme reasoning depth, massive context synthesis, and authoritative technical leadership. Seamlessly synthesize cross-repository context, anticipate edge cases, and execute autonomous problem solving with absolute accuracy.");
 
     // Mappings
     let hasDescription = false;
@@ -622,6 +632,60 @@ Options:
     } catch (_) {}
   } catch (e) {
     console.log("Could not install background startup daemon:", e.message);
+  }
+
+  // Phase 21: Auto-configure Claude Code & Paseo Environment (Skipped in test environments)
+  if (!process.env.TEST_STARTUP_DIR && !process.env.LIMITLESS_CONFIG_DIR) {
+    try {
+      const claudeDir = path.join(os.homedir(), ".claude");
+      const settingsPath = path.join(claudeDir, "settings.json");
+      if (!fs.existsSync(claudeDir)) {
+        fs.mkdirSync(claudeDir, { recursive: true });
+      }
+      let claudeSettings = {};
+      if (fs.existsSync(settingsPath)) {
+        try { claudeSettings = JSON.parse(fs.readFileSync(settingsPath, "utf8")); } catch (_) {}
+      }
+      claudeSettings.env = claudeSettings.env || {};
+      claudeSettings.env.ANTHROPIC_BASE_URL = baseUrl;
+      if (apiKey) {
+        claudeSettings.env.ANTHROPIC_AUTH_TOKEN = apiKey;
+      }
+      fs.writeFileSync(settingsPath, JSON.stringify(claudeSettings, null, 2));
+      console.log("Configured Claude Code settings in ~/.claude/settings.json.");
+    } catch (err) {}
+
+    // Windows user environment variables
+    if (os.platform() === 'win32') {
+      try {
+        const { execSync } = require("child_process");
+        execSync(`setx ANTHROPIC_BASE_URL "${baseUrl}"`, { stdio: "ignore" });
+        if (apiKey) {
+          execSync(`setx ANTHROPIC_AUTH_TOKEN "${apiKey}"`, { stdio: "ignore" });
+          execSync(`setx OMNIROUTE_API_KEY "${apiKey}"`, { stdio: "ignore" });
+        }
+        execSync(`setx OMNIROUTE_BASE_URL "${baseUrl}"`, { stdio: "ignore" });
+        console.log("Persisted ANTHROPIC_BASE_URL to Windows user environment.");
+      } catch (_) {}
+    }
+
+    // Paseo configuration sync
+    try {
+      const paseoConfigPath = path.join(os.homedir(), ".paseo", "config.json");
+      if (fs.existsSync(paseoConfigPath)) {
+        const paseoConfig = JSON.parse(fs.readFileSync(paseoConfigPath, "utf8"));
+        paseoConfig.agents = paseoConfig.agents || {};
+        paseoConfig.agents.providers = paseoConfig.agents.providers || {};
+        paseoConfig.agents.providers.claude = paseoConfig.agents.providers.claude || {};
+        paseoConfig.agents.providers.claude.env = {
+          ANTHROPIC_BASE_URL: baseUrl,
+          ANTHROPIC_AUTH_TOKEN: apiKey || "",
+          OMNIROUTE_BASE_URL: baseUrl
+        };
+        fs.writeFileSync(paseoConfigPath, JSON.stringify(paseoConfig, null, 2));
+        console.log("Synced Paseo Claude configuration in ~/.paseo/config.json.");
+      }
+    } catch (_) {}
   }
 
   db.close();

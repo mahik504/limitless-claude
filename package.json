@@ -1,6 +1,6 @@
 {
   "name": "limitless-claude",
-  "version": "5.0.0",
+  "version": "5.5.0",
   "private": true,
   "description": "An open-source configuration harness for routing Claude Code through OmniRoute to supported third-party models. Includes four tier profiles, provider-aware candidate filtering, fallback configurations and transparent capacity estimates. Actual availability, costs, quotas and compatibility depend on your configuration and upstream providers.",
   "license": "MIT",
@@ -8,7 +8,10 @@
     "node": ">=22"
   },
   "scripts": {
+    "install:all": "node scripts/install-all.js",
+    "install:clean": "node scripts/install-all.js --clean",
     "setup": "node scripts/setup.js",
+    "verify": "node scripts/verify-combos.js",
     "discover": "node scripts/discover.js",
     "test": "node --test test/*.test.js"
   },

@@ -87,7 +87,7 @@ test.describe("Limitless Claude Setup Integrity", () => {
     assert.ok(row, "combo/limitless-haiku should exist in database");
 
     const data = JSON.parse(row.data);
-    assert.strictEqual(data.strategy, "priority", "Haiku should use priority routing");
+    assert.strictEqual(data.strategy, "round-robin", "Haiku should use round-robin routing");
     assert.ok(Array.isArray(data.models), "Haiku data.models MUST be an array");
     assert.ok(data.models.length > 0, "Haiku data.models should have at least one fallback");
 
@@ -137,16 +137,16 @@ test.describe("Limitless Claude Setup Integrity", () => {
     const byId = {};
     mappings.forEach(m => byId[m.id] = m);
 
-    assert.strictEqual(byId["mapping/limitless-opus"].pattern, "*opus*");
+    assert.strictEqual(byId["mapping/limitless-opus"].pattern, "claude*opus*");
     assert.strictEqual(byId["mapping/limitless-opus"].combo_id, "combo/limitless-opus");
 
-    assert.strictEqual(byId["mapping/limitless-sonnet"].pattern, "*sonnet*");
+    assert.strictEqual(byId["mapping/limitless-sonnet"].pattern, "claude*sonnet*");
     assert.strictEqual(byId["mapping/limitless-sonnet"].combo_id, "combo/limitless-sonnet");
 
-    assert.strictEqual(byId["mapping/limitless-haiku"].pattern, "*haiku*");
+    assert.strictEqual(byId["mapping/limitless-haiku"].pattern, "claude*haiku*");
     assert.strictEqual(byId["mapping/limitless-haiku"].combo_id, "combo/limitless-haiku");
 
-    assert.strictEqual(byId["mapping/limitless-fable"].pattern, "*fable*");
+    assert.strictEqual(byId["mapping/limitless-fable"].pattern, "claude*fable*");
     assert.strictEqual(byId["mapping/limitless-fable"].combo_id, "combo/limitless-fable");
 
     assert.strictEqual(byId["mapping/limitless-best"].combo_id, "combo/limitless-fable");
@@ -208,7 +208,9 @@ test.describe("Limitless Claude Setup Integrity", () => {
     assert.strictEqual(resolveCombo("claude-opus-4-6"), "combo/limitless-opus");
     assert.strictEqual(resolveCombo("claude-sonnet-4-6"), "combo/limitless-sonnet");
     assert.strictEqual(resolveCombo("claude-haiku-4-5"), "combo/limitless-haiku");
-    assert.strictEqual(resolveCombo("limitless-fable"), "combo/limitless-fable");
+    assert.strictEqual(resolveCombo("claude-fable-5-1"), "combo/limitless-fable");
+    assert.strictEqual(resolveCombo("github/claude-sonnet-5"), null, "Direct provider calls bypass combos");
+    assert.strictEqual(resolveCombo("kiro/claude-sonnet-5"), null, "Direct provider calls bypass combos");
     assert.strictEqual(resolveCombo("best-model"), "combo/limitless-fable");
     assert.strictEqual(resolveCombo("opusplan-custom"), "combo/limitless-sonnet");
     assert.strictEqual(resolveCombo("claude-sonnet[1m]"), "combo/limitless-sonnet");
@@ -226,7 +228,7 @@ test.describe("Limitless Claude Setup Integrity", () => {
       }
       return null;
     }
-    assert.strictEqual(resolveShadowed("opusplan-custom"), "combo/limitless-opus", "Proves that *opus* shadows *opusplan* if opusplan has lower priority");
+    assert.strictEqual(resolveShadowed("claude-opusplan-custom"), "combo/limitless-opus", "Proves that claude*opus* shadows *opusplan* if opusplan has lower priority");
   });
 
   test.it("should enforce paid-model safety guard when LIMITLESS_EXCLUDE_PAID is set", () => {

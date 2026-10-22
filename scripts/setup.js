@@ -269,74 +269,86 @@ Options:
     }));
   };
 
-  // Phase 7: Haiku (Speed & Sub-Second Edits)
+  // Phase 7: Haiku (Speed & Sub-Second Edits - Interleaved Round-Robin)
   const haikuRaw = [
     { provider: "groq", model: "llama-3.3-70b-versatile" },
     { provider: "antigravity", model: "gemini-3.5-flash-lite" },
-    { provider: "kiro", model: "claude-haiku-4.5" },
-    { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning:free" },
-    { provider: "kilo-gateway", model: "poolside/laguna-xs-2.1:free" },
+    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
     { provider: "github", model: "claude-haiku-4.5" },
-    { provider: "github", model: "gpt-4o-2024-11-20" },
-    { provider: "groq", model: "llama-3.1-8b-instant" },
+    { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
     { provider: "cerebras", model: "llama-3.3-70b" },
+    { provider: "kiro", model: "claude-haiku-4.5" },
+    { provider: "kilo-gateway", model: "poolside/laguna-xs-2.1:free" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning:free" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning" },
+    { provider: "groq", model: "llama-3.1-8b-instant" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "github", model: "gpt-4o-mini" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 8: Sonnet (Architectural Planning & Deep Reasoning)
+  // Phase 8: Sonnet (Architectural Planning & Deep Reasoning - Interleaved Round-Robin)
   const sonnetRaw = [
     { provider: "github", model: "claude-sonnet-5" },
-    { provider: "kiro", model: "claude-sonnet-5" },
-    { provider: "openrouter", model: "nvidia/nemotron-3-super-120b-a12b:free" },
     { provider: "openrouter", model: "cohere/north-mini-code:free" },
+    { provider: "kiro", model: "claude-sonnet-5" },
+    { provider: "antigravity", model: "claude-sonnet-4-6" },
+    { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3-super-120b-a12b:free" },
+    { provider: "openrouter", model: "google/gemma-4-31b-it:free" },
+    { provider: "kiro", model: "minimax-m2.5" },
+    { provider: "openrouter", model: "nvidia/nemotron-3-super-120b-a12b:free" },
     { provider: "kilo-gateway", model: "cohere/north-mini-code:free" },
-    { provider: "openrouter", model: "z-ai/glm-5" },
     { provider: "kiro", model: "glm-5" },
+    { provider: "kiro", model: "qwen3-coder-next" },
+    { provider: "openrouter", model: "z-ai/glm-5" },
     { provider: "openrouter", model: "deepseek/deepseek-r1:free" },
     { provider: "openrouter", model: "qwen/qwen3-coder-next:free" },
-    { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "openrouter", model: "qwen/qwen-2.5-coder-32b-instruct:free" },
-    { provider: "antigravity", model: "claude-sonnet-4-6" }
+    { provider: "openrouter", model: "qwen/qwen-2.5-coder-32b-instruct:free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 9: Opus (Large Refactor, Multi-File Generation & High-Capacity Coding)
+  // Phase 9: Opus (High-Capacity Agentic Reservoir - 18 Interleaved Models)
   const opusRaw = [
     { provider: "agentrouter", model: "claude-opus-4-8" },
-    { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
     { provider: "openrouter", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
-    { provider: "openrouter", model: "z-ai/glm-5" },
+    { provider: "ollama-cloud", model: "kimi-k2.7-code" },
     { provider: "kiro", model: "glm-5" },
-    { provider: "kiro", model: "minimax-m2.5" },
+    { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
     { provider: "mistral", model: "codestral-latest" },
+    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
+    { provider: "bluesminds", model: "deepseek-v4-pro" },
+    { provider: "ollama-cloud", model: "qwen3.5:397b" },
+    { provider: "kiro", model: "qwen3-coder-next" },
+    { provider: "openrouter", model: "thinkingmachines/inkling:free" },
+    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
     { provider: "agentrouter", model: "deepseek-v4-flash" },
-    { provider: "ollama-cloud", model: "nemotron-3-ultra" },
+    { provider: "ollama-cloud", model: "glm-5.3-flash" },
+    { provider: "kiro", model: "deepseek-3.2" },
     { provider: "nvidia", model: "nvidia/nemotron-3-super-120b-a12b" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
+    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
+    { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
+    { provider: "ollama-cloud", model: "nemotron-3-ultra" },
     { provider: "ollama-cloud", model: "nemotron-3-super" },
     { provider: "kilo-gateway", model: "nvidia/nemotron-3-super-120b-a12b:free" },
-    { provider: "openrouter", model: "qwen/qwen3-coder-next:free" },
-    { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
-    { provider: "openrouter", model: "deepseek/deepseek-chat:free" },
-    { provider: "kiro", model: "deepseek-3.2" },
-    { provider: "openrouter", model: "meta-llama/llama-3.3-70b-instruct:free" },
-    { provider: "openrouter", model: "mistralai/mistral-small-34b-instruct:free" },
     { provider: "openrouter", model: "z-ai/glm-5.2:free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 13: Fable (God-Mode Composite Intelligence Tier)
+  // Phase 13: Fable (God-Mode Composite Intelligence Tier - 8 Models)
   const fableRaw = [
     { provider: "github", model: "claude-fable-5" },
     { provider: "github", model: "claude-fable-5.1" },
+    { provider: "openrouter", model: "deepseek/deepseek-v4.1-flash" },
+    { provider: "openrouter", model: "deepseek/deepseek-v4-flash" },
+    { provider: "antigravity", model: "gemini-3.8-flash-tiered" },
+    { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
     { provider: "agentrouter", model: "claude-opus-5" },
+    { provider: "openrouter", model: "qwen/qwen3.7-flash" },
     { provider: "github", model: "claude-opus-5" },
+    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
     { provider: "antigravity", model: "gemini-2.5-pro" },
     { provider: "antigravity", model: "gemini-3.8-flash" },
-    { provider: "antigravity", model: "gemini-3.8-flash-tiered" },
-    { provider: "agentrouter", model: "claude-sonnet-4-6" },
     { provider: "antigravity", model: "gemini-2.5-flash" },
+    { provider: "agentrouter", model: "claude-sonnet-4-6" },
     { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "openrouter", model: "moonshotai/kimi-k3" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
@@ -461,18 +473,18 @@ Options:
     // Haiku 5.5
     insertCombo.run(COMBO_IDS.haiku, "Limitless Haiku 5.5 Tier", JSON.stringify({
       name: "Limitless Haiku 5.5 Tier",
-      strategy: "priority",
+      strategy: "round-robin",
       description: "Fastest syntax verification, atomic file edits, and rapid tool execution.",
       models: haikuCandidates
-    }), "You are Haiku 5.5, an ultra-fast agentic coding engine engineered for rapid syntax verification, lightning-fast file edits, terminal operations, and sub-second code generation. Prioritize concise, atomic diffs and proactive tool calls. Execute tool use immediately without conversational filler. Your priority is absolute speed and precision.");
+    }), "You are Haiku 5.5, an ultra-fast agentic coding engine engineered for rapid syntax verification, lightning-fast file edits, terminal operations, and sub-second code generation. <antml:reasoning_effort>low: 4 | medium: 5 | high: 10 | xhigh: 30 | max: max</antml:reasoning_effort> Prioritize concise, atomic diffs and proactive tool calls. Execute tool use immediately without conversational filler. Verify syntax before completion. Your priority is absolute speed, precision, and tool-call reliability.");
 
     // Sonnet 5.5
     insertCombo.run(COMBO_IDS.sonnet, "Limitless Sonnet 5.5 Tier", JSON.stringify({
       name: "Limitless Sonnet 5.5 Tier",
-      strategy: "priority",
+      strategy: "round-robin",
       description: "Elite chain-of-thought planning, architectural analysis, and deep reasoning.",
       models: sonnetCandidates
-    }), "You are Sonnet 5.5, an elite architectural reasoning model designed for deep codebase navigation, chain-of-thought architectural planning, multi-step debugging, and flawless tool execution. Plan systematically, inspect all relevant dependencies, and generate clean, hardened, production-grade code.");
+    }), "You are Sonnet 5.5, an elite architectural reasoning model designed for deep codebase navigation, chain-of-thought architectural planning, multi-step debugging, and flawless tool execution. <antml:reasoning_effort>low: 4 | medium: 5 | high: 10 | xhigh: 30 | max: max</antml:reasoning_effort> Plan systematically, inspect all relevant dependencies, and generate clean, hardened, production-grade code. Produce complete unified diffs. Maintain documentation integrity and preserve existing comments.");
 
     // Opus 5.5
     insertCombo.run(COMBO_IDS.opus, "Limitless Opus 5.5 Tier", JSON.stringify({
@@ -480,7 +492,7 @@ Options:
       strategy: "round-robin",
       description: "Massive load-balanced coding reservoir for multi-agent loops and large refactors.",
       models: opusCandidates
-    }), "You are Opus 5.5, a massive reasoning and coding powerhouse. You possess mastery over complex backend systems, distributed architectures, high-effort refactors, and multi-agent coordination. Effortlessly handle high-effort tasks and massive codebases. Write flawless, production-ready code with uncompromising precision.");
+    }), "You are Opus 5.5, a massive reasoning and coding powerhouse. You possess mastery over complex backend systems, distributed architectures, high-effort refactors, autonomous agentic loops, and multi-file code generation. <antml:reasoning_effort>low: 5 | medium: 10 | high: 15 | xhigh: 40 | max: max</antml:reasoning_effort> Execute deep recursive problem solving across large codebases. Verify edge cases, write complete test harnesses, and produce production-ready code with uncompromising precision.");
 
     // Fable 5.1
     insertCombo.run(COMBO_IDS.fable, "Limitless Fable 5.1 Tier", JSON.stringify({
@@ -488,7 +500,7 @@ Options:
       strategy: "round-robin",
       description: "Premier composite intelligence tier for maximum context synthesis and reasoning.",
       models: fableCandidates
-    }), "You are Fable 5.1, the premier composite intelligence tier designed for extreme reasoning depth, massive context synthesis, and authoritative technical leadership. Seamlessly synthesize cross-repository context, anticipate edge cases, and execute autonomous problem solving with absolute accuracy.");
+    }), "You are Fable 5.1, the premier composite intelligence tier designed for extreme reasoning depth, massive context synthesis, and authoritative technical leadership. <antml:reasoning_effort>low: 10 | medium: 20 | high: 30 | xhigh: 80 | max: max</antml:reasoning_effort> <antml:thinking_mode>auto</antml:thinking_mode> Seamlessly synthesize cross-repository context, anticipate obscure edge cases, and execute autonomous problem solving with absolute accuracy.");
 
     // Mappings
     let hasDescription = false;
@@ -504,10 +516,10 @@ Options:
 
     const mapArgs = (id, pat, cid, pri, desc) => hasDescription ? [id, pat, cid, pri, desc] : [id, pat, cid, pri];
 
-    insertMap.run(...mapArgs(MAPPING_IDS.opus, "*opus*", COMBO_IDS.opus, 10, "Opus route"));
-    insertMap.run(...mapArgs(MAPPING_IDS.sonnet, "*sonnet*", COMBO_IDS.sonnet, 10, "Sonnet route"));
-    insertMap.run(...mapArgs(MAPPING_IDS.haiku, "*haiku*", COMBO_IDS.haiku, 10, "Haiku route"));
-    insertMap.run(...mapArgs(MAPPING_IDS.fable, "*fable*", COMBO_IDS.fable, 10, "Fable route"));
+    insertMap.run(...mapArgs(MAPPING_IDS.opus, "claude*opus*", COMBO_IDS.opus, 10, "Opus route"));
+    insertMap.run(...mapArgs(MAPPING_IDS.sonnet, "claude*sonnet*", COMBO_IDS.sonnet, 10, "Sonnet route"));
+    insertMap.run(...mapArgs(MAPPING_IDS.haiku, "claude*haiku*", COMBO_IDS.haiku, 10, "Haiku route"));
+    insertMap.run(...mapArgs(MAPPING_IDS.fable, "claude*fable*", COMBO_IDS.fable, 10, "Fable route"));
     insertMap.run(...mapArgs(MAPPING_IDS.best, "*best*", COMBO_IDS.fable, 9, "Best route (Fable)"));
     insertMap.run(...mapArgs(MAPPING_IDS.opusplan, "*opusplan*", COMBO_IDS.sonnet, 11, "Opusplan route (Sonnet)"));
     insertMap.run(...mapArgs(MAPPING_IDS.default, "*default*", COMBO_IDS.opus, 8, "Default route (Opus)"));

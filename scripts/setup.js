@@ -271,87 +271,158 @@ Options:
 
   // Phase 7: Haiku (Speed & Sub-Second Edits - Interleaved Round-Robin)
   const haikuRaw = [
-    { provider: "groq", model: "llama-3.3-70b-versatile" },
+    { provider: "groq", model: "openai/gpt-oss-20b" },
     { provider: "antigravity", model: "gemini-3.5-flash-lite" },
+    { provider: "antigravity", model: "gemini-3-flash" },
     { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
-    { provider: "github", model: "claude-haiku-4.5" },
     { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
-    { provider: "cerebras", model: "llama-3.3-70b" },
     { provider: "kiro", model: "claude-haiku-4.5" },
     { provider: "kilo-gateway", model: "poolside/laguna-xs-2.1:free" },
     { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning:free" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning" },
-    { provider: "groq", model: "llama-3.1-8b-instant" },
+    { provider: "github", model: "gpt-4o-mini" },
     { provider: "github", model: "gpt-4o-2024-11-20" },
-    { provider: "github", model: "gpt-4o-mini" }
+    { provider: "groq", model: "llama-3.3-70b-versatile" },
+    { provider: "groq", model: "llama-3.1-8b-instant" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 8: Sonnet (Architectural Planning & Deep Reasoning - Interleaved Round-Robin)
+  // Phase 8: Sonnet (Architectural Planning & Deep Reasoning - Priority Waterfall)
   const sonnetRaw = [
     { provider: "github", model: "claude-sonnet-5" },
-    { provider: "openrouter", model: "cohere/north-mini-code:free" },
-    { provider: "kiro", model: "claude-sonnet-5" },
+    { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "antigravity", model: "claude-sonnet-4-6" },
+    { provider: "openrouter", model: "cohere/north-mini-code:free" },
     { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3-super-120b-a12b:free" },
-    { provider: "openrouter", model: "google/gemma-4-31b-it:free" },
-    { provider: "kiro", model: "minimax-m2.5" },
-    { provider: "openrouter", model: "nvidia/nemotron-3-super-120b-a12b:free" },
     { provider: "kilo-gateway", model: "cohere/north-mini-code:free" },
+    { provider: "kiro", model: "minimax-m2.5" },
     { provider: "kiro", model: "glm-5" },
     { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "openrouter", model: "z-ai/glm-5" },
+    { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
     { provider: "openrouter", model: "deepseek/deepseek-r1:free" },
     { provider: "openrouter", model: "qwen/qwen3-coder-next:free" },
-    { provider: "openrouter", model: "qwen/qwen-2.5-coder-32b-instruct:free" }
+    { provider: "openrouter", model: "qwen/qwen-2.5-coder-32b-instruct:free" },
+    { provider: "openrouter", model: "google/gemma-4-31b-it:free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 9: Opus (High-Capacity Agentic Reservoir - 18 Interleaved Models)
+  // Phase 9: Opus (High-Capacity Agentic Reservoir - Interleaved Round-Robin)
   const opusRaw = [
-    { provider: "agentrouter", model: "claude-opus-4-8" },
     { provider: "openrouter", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
-    { provider: "ollama-cloud", model: "kimi-k2.7-code" },
-    { provider: "kiro", model: "glm-5" },
-    { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
     { provider: "mistral", model: "codestral-latest" },
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "bluesminds", model: "deepseek-v4-pro" },
-    { provider: "ollama-cloud", model: "qwen3.5:397b" },
+    { provider: "kiro", model: "glm-5" },
     { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "openrouter", model: "thinkingmachines/inkling:free" },
-    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
-    { provider: "agentrouter", model: "deepseek-v4-flash" },
-    { provider: "ollama-cloud", model: "glm-5.3-flash" },
     { provider: "kiro", model: "deepseek-3.2" },
-    { provider: "nvidia", model: "nvidia/nemotron-3-super-120b-a12b" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
+    { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
+    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
     { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
-    { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
-    { provider: "ollama-cloud", model: "nemotron-3-ultra" },
-    { provider: "ollama-cloud", model: "nemotron-3-super" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3-super-120b-a12b:free" },
+    { provider: "openrouter", model: "qwen/qwen3.7-flash" },
+    { provider: "groq", model: "openai/gpt-oss-120b" },
+    { provider: "openrouter", model: "thinkingmachines/inkling:free" },
     { provider: "openrouter", model: "z-ai/glm-5.2:free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 13: Fable (God-Mode Composite Intelligence Tier - 8 Models)
+  // Phase 13: Fable (God-Mode Composite Intelligence Tier - Interleaved Round-Robin)
   const fableRaw = [
-    { provider: "github", model: "claude-fable-5" },
     { provider: "github", model: "claude-fable-5.1" },
     { provider: "openrouter", model: "deepseek/deepseek-v4.1-flash" },
     { provider: "openrouter", model: "deepseek/deepseek-v4-flash" },
     { provider: "antigravity", model: "gemini-3.8-flash-tiered" },
-    { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
-    { provider: "agentrouter", model: "claude-opus-5" },
     { provider: "openrouter", model: "qwen/qwen3.7-flash" },
-    { provider: "github", model: "claude-opus-5" },
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "antigravity", model: "gemini-2.5-pro" },
-    { provider: "antigravity", model: "gemini-3.8-flash" },
-    { provider: "antigravity", model: "gemini-2.5-flash" },
-    { provider: "agentrouter", model: "claude-sonnet-4-6" },
     { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "kiro", model: "deepseek-3.2" },
+    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
     { provider: "openrouter", model: "moonshotai/kimi-k3" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
+
+  // Dynamic Heuristic Multi-Provider Discovery Engine
+  // For users with custom, arbitrary, or limited provider setups (e.g., 3-5 custom providers),
+  // dynamically scan all unassigned liveModels, classify them by capability heuristics into the 4 tiers,
+  // and interleave across providers.
+  const assignedKeys = new Set([
+    ...haikuRaw.map(m => (m.provider + "/" + m.model).toLowerCase()),
+    ...sonnetRaw.map(m => (m.provider + "/" + m.model).toLowerCase()),
+    ...opusRaw.map(m => (m.provider + "/" + m.model).toLowerCase()),
+    ...fableRaw.map(m => (m.provider + "/" + m.model).toLowerCase())
+  ]);
+
+  const dynamicHaiku = [];
+  const dynamicSonnet = [];
+  const dynamicOpus = [];
+  const dynamicFable = [];
+
+  for (const m of liveModels) {
+    const fullId = String(m.id || m.model || "");
+    const slashIdx = fullId.indexOf("/");
+    const provider = slashIdx !== -1 ? fullId.slice(0, slashIdx) : (m.provider || "custom");
+    const model = slashIdx !== -1 ? fullId.slice(slashIdx + 1) : fullId;
+    const key = `${provider}/${model}`.toLowerCase();
+
+    if (assignedKeys.has(key)) continue;
+
+    const id = fullId.toLowerCase();
+
+    // 1. Haiku: Low latency, lightweight, sub-second rapid editing
+    if (/flash|instant|mini|haiku|lightning|fast|small|lite|nano|turbo|20b|8b|7b/i.test(id) &&
+        !/opus|large|r1|deepseek-r1|ultra|550b|codestral|frontier/i.test(id)) {
+      dynamicHaiku.push({ provider, model });
+      assignedKeys.add(key);
+    }
+    // 2. Fable: Frontier composite intelligence, god-mode reasoning
+    else if (/fable|frontier|r1|o1|o3|max|tiered|pro-preview/i.test(id)) {
+      dynamicFable.push({ provider, model });
+      assignedKeys.add(key);
+    }
+    // 3. Sonnet: Architectural planning, deep reasoning, structured code generation
+    else if (/sonnet|coder|code|laguna|north|reasoning|instruct|32b|70b/i.test(id) &&
+             !/flash|mini|instant|lightning|haiku|nano|small|8b|7b/i.test(id)) {
+      dynamicSonnet.push({ provider, model });
+      assignedKeys.add(key);
+    }
+    // 4. Opus: Agentic development, heavy autonomous coding, large models, MoE
+    else if (/opus|codestral|coder|ultra|large|moe|deepseek|glm|qwen|550b|120b|397b/i.test(id)) {
+      dynamicOpus.push({ provider, model });
+      assignedKeys.add(key);
+    }
+  }
+
+  // Interleave dynamic additions by provider to prevent provider clustering
+  const interleave = (list) => {
+    const byProv = new Map();
+    for (const item of list) {
+      if (!byProv.has(item.provider)) byProv.set(item.provider, []);
+      byProv.get(item.provider).push(item);
+    }
+    const res = [];
+    let more = true;
+    let round = 0;
+    while (more) {
+      more = false;
+      for (const [, items] of byProv.entries()) {
+        if (round < items.length) {
+          res.push(items[round]);
+          more = true;
+        }
+      }
+      round++;
+    }
+    return res;
+  };
+
+  const dynamicHaikuInterleaved = interleave(dynamicHaiku);
+  const dynamicSonnetInterleaved = interleave(dynamicSonnet);
+  const dynamicOpusInterleaved = interleave(dynamicOpus);
+  const dynamicFableInterleaved = interleave(dynamicFable);
+
+  if (dynamicHaikuInterleaved.length > 0 || dynamicSonnetInterleaved.length > 0 ||
+      dynamicOpusInterleaved.length > 0 || dynamicFableInterleaved.length > 0) {
+    console.log(`[Dynamic Discovery Engine] Discovered and classified custom models into tiers: Haiku (+${dynamicHaikuInterleaved.length}), Sonnet (+${dynamicSonnetInterleaved.length}), Opus (+${dynamicOpusInterleaved.length}), Fable (+${dynamicFableInterleaved.length})`);
+  }
+
+  haikuRaw.push(...dynamicHaikuInterleaved);
+  sonnetRaw.push(...dynamicSonnetInterleaved);
+  opusRaw.push(...dynamicOpusInterleaved);
+  fableRaw.push(...dynamicFableInterleaved);
 
   let haikuCandidates = haikuRaw;
   let sonnetCandidates = sonnetRaw;

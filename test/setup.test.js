@@ -867,6 +867,80 @@ test.describe("Limitless Claude Setup Integrity", () => {
     verifyDb.close();
   });
 
+  test.it("should dynamically discover and classify arbitrary custom providers and models into 4 tiers at runtime", () => {
+    const customTestDir = path.join(TEST_DIR, "custom-dynamic-providers-test");
+    fs.mkdirSync(customTestDir, { recursive: true });
+    const customDbPath = path.join(customTestDir, "storage.sqlite");
+    const customConfigDir = path.join(customTestDir, "config");
+    fs.mkdirSync(customConfigDir, { recursive: true });
+
+    // Seed database
+    const db = openDatabase(customDbPath);
+    db.exec(`
+      CREATE TABLE api_keys (key TEXT PRIMARY KEY, model_access_mode TEXT, allowed_models TEXT, allowed_combos TEXT, is_active INTEGER, created_at DATETIME);
+      INSERT INTO api_keys VALUES ('custom-key', 'all', '[]', '["combo/*"]', 1, datetime('now'));
+      CREATE TABLE combos (id TEXT PRIMARY KEY, name TEXT, data TEXT, system_message TEXT, created_at DATETIME, updated_at DATETIME);
+      CREATE TABLE model_combo_mappings (id TEXT PRIMARY KEY, pattern TEXT, combo_id TEXT, priority INTEGER, enabled INTEGER, description TEXT, created_at DATETIME, updated_at DATETIME);
+    `);
+    db.close();
+
+    // 5 arbitrary custom providers with arbitrary models (none in hardcoded baseline)
+    fs.writeFileSync(path.join(customConfigDir, "live_models.json"), JSON.stringify({
+      data: [
+        { id: "my-fast-groq/custom-fast-mini" },               // -> Haiku (mini/fast)
+        { id: "together-custom/meta-llama-3.3-70b-instruct" },  // -> Sonnet (instruct/70b)
+        { id: "fireworks-ai/qwen-2.5-coder-32b-moe" },         // -> Opus (coder/moe)
+        { id: "deepseek-direct/deepseek-r1-frontier" },        // -> Fable (r1/frontier)
+        { id: "local-ollama/phi-4-mini" },                     // -> Haiku (mini)
+        { id: "sambanova-cloud/deepseek-v3-ultra" }            // -> Opus (ultra/deepseek)
+      ]
+    }));
+
+    const output = execSync("node scripts/setup.js --allow-offline-catalog", {
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        OMNIROUTE_DIR: customTestDir,
+        LIMITLESS_CONFIG_DIR: customConfigDir,
+        TEST_STARTUP_DIR: STARTUP_DIR
+      }
+    });
+
+    assert.match(output, /\[Dynamic Discovery Engine\] Discovered and classified custom models into tiers/);
+    assert.match(output, /=== Limitless Claude Setup Complete! ===/);
+
+    // Verify all 4 tiers received dynamic models
+    const verifyDb = openDatabase(customDbPath, { readonly: true });
+    const haikuRow = verifyDb.prepare("SELECT data FROM combos WHERE id = 'combo/limitless-haiku'").get();
+    const sonnetRow = verifyDb.prepare("SELECT data FROM combos WHERE id = 'combo/limitless-sonnet'").get();
+    const opusRow = verifyDb.prepare("SELECT data FROM combos WHERE id = 'combo/limitless-opus'").get();
+    const fableRow = verifyDb.prepare("SELECT data FROM combos WHERE id = 'combo/limitless-fable'").get();
+
+    assert.ok(haikuRow, "Haiku combo should exist");
+    assert.ok(sonnetRow, "Sonnet combo should exist");
+    assert.ok(opusRow, "Opus combo should exist");
+    assert.ok(fableRow, "Fable combo should exist");
+
+    const haikuModels = JSON.parse(haikuRow.data).models;
+    const sonnetModels = JSON.parse(sonnetRow.data).models;
+    const opusModels = JSON.parse(opusRow.data).models;
+    const fableModels = JSON.parse(fableRow.data).models;
+
+    assert.ok(haikuModels.length > 0, "Haiku must have dynamically classified models");
+    assert.ok(sonnetModels.length > 0, "Sonnet must have dynamically classified models");
+    assert.ok(opusModels.length > 0, "Opus must have dynamically classified models");
+    assert.ok(fableModels.length > 0, "Fable must have dynamically classified models");
+
+    // Haiku got mini models
+    assert.ok(haikuModels.some(m => m.model.includes("mini")), "Haiku should contain mini model");
+    // Fable got frontier/r1 model
+    assert.ok(fableModels.some(m => m.model.includes("r1") || m.model.includes("frontier")), "Fable should contain frontier model");
+    // Opus got moe or ultra model
+    assert.ok(opusModels.some(m => m.model.includes("moe") || m.model.includes("ultra")), "Opus should contain heavy model");
+
+    verifyDb.close();
+  });
+
   test.it("should print help message and exit cleanly without requiring or touching database when --help is passed", () => {
     const nonexistentDir = path.join(TEST_DIR, "nonexistent-db-dir-" + Date.now());
     const result = execSync("node scripts/setup.js --help", {

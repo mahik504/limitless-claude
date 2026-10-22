@@ -24,7 +24,11 @@ const MAPPING_IDS = {
 };
 
 function findModel(liveModels, provider, modelName) {
-  return liveModels.find(m => m.id === `${provider}/${modelName}`);
+  const targetId = `${provider}/${modelName}`.toLowerCase();
+  return liveModels.find(m => {
+    const id = String(m.id || "").toLowerCase();
+    return id === targetId || id === `${targetId}:free` || id.replace(/:free$/, "") === targetId;
+  });
 }
 
 function resolvePreferredApiKey() {
@@ -267,64 +271,74 @@ Options:
 
   // Phase 7: Haiku (Speed & Sub-Second Edits)
   const haikuRaw = [
-    { provider: "github", model: "claude-haiku-4.5" },
-    { provider: "kiro", model: "claude-haiku-4.5" },
-    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "groq", model: "llama-3.3-70b-versatile" },
     { provider: "antigravity", model: "gemini-3.5-flash-lite" },
+    { provider: "kiro", model: "claude-haiku-4.5" },
     { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning" },
     { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning:free" },
-    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
     { provider: "kilo-gateway", model: "poolside/laguna-xs-2.1:free" },
-    { provider: "github", model: "gpt-4o-mini" },
-    { provider: "antigravity", model: "gemini-3.1-flash-lite" },
-    { provider: "groq", model: "llama-3.1-8b-instant" }
+    { provider: "github", model: "claude-haiku-4.5" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "groq", model: "llama-3.1-8b-instant" },
+    { provider: "cerebras", model: "llama-3.3-70b" },
+    { provider: "github", model: "gpt-4o-mini" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   // Phase 8: Sonnet (Architectural Planning & Deep Reasoning)
   const sonnetRaw = [
     { provider: "github", model: "claude-sonnet-5" },
     { provider: "kiro", model: "claude-sonnet-5" },
-    { provider: "antigravity", model: "claude-sonnet-4-6" },
-    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
     { provider: "openrouter", model: "nvidia/nemotron-3-super-120b-a12b:free" },
-    { provider: "kilo-gateway", model: "cohere/north-mini-code:free" },
     { provider: "openrouter", model: "cohere/north-mini-code:free" },
-    { provider: "github", model: "claude-sonnet-4.6" },
-    { provider: "github", model: "claude-sonnet-4.5" }
+    { provider: "kilo-gateway", model: "cohere/north-mini-code:free" },
+    { provider: "openrouter", model: "z-ai/glm-5" },
+    { provider: "kiro", model: "glm-5" },
+    { provider: "openrouter", model: "deepseek/deepseek-r1:free" },
+    { provider: "openrouter", model: "qwen/qwen3-coder-next:free" },
+    { provider: "kiro", model: "qwen3-coder-next" },
+    { provider: "openrouter", model: "qwen/qwen-2.5-coder-32b-instruct:free" },
+    { provider: "antigravity", model: "claude-sonnet-4-6" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   // Phase 9: Opus (Large Refactor, Multi-File Generation & High-Capacity Coding)
   const opusRaw = [
     { provider: "agentrouter", model: "claude-opus-4-8" },
-    { provider: "mistral", model: "codestral-latest" },
-    { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
-    { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "kiro", model: "deepseek-3.2" },
-    { provider: "agentrouter", model: "deepseek-v4-flash" },
-    { provider: "nvidia", model: "nvidia/nemotron-3-super-120b-a12b" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
-    { provider: "openrouter", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3-super-120b-a12b:free" },
-    { provider: "ollama-cloud", model: "nemotron-3-ultra" },
-    { provider: "ollama-cloud", model: "nemotron-3-super" },
     { provider: "openrouter", model: "z-ai/glm-5.3-flash" },
+    { provider: "openrouter", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
+    { provider: "openrouter", model: "z-ai/glm-5" },
     { provider: "kiro", model: "glm-5" },
     { provider: "kiro", model: "minimax-m2.5" },
-    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
-    { provider: "github", model: "claude-opus-4.6" }
+    { provider: "mistral", model: "codestral-latest" },
+    { provider: "agentrouter", model: "deepseek-v4-flash" },
+    { provider: "ollama-cloud", model: "nemotron-3-ultra" },
+    { provider: "nvidia", model: "nvidia/nemotron-3-super-120b-a12b" },
+    { provider: "ollama-cloud", model: "nemotron-3-super" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3-super-120b-a12b:free" },
+    { provider: "openrouter", model: "qwen/qwen3-coder-next:free" },
+    { provider: "kiro", model: "qwen3-coder-next" },
+    { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
+    { provider: "openrouter", model: "deepseek/deepseek-chat:free" },
+    { provider: "kiro", model: "deepseek-3.2" },
+    { provider: "openrouter", model: "meta-llama/llama-3.3-70b-instruct:free" },
+    { provider: "openrouter", model: "mistralai/mistral-small-34b-instruct:free" },
+    { provider: "openrouter", model: "z-ai/glm-5.2:free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   // Phase 13: Fable (God-Mode Composite Intelligence Tier)
   const fableRaw = [
     { provider: "github", model: "claude-fable-5" },
     { provider: "github", model: "claude-fable-5.1" },
-    { provider: "github", model: "claude-opus-5" },
     { provider: "agentrouter", model: "claude-opus-5" },
-    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
+    { provider: "github", model: "claude-opus-5" },
+    { provider: "antigravity", model: "gemini-2.5-pro" },
+    { provider: "antigravity", model: "gemini-3.8-flash" },
     { provider: "antigravity", model: "gemini-3.8-flash-tiered" },
-    { provider: "github", model: "claude-opus-4.8" },
-    { provider: "antigravity", model: "gemini-3.1-pro-low" },
-    { provider: "github", model: "gpt-4o-2024-11-20" }
+    { provider: "agentrouter", model: "claude-sonnet-4-6" },
+    { provider: "antigravity", model: "gemini-2.5-flash" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "openrouter", model: "moonshotai/kimi-k3" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   let haikuCandidates = haikuRaw;
@@ -648,6 +662,14 @@ Options:
       }
       claudeSettings.env = claudeSettings.env || {};
       claudeSettings.env.ANTHROPIC_BASE_URL = baseUrl;
+      claudeSettings.env.CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY = "0";
+      claudeSettings.primaryModel = "claude-opus-5-5";
+      claudeSettings.modelSettings = Object.assign({}, claudeSettings.modelSettings, {
+        "claude-fable-5-1": { effortLevel: "max" },
+        "claude-opus-5-5": { effortLevel: "xhigh" },
+        "claude-sonnet-5-5": { effortLevel: "high" },
+        "claude-haiku-5-5": { effortLevel: "low" }
+      });
       if (apiKey) {
         claudeSettings.env.ANTHROPIC_AUTH_TOKEN = apiKey;
       }

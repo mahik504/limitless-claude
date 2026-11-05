@@ -269,70 +269,57 @@ Options:
     }));
   };
 
-  // Phase 7: Haiku (Speed & Sub-Second Edits - Interleaved Round-Robin)
+  // Phase 7: Haiku (Speed & Sub-Second Edits - Strict 5-6 Models)
   const haikuRaw = [
-    { provider: "groq", model: "openai/gpt-oss-20b" },
     { provider: "antigravity", model: "gemini-3.5-flash-lite" },
     { provider: "antigravity", model: "gemini-3-flash" },
-    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
+    { provider: "groq", model: "openai/gpt-oss-20b" },
     { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
-    { provider: "kiro", model: "claude-haiku-4.5" },
-    { provider: "kilo-gateway", model: "poolside/laguna-xs-2.1:free" },
     { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning:free" },
-    { provider: "github", model: "gpt-4o-mini" },
-    { provider: "github", model: "gpt-4o-2024-11-20" },
-    { provider: "groq", model: "llama-3.3-70b-versatile" },
-    { provider: "groq", model: "llama-3.1-8b-instant" }
+    { provider: "github", model: "gpt-4o-mini" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 8: Sonnet (Architectural Planning & Deep Reasoning - Priority Waterfall)
+  // Phase 8: Sonnet (Architectural Planning & Deep Reasoning - Strict 7-8 Models)
   const sonnetRaw = [
-    { provider: "github", model: "claude-sonnet-5" },
     { provider: "kiro", model: "claude-sonnet-4.5" },
-    { provider: "antigravity", model: "claude-sonnet-4-6" },
-    { provider: "openrouter", model: "cohere/north-mini-code:free" },
-    { provider: "openrouter", model: "poolside/laguna-s-2.1:free" },
-    { provider: "kilo-gateway", model: "cohere/north-mini-code:free" },
-    { provider: "kiro", model: "minimax-m2.5" },
+    { provider: "antigravity", model: "gemini-3-flash" },
     { provider: "kiro", model: "glm-5" },
     { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
-    { provider: "openrouter", model: "deepseek/deepseek-r1:free" },
-    { provider: "openrouter", model: "qwen/qwen3-coder-next:free" },
-    { provider: "openrouter", model: "qwen/qwen-2.5-coder-32b-instruct:free" },
-    { provider: "openrouter", model: "google/gemma-4-31b-it:free" }
+    { provider: "kiro", model: "minimax-m2.5" },
+    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
+    { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
+    { provider: "github", model: "gpt-4o" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 9: Opus (High-Capacity Agentic Reservoir - Interleaved Round-Robin)
+  // Phase 9: Opus (High-Capacity Agentic Reservoir - 10-25 Coding Models)
   const opusRaw = [
-    { provider: "openrouter", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
     { provider: "mistral", model: "codestral-latest" },
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
     { provider: "kiro", model: "glm-5" },
     { provider: "kiro", model: "qwen3-coder-next" },
+    { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "kiro", model: "deepseek-3.2" },
     { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
     { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
-    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
-    { provider: "openrouter", model: "qwen/qwen3.7-flash" },
     { provider: "groq", model: "openai/gpt-oss-120b" },
-    { provider: "openrouter", model: "thinkingmachines/inkling:free" },
-    { provider: "openrouter", model: "z-ai/glm-5.2:free" }
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
+    { provider: "ollama-cloud", model: "nemotron-3-ultra" },
+    { provider: "github", model: "gpt-4o" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "antigravity", model: "gpt-oss-120b-medium" },
+    { provider: "kilo-gateway", model: "cohere/north-mini-code:free" },
+    { provider: "openrouter", model: "cohere/north-mini-code:free" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning:free" },
+    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 13: Fable (God-Mode Composite Intelligence Tier - Interleaved Round-Robin)
+  // Phase 13: Fable (God-Mode Composite Intelligence Tier - Strict 5 Flagship Models)
   const fableRaw = [
-    { provider: "github", model: "claude-fable-5.1" },
-    { provider: "openrouter", model: "deepseek/deepseek-v4.1-flash" },
-    { provider: "openrouter", model: "deepseek/deepseek-v4-flash" },
-    { provider: "antigravity", model: "gemini-3.8-flash-tiered" },
-    { provider: "openrouter", model: "qwen/qwen3.7-flash" },
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "kiro", model: "deepseek-3.2" },
-    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
-    { provider: "openrouter", model: "moonshotai/kimi-k3" }
+    { provider: "kiro", model: "glm-5" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   // Dynamic Heuristic Multi-Provider Discovery Engine
@@ -424,10 +411,10 @@ Options:
   opusRaw.push(...dynamicOpusInterleaved);
   fableRaw.push(...dynamicFableInterleaved);
 
-  let haikuCandidates = haikuRaw;
-  let sonnetCandidates = sonnetRaw;
-  let opusCandidates = opusRaw;
-  let fableCandidates = fableRaw;
+  let haikuCandidates = haikuRaw.slice(0, 6);
+  let sonnetCandidates = sonnetRaw.slice(0, 8);
+  let fableCandidates = fableRaw.slice(0, 5);
+  let opusCandidates = opusRaw.slice(0, 25);
 
   if (excludePaid) {
     haikuCandidates = filterCandidatesByBilling(haikuCandidates, true, allowUnknown);
@@ -547,7 +534,7 @@ Options:
       strategy: "round-robin",
       description: "Fastest syntax verification, atomic file edits, and rapid tool execution.",
       models: haikuCandidates
-    }), "You are Haiku 5.5, an ultra-fast agentic coding engine engineered for rapid syntax verification, lightning-fast file edits, terminal operations, and sub-second code generation. <antml:reasoning_effort>low: 4 | medium: 5 | high: 10 | xhigh: 30 | max: max</antml:reasoning_effort> Prioritize concise, atomic diffs and proactive tool calls. Execute tool use immediately without conversational filler. Verify syntax before completion. Your priority is absolute speed, precision, and tool-call reliability.");
+    }), "You are Haiku 5.5, an ultra-fast agentic coding engine engineered for rapid repository navigation, sub-second syntax verification, atomic file edits, and tool execution. <antml:reasoning_effort>low: 4 | medium: 5 | high: 10 | xhigh: 30 | max: max</antml:reasoning_effort> <antml:thinking_mode>auto</antml:thinking_mode>\nOperate as Claude Code in fast terminal mode:\n- Reference code with exact file_path:line_number coordinates.\n- Prioritize concise, atomic diffs and proactive tool calls. Execute tool use immediately without conversational filler.\n- Verify syntax and run lightweight checks before completion. Speed, precision, and tool-call reliability are your core imperatives.");
 
     // Sonnet 5.5
     insertCombo.run(COMBO_IDS.sonnet, "Limitless Sonnet 5.5 Tier", JSON.stringify({
@@ -555,7 +542,7 @@ Options:
       strategy: "round-robin",
       description: "Elite chain-of-thought planning, architectural analysis, and deep reasoning.",
       models: sonnetCandidates
-    }), "You are Sonnet 5.5, an elite architectural reasoning model designed for deep codebase navigation, chain-of-thought architectural planning, multi-step debugging, and flawless tool execution. <antml:reasoning_effort>low: 4 | medium: 5 | high: 10 | xhigh: 30 | max: max</antml:reasoning_effort> Plan systematically, inspect all relevant dependencies, and generate clean, hardened, production-grade code. Produce complete unified diffs. Maintain documentation integrity and preserve existing comments.");
+    }), "You are Sonnet 5.5, an elite architectural reasoning model designed for deep codebase navigation, chain-of-thought system design, structural debugging, flaw detection, and creative engineering. <antml:reasoning_effort>low: 4 | medium: 5 | high: 10 | xhigh: 30 | max: max</antml:reasoning_effort> <antml:thinking_mode>auto</antml:thinking_mode>\nOperate as Claude Code in architecture and reasoning mode:\n- Plan systematically before making changes: inspect dependencies, identify potential regressions, and evaluate trade-offs.\n- In reviews, ruthlessly hunt architectural flaws, race conditions, memory leaks, and performance regressions.\n- Generate clean, hardened, production-grade code. Produce complete unified diffs.\n- Maintain documentation integrity, preserve existing comments, and state technical recommendations with absolute clarity.");
 
     // Opus 5.5
     insertCombo.run(COMBO_IDS.opus, "Limitless Opus 5.5 Tier", JSON.stringify({
@@ -563,7 +550,7 @@ Options:
       strategy: "round-robin",
       description: "Massive load-balanced coding reservoir for multi-agent loops and large refactors.",
       models: opusCandidates
-    }), "You are Opus 5.5, a massive reasoning and coding powerhouse. You possess mastery over complex backend systems, distributed architectures, high-effort refactors, autonomous agentic loops, and multi-file code generation. <antml:reasoning_effort>low: 5 | medium: 10 | high: 15 | xhigh: 40 | max: max</antml:reasoning_effort> Execute deep recursive problem solving across large codebases. Verify edge cases, write complete test harnesses, and produce production-ready code with uncompromising precision.");
+    }), "You are Opus 5.5, a massive reasoning and coding powerhouse. You possess mastery over complex full-stack web applications (Next.js, React 19, Server Actions, TanStack Query, Tailwind v4), award-winning 3D web experiences (Three.js, R3F, custom GLSL shaders, Lenis + GSAP ScrollTrigger), Android/mobile development, distributed backends, and multi-file agentic loops. <antml:reasoning_effort>low: 5 | medium: 10 | high: 15 | xhigh: 40 | max: max</antml:reasoning_effort> <antml:thinking_mode>auto</antml:thinking_mode>\nOperate as Claude Code in full agentic development mode:\n- Strict Zero-Stub Policy: Never output `// TODO`, `// Add implementation here`, or truncated code blocks. Provide 100% complete, fully implemented, compilable code.\n- Full-Stack Architecture: Enforce strict TypeScript typing (no `any`), Zod boundary validation on all Server Actions and APIs, and defensive loading/error boundaries.\n- 3D & Creative Web: Clamp DPR to [1, 2], maintain a 60fps frame budget, dispose WebGL resources explicitly on unmount, and choreograph smooth scrolling.\n- Deep Recursive Problem Solving: Verify edge cases, author comprehensive test harnesses, and execute multi-file changes with flawless precision.");
 
     // Fable 5.1
     insertCombo.run(COMBO_IDS.fable, "Limitless Fable 5.1 Tier", JSON.stringify({
@@ -571,7 +558,7 @@ Options:
       strategy: "round-robin",
       description: "Premier composite intelligence tier for maximum context synthesis and reasoning.",
       models: fableCandidates
-    }), "You are Fable 5.1, the premier composite intelligence tier designed for extreme reasoning depth, massive context synthesis, and authoritative technical leadership. <antml:reasoning_effort>low: 10 | medium: 20 | high: 30 | xhigh: 80 | max: max</antml:reasoning_effort> <antml:thinking_mode>auto</antml:thinking_mode> Seamlessly synthesize cross-repository context, anticipate obscure edge cases, and execute autonomous problem solving with absolute accuracy.");
+    }), "You are Fable 5.1 (Mythos Class), the premier composite intelligence tier designed for extreme reasoning depth, massive cross-repository synthesis, and authoritative technical leadership. <antml:reasoning_effort>low: 10 | medium: 20 | high: 30 | xhigh: 80 | max: max</antml:reasoning_effort> <antml:thinking_mode>auto</antml:thinking_mode>\nOperate as Claude Code in frontier synthesis mode:\n- Seamlessly synthesize cross-repository architectures, distributed state machines, and complex domain boundaries.\n- Anticipate obscure edge cases, security implications, and upstream/downstream contract breaks.\n- Execute autonomous multi-step problem solving with uncompromising precision and authoritative technical leadership.");
 
     // Mappings
     let hasDescription = false;

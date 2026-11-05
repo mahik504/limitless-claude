@@ -19529,7 +19529,7 @@
         "tool_calling": true,
         "reasoning": true
       },
-      "name": "cf/Mistral 7B (\ud83c\udd93)",
+      "name": "cf/Mistral 7B (🆓)",
       "context_length": 128000
     },
     {
@@ -19544,7 +19544,7 @@
         "tool_calling": true,
         "reasoning": true
       },
-      "name": "cloudflare-ai/Mistral 7B (\ud83c\udd93)",
+      "name": "cloudflare-ai/Mistral 7B (🆓)",
       "context_length": 128000
     },
     {
@@ -19559,7 +19559,7 @@
         "tool_calling": true,
         "reasoning": true
       },
-      "name": "cf/Qwen 2.5 Coder 32B (\ud83c\udd93)",
+      "name": "cf/Qwen 2.5 Coder 32B (🆓)",
       "context_length": 128000
     },
     {
@@ -19574,7 +19574,7 @@
         "tool_calling": true,
         "reasoning": true
       },
-      "name": "cloudflare-ai/Qwen 2.5 Coder 32B (\ud83c\udd93)",
+      "name": "cloudflare-ai/Qwen 2.5 Coder 32B (🆓)",
       "context_length": 128000
     },
     {
@@ -19589,7 +19589,7 @@
         "tool_calling": true,
         "reasoning": true
       },
-      "name": "cf/DeepSeek R1 Distill 32B (\ud83c\udd93)",
+      "name": "cf/DeepSeek R1 Distill 32B (🆓)",
       "context_length": 128000
     },
     {
@@ -19604,7 +19604,7 @@
         "tool_calling": true,
         "reasoning": true
       },
-      "name": "cloudflare-ai/DeepSeek R1 Distill 32B (\ud83c\udd93)",
+      "name": "cloudflare-ai/DeepSeek R1 Distill 32B (🆓)",
       "context_length": 128000
     },
     {
@@ -19619,7 +19619,7 @@
         "tool_calling": true,
         "reasoning": true
       },
-      "name": "cf/Llama 3.3 70B (FP8 Fast \ud83c\udd93 ~150 resp/day)",
+      "name": "cf/Llama 3.3 70B (FP8 Fast 🆓 ~150 resp/day)",
       "context_length": 128000
     },
     {
@@ -19634,7 +19634,7 @@
         "tool_calling": true,
         "reasoning": true
       },
-      "name": "cloudflare-ai/Llama 3.3 70B (FP8 Fast \ud83c\udd93 ~150 resp/day)",
+      "name": "cloudflare-ai/Llama 3.3 70B (FP8 Fast 🆓 ~150 resp/day)",
       "context_length": 128000
     },
     {
@@ -19649,7 +19649,7 @@
         "tool_calling": true,
         "reasoning": true
       },
-      "name": "cf/Llama 3.2 3B (\ud83c\udd93)",
+      "name": "cf/Llama 3.2 3B (🆓)",
       "context_length": 128000
     },
     {
@@ -19664,7 +19664,7 @@
         "tool_calling": true,
         "reasoning": true
       },
-      "name": "cloudflare-ai/Llama 3.2 3B (\ud83c\udd93)",
+      "name": "cloudflare-ai/Llama 3.2 3B (🆓)",
       "context_length": 128000
     },
     {
@@ -19679,7 +19679,7 @@
         "tool_calling": true,
         "reasoning": true
       },
-      "name": "cf/QwQ 32B (\ud83c\udd93)",
+      "name": "cf/QwQ 32B (🆓)",
       "context_length": 128000
     },
     {
@@ -19694,7 +19694,7 @@
         "tool_calling": true,
         "reasoning": true
       },
-      "name": "cloudflare-ai/QwQ 32B (\ud83c\udd93)",
+      "name": "cloudflare-ai/QwQ 32B (🆓)",
       "context_length": 128000
     },
     {
@@ -19711,7 +19711,7 @@
       },
       "context_length": 131072,
       "max_input_tokens": 131072,
-      "name": "cf/GLM 4.7 Flash (\ud83c\udd93)"
+      "name": "cf/GLM 4.7 Flash (🆓)"
     },
     {
       "id": "cloudflare-ai/@cf/zai-org/glm-4.7-flash",
@@ -19727,7 +19727,7 @@
       },
       "context_length": 131072,
       "max_input_tokens": 131072,
-      "name": "cloudflare-ai/GLM 4.7 Flash (\ud83c\udd93)"
+      "name": "cloudflare-ai/GLM 4.7 Flash (🆓)"
     },
     {
       "id": "cf/@cf/moonshotai/kimi-k2.6",
@@ -19751,7 +19751,7 @@
       ],
       "context_length": 262144,
       "max_input_tokens": 262144,
-      "name": "cf/Kimi K2.6 (\ud83c\udd93)"
+      "name": "cf/Kimi K2.6 (🆓)"
     },
     {
       "id": "cloudflare-ai/@cf/moonshotai/kimi-k2.6",
@@ -19775,7 +19775,7 @@
       ],
       "context_length": 262144,
       "max_input_tokens": 262144,
-      "name": "cloudflare-ai/Kimi K2.6 (\ud83c\udd93)"
+      "name": "cloudflare-ai/Kimi K2.6 (🆓)"
     },
     {
       "id": "cf/@cf/google/gemma-4-26b-a4b-it",
@@ -19791,7 +19791,7 @@
       },
       "context_length": 262144,
       "max_input_tokens": 262144,
-      "name": "cf/Gemma 4 26B (\ud83c\udd93)"
+      "name": "cf/Gemma 4 26B (🆓)"
     },
     {
       "id": "cloudflare-ai/@cf/google/gemma-4-26b-a4b-it",
@@ -19807,7 +19807,7 @@
       },
       "context_length": 262144,
       "max_input_tokens": 262144,
-      "name": "cloudflare-ai/Gemma 4 26B (\ud83c\udd93)"
+      "name": "cloudflare-ai/Gemma 4 26B (🆓)"
     },
     {
       "id": "cloudflare-ai/@cf/black-forest-labs/flux-1-schnell",
@@ -19833,6 +19833,20 @@
         "supportsThinking": false
       },
       "name": "@cf/black-forest-labs/flux-1-schnell"
+    },
+    {
+      "id": "github/gpt-4o",
+      "object": "model",
+      "created": 1792426954,
+      "owned_by": "github",
+      "context_length": 128000,
+      "max_output_tokens": 16384,
+      "capabilities": {
+        "vision": true,
+        "tool_calling": true,
+        "reasoning": true
+      },
+      "name": "github/gpt-4o"
     }
   ]
 }

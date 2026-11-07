@@ -276,38 +276,53 @@ Options:
     { provider: "github", model: "gpt-4o-mini" },
     { provider: "groq", model: "openai/gpt-oss-20b" },
     { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
+    { provider: "cloudflare-ai", model: "@cf/meta/llama-3.2-3b-instruct" },
     { provider: "openrouter", model: "openai/gpt-oss-20b:free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 8: Sonnet (Architectural Planning & Deep Reasoning - Strict 7-8 Models)
+  // Phase 8: Sonnet (Architectural Planning & Deep Reasoning - Strict 5-6 Models)
   const sonnetRaw = [
     { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "kiro", model: "glm-5" },
-    { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
-    { provider: "mistral", model: "codestral-latest" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "antigravity", model: "claude-sonnet-4-6" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 9: Opus (High-Capacity Agentic Coding Reservoir - 8 Coding Models)
+  // Phase 9: Opus (High-Capacity Agentic Coding Reservoir - 20+ Models)
   const opusRaw = [
     { provider: "mistral", model: "codestral-latest" },
     { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "kiro", model: "glm-5" },
+    { provider: "kiro", model: "deepseek-3.2" },
+    { provider: "kiro", model: "minimax-m2.1" },
     { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
+    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
+    { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
+    { provider: "cloudflare-ai", model: "@cf/qwen/qwq-32b" },
     { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "groq", model: "openai/gpt-oss-120b" },
+    { provider: "openrouter", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
     { provider: "openrouter", model: "cohere/north-mini-code:free" },
-    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
-    { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" }
+    { provider: "kilo-gateway", model: "cohere/north-mini-code:free" },
+    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
+    { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning:free" },
+    { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
+    { provider: "openrouter", model: "dots-studio/dots-3-note-preview:free" },
+    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
+    { provider: "antigravity", model: "claude-sonnet-4-6" },
+    { provider: "antigravity", model: "gpt-oss-120b-medium" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 13: Fable (God-Mode Composite Intelligence Tier - Strict 5 Flagship Models)
+  // Phase 13: Fable (God-Mode Composite Intelligence Tier - Strict 4-5 Flagship Models)
   const fableRaw = [
+    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "kiro", model: "glm-5" },
-    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
     { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
     { provider: "openrouter", model: "moonshotai/kimi-k3" },
     { provider: "openrouter", model: "z-ai/glm-5.3" }
@@ -403,9 +418,9 @@ Options:
   fableRaw.push(...dynamicFableInterleaved);
 
   let haikuCandidates = haikuRaw.slice(0, 6);
-  let sonnetCandidates = sonnetRaw.slice(0, 8);
+  let sonnetCandidates = sonnetRaw.slice(0, 6);
   let fableCandidates = fableRaw.slice(0, 5);
-  let opusCandidates = opusRaw.slice(0, 8);
+  let opusCandidates = opusRaw.slice(0, 30);
 
   if (excludePaid) {
     haikuCandidates = filterCandidatesByBilling(haikuCandidates, true, allowUnknown);

@@ -5,6 +5,7 @@ const { openDatabase } = require("../src/omniroute/db");
 const { findTargetApiKey } = require("../src/omniroute/permissions");
 const { defaultCapabilityEvaluator } = require("../src/core/capability-evaluator");
 const { defaultClassifier } = require("../src/core/billing-classifier");
+const { defaultOllamaDiscovery } = require("../src/core/ollama-discovery");
 
 const cliArgs = process.argv.slice(2);
 if (cliArgs.includes("--help") || cliArgs.includes("-h")) {
@@ -163,6 +164,31 @@ async function fetchModels() {
         last_scanned: new Date().toISOString()
       };
     });
+
+  // Probe local Ollama inference engine
+  try {
+    const ollamaProbe = await defaultOllamaDiscovery.probe();
+    if (ollamaProbe.online && ollamaProbe.modelCount > 0) {
+      const ollamaModels = defaultOllamaDiscovery.toModelInventory(ollamaProbe);
+      modelInventory.push(...ollamaModels);
+      providerInventory.push({
+        provider: "ollama",
+        configured: true,
+        active: true,
+        authentication_state: "local",
+        free_or_paid: "free",
+        quota_class: "free",
+        tool_support: "verified",
+        last_scanned: new Date().toISOString(),
+        notes: "Local Ollama engine detected on port 11434 with zero billing limits."
+      });
+      // Re-write updated provider inventory
+      try {
+        fs.writeFileSync(path.join(configDir, "provider-inventory.json"), JSON.stringify(providerInventory, null, 2));
+      } catch (_) {}
+      console.log(`[+] Auto-discovered ${ollamaModels.length} local Ollama models on port 11434`);
+    }
+  } catch (_) {}
 
   try {
     fs.writeFileSync(path.join(configDir, "model-inventory.json"), JSON.stringify(modelInventory, null, 2));

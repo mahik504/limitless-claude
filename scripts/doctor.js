@@ -23,7 +23,7 @@ const { defaultCapacityCalculator } = require("../src/core/capacity-calculator")
 async function runDoctor() {
   console.log(`
 ================================================================================
-          LIMITLESS CLAUDE 8.1 — SYSTEM & GATEWAY DIAGNOSTIC DOCTOR
+          LIMITLESS CLAUDE 8.2 — SYSTEM & GATEWAY DIAGNOSTIC DOCTOR
 ================================================================================
 `);
 
@@ -196,10 +196,20 @@ async function runDoctor() {
 
   // 15. Orchestration & Interop Environment
   const { defaultOrchestraAdapter } = require("../src/integrations/orchestra");
-  if (defaultOrchestraAdapter.isAvailable()) {
-    report("Orchestra Integration Gate", "PASS", "Connected: C:\\projects\\orchestra-workflow (Mode B Active)");
+  const orchDetails = defaultOrchestraAdapter.getDetails();
+  if (orchDetails.detected) {
+    report("Orchestra Integration Gate", "PASS", `Connected: ${orchDetails.path} (v${orchDetails.version}, ${orchDetails.skillsCount} skills, Mode B Active)`);
   } else {
     report("Standalone Architecture Gate", "PASS", "Zero external framework dependencies required (Mode A Active)");
+  }
+
+  // 16. Local Ollama Auto-Discovery Engine
+  const { defaultOllamaDiscovery } = require("../src/core/ollama-discovery");
+  const ollamaRes = await defaultOllamaDiscovery.probe();
+  if (ollamaRes.online) {
+    report("Local Ollama Engine (:11434)", "PASS", `Online: ${ollamaRes.modelCount} local models available for zero-cost offline routing`);
+  } else {
+    report("Local Ollama Engine (:11434)", "PASS", "Standby / Optional (offline; cloud combos active)");
   }
 
   if (db) db.close();

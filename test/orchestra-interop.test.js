@@ -5,10 +5,9 @@ const path = require("path");
 
 const { OrchestraAdapter } = require("../src/integrations/orchestra/adapter");
 
-test.describe("Limitless Claude 8.0 - Optional Orchestra Interoperability Suite", () => {
+test.describe("Limitless Claude 8.2 - Orchestra 4.5.0 Interoperability Suite", () => {
 
   test.it("Standalone Fallback - should fall back cleanly when Orchestra is absent", () => {
-    // Explicitly disabled/absent adapter
     const adapter = new OrchestraAdapter({ enabled: false });
 
     assert.equal(adapter.isAvailable(), false);
@@ -20,27 +19,27 @@ test.describe("Limitless Claude 8.0 - Optional Orchestra Interoperability Suite"
     assert.equal(result.tier, "limitless-sonnet-5.5");
   });
 
-  test.it("Contract Mapping - should accurately map Orchestra tasks to Limitless capabilities when enabled", () => {
+  test.it("Orchestra 4.5.0 Contract Mapping - maps tasks to capabilities and frontier tiers", () => {
     const adapter = new OrchestraAdapter({ enabled: true });
     assert.equal(adapter.isAvailable(), true);
 
     // 1. 3D task
-    const res3D = adapter.consumeContract({ task: "One 3D scene with R3F shaders" });
+    const res3D = adapter.consumeContract({ task: "One 3D scene with ow-3d-engineering" });
     assert.equal(res3D.capability, "3d");
     assert.equal(res3D.recommendedTier, "limitless-opus-4.6");
 
     // 2. Frontend task
-    const resFront = adapter.consumeContract({ task: "Award-style site with React 19" });
+    const resFront = adapter.consumeContract({ task: "Award-style site with taste-design" });
     assert.equal(resFront.capability, "frontend");
     assert.equal(resFront.recommendedTier, "limitless-opus-4.6");
 
     // 3. Backend task
-    const resBack = adapter.consumeContract({ task: "SaaS backend with PostgreSQL RLS" });
+    const resBack = adapter.consumeContract({ task: "SaaS backend with ow-backend-architecture" });
     assert.equal(resBack.capability, "backend");
     assert.equal(resBack.recommendedTier, "limitless-opus-4.6");
 
     // 4. Architecture / reasoning
-    const resArch = adapter.consumeContract({ task: "Architecture diagram and reasoning review" });
+    const resArch = adapter.consumeContract({ task: "ow-diagrams architecture" });
     assert.equal(resArch.capability, "reasoning");
     assert.equal(resArch.recommendedTier, "limitless-sonnet-5.5");
 
@@ -48,6 +47,11 @@ test.describe("Limitless Claude 8.0 - Optional Orchestra Interoperability Suite"
     const resFast = adapter.consumeContract({ task: "Fast syntax patch" });
     assert.equal(resFast.capability, "fast");
     assert.equal(resFast.recommendedTier, "limitless-haiku-4.5");
+
+    // 6. Documentation / paper
+    const resDoc = adapter.consumeContract({ task: "Paper with ow-research-paper and humanizer" });
+    assert.equal(resDoc.capability, "documentation");
+    assert.equal(resDoc.recommendedTier, "limitless-sonnet-5.5");
   });
 
   test.it("Architectural Isolation - core runtime must NEVER import Orchestra modules", () => {

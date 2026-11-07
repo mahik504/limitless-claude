@@ -47,13 +47,17 @@ const COMMANDS = {
   e2e: path.join(SCRIPTS_DIR, "e2e-acceptance.js"),
   pin: path.join(SCRIPTS_DIR, "pin.js"),
   undo: path.join(SCRIPTS_DIR, "undo.js"),
-  checkpoint: path.join(SCRIPTS_DIR, "undo.js")
+  checkpoint: path.join(SCRIPTS_DIR, "undo.js"),
+  tui: path.join(SCRIPTS_DIR, "tui.js"),
+  stats: path.join(SCRIPTS_DIR, "stats.js"),
+  tokens: path.join(SCRIPTS_DIR, "stats.js"),
+  orchestra: path.join(SCRIPTS_DIR, "orchestra.js")
 };
 
 function printHelp() {
   console.log(`
 ================================================================================
-           LIMITLESS CLAUDE 8.1.0 — UNIVERSAL GLOBAL CLI
+           LIMITLESS CLAUDE 8.2.0 — UNIVERSAL GLOBAL CLI
 ================================================================================
 
 Usage:
@@ -61,19 +65,25 @@ Usage:
 
 Core Operations:
   init               Zero-config initialization wizard & pre-setup validation
-  doctor             Run 15-point system, gateway, and database diagnostics
+  doctor             Run 16-point system, gateway, and database diagnostics
   status             View active profile, gateway endpoint, and routing tiers
   verify             Test live HTTP 200 connectivity across all 4 tiers
   setup              Sync live OmniRoute models into intelligent composite tiers
   launcher           Launch Claude Code under scoped profile (no registry pollution)
+  tui                Interactive real-time Terminal UI with live telemetry & latency
+  stats (tokens)     Display real-time token volume and Anthropic cost savings
 
 Model & Provider Intelligence:
-  discover           Discover live models & providers from local gateway
+  discover           Discover live models & providers (including local Ollama)
   models list        List catalogued models with lifecycle & billing filters
   models inspect     Inspect detailed capability profile of a model
   providers list     List connected providers, active states, and taxonomy
   providers test     Test gateway latency to connected inference providers
   pin                Pin specific models to task profiles (backend, frontend, etc.)
+
+Orchestration & Workflow:
+  orchestra status   Verify connection to local Orchestra 4.5.0 control plane
+  orchestra sync     Sync Orchestra CLAUDE.md adapter and skills into ~/.claude/
 
 Prompt Engineering & Budget:
   prompt list        List available 5-layer capability profiles & adapters
@@ -84,7 +94,7 @@ Prompt Engineering & Budget:
 Benchmarks & Resilience:
   benchmark          Run the 12-task standardized capability benchmark
   acceptance         Run the 6-test End-to-End production acceptance suite
-  dashboard          Open real-time terminal observability dashboard
+  dashboard          Open terminal observability dashboard
   rollback           List, inspect, or restore atomic database snapshots
   checkpoint         Snapshot files before editing (Cline-style file protection)
   undo               Instantly undo file changes from the last checkpoint

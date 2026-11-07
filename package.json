@@ -1,12 +1,42 @@
 {
   "name": "limitless-claude",
-  "version": "8.1.0",
-  "private": true,
-  "description": "Limitless Claude 8.1 - Autonomous Multi-Provider Coding Agent Runtime. Features task-to-model pinning, Cline-style granular file checkpoints & undo, standalone-first architecture, 5-layer prompt engine, prompt lab, bidirectional protocol translation, session intelligence, dynamic capability evaluation, and fine-grained billing safety.",
+  "version": "8.2.0",
+  "description": "Limitless Claude 8.2 - Autonomous Multi-Provider Coding Agent Runtime. Features interactive terminal TUI, live token & cost savings telemetry, local Ollama auto-discovery, Orchestra 4.5.0 workflow interop, task-to-model pinning, granular file checkpoints & atomic undo, 5-layer prompt engine, and billing safety.",
   "license": "MIT",
+  "author": "mahik504",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mahik504/limitless-claude.git"
+  },
+  "keywords": [
+    "claude",
+    "anthropic",
+    "omniroute",
+    "coding-agent",
+    "developer-tools",
+    "llm-router",
+    "orchestra",
+    "tui",
+    "ollama",
+    "cline",
+    "ai"
+  ],
   "bin": {
     "limitless": "./bin/limitless.js"
   },
+  "files": [
+    "bin",
+    "config",
+    "docs",
+    "prompts",
+    "scripts",
+    "src",
+    "install.ps1",
+    "install.sh",
+    "README.md",
+    "LICENSE",
+    "VERSION"
+  ],
   "engines": {
     "node": ">=22"
   },
@@ -22,9 +52,14 @@
     "pin": "node scripts/pin.js",
     "checkpoint": "node scripts/undo.js",
     "undo": "node scripts/undo.js",
+    "tui": "node scripts/tui.js",
     "dashboard": "node scripts/dashboard.js",
+    "stats": "node scripts/stats.js",
+    "tokens": "node scripts/stats.js",
+    "orchestra": "node scripts/orchestra.js",
     "benchmark": "node scripts/benchmark.js",
     "acceptance": "node scripts/e2e-acceptance.js",
+    "prepack": "node --test test/*.test.js",
     "test": "node --test test/*.test.js"
   },
   "optionalDependencies": {

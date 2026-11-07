@@ -287,7 +287,8 @@ Options:
     { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
     { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "kiro", model: "deepseek-3.2" }
+    { provider: "kiro", model: "deepseek-3.2" },
+    { provider: "antigravity", model: "claude-sonnet-4-6" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   // Phase 9: Opus (High-Capacity Agentic Coding Reservoir - 20+ Models)
@@ -297,6 +298,7 @@ Options:
     { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "kiro", model: "glm-5" },
     { provider: "kiro", model: "deepseek-3.2" },
+    { provider: "antigravity", model: "claude-sonnet-4-6" },
     { provider: "kiro", model: "minimax-m2.1" },
     { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
     { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
@@ -807,3 +809,4 @@ if (require.main === module) {
     process.exit(1);
   });
 }
+

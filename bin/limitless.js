@@ -44,13 +44,16 @@ const COMMANDS = {
   backup: path.join(SCRIPTS_DIR, "rollback.js"),
   setup: path.join(SCRIPTS_DIR, "setup.js"),
   acceptance: path.join(SCRIPTS_DIR, "e2e-acceptance.js"),
-  e2e: path.join(SCRIPTS_DIR, "e2e-acceptance.js")
+  e2e: path.join(SCRIPTS_DIR, "e2e-acceptance.js"),
+  pin: path.join(SCRIPTS_DIR, "pin.js"),
+  undo: path.join(SCRIPTS_DIR, "undo.js"),
+  checkpoint: path.join(SCRIPTS_DIR, "undo.js")
 };
 
 function printHelp() {
   console.log(`
 ================================================================================
-           LIMITLESS CLAUDE 8.0.0 — UNIVERSAL GLOBAL CLI
+           LIMITLESS CLAUDE 8.1.0 — UNIVERSAL GLOBAL CLI
 ================================================================================
 
 Usage:
@@ -70,6 +73,7 @@ Model & Provider Intelligence:
   models inspect     Inspect detailed capability profile of a model
   providers list     List connected providers, active states, and taxonomy
   providers test     Test gateway latency to connected inference providers
+  pin                Pin specific models to task profiles (backend, frontend, etc.)
 
 Prompt Engineering & Budget:
   prompt list        List available 5-layer capability profiles & adapters
@@ -82,12 +86,15 @@ Benchmarks & Resilience:
   acceptance         Run the 6-test End-to-End production acceptance suite
   dashboard          Open real-time terminal observability dashboard
   rollback           List, inspect, or restore atomic database snapshots
+  checkpoint         Snapshot files before editing (Cline-style file protection)
+  undo               Instantly undo file changes from the last checkpoint
 
 Examples:
   limitless doctor
   limitless verify
-  limitless models list --free-only
-  limitless prompt compose --capability frontend --provider kiro
+  limitless pin --task backend --model kiro/claude-sonnet-4.5
+  limitless checkpoint --create "before auth edits" src/auth.js
+  limitless undo
   limitless budget
   limitless benchmark --target limitless-sonnet-5.5
   limitless launcher

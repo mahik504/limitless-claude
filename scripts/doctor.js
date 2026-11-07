@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Limitless Claude 8.0 - System & Gateway Doctor (15-Point Diagnostics)
+ * Limitless Claude 8.1 - System & Gateway Doctor (15-Point Diagnostics)
  * 
  * Verifies end-to-end environment readiness:
  * - Runtime version & platform
@@ -23,7 +23,7 @@ const { defaultCapacityCalculator } = require("../src/core/capacity-calculator")
 async function runDoctor() {
   console.log(`
 ================================================================================
-          LIMITLESS CLAUDE 8.0 — SYSTEM & GATEWAY DIAGNOSTIC DOCTOR
+          LIMITLESS CLAUDE 8.1 — SYSTEM & GATEWAY DIAGNOSTIC DOCTOR
 ================================================================================
 `);
 

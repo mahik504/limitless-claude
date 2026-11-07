@@ -1,8 +1,8 @@
 {
   "name": "limitless-claude",
-  "version": "8.0.0",
+  "version": "8.1.0",
   "private": true,
-  "description": "Limitless Claude 8.0 - Autonomous Multi-Provider Coding Agent Runtime. Features Standalone-First architecture, 5-layer prompt engine, prompt lab, bidirectional protocol translation, session intelligence, dynamic capability evaluation, and fine-grained billing safety.",
+  "description": "Limitless Claude 8.1 - Autonomous Multi-Provider Coding Agent Runtime. Features task-to-model pinning, Cline-style granular file checkpoints & undo, standalone-first architecture, 5-layer prompt engine, prompt lab, bidirectional protocol translation, session intelligence, dynamic capability evaluation, and fine-grained billing safety.",
   "license": "MIT",
   "bin": {
     "limitless": "./bin/limitless.js"
@@ -19,6 +19,9 @@
     "switch-profile": "node scripts/switch-profile.js",
     "launcher": "node scripts/launcher.js",
     "rollback": "node scripts/rollback.js",
+    "pin": "node scripts/pin.js",
+    "checkpoint": "node scripts/undo.js",
+    "undo": "node scripts/undo.js",
     "dashboard": "node scripts/dashboard.js",
     "benchmark": "node scripts/benchmark.js",
     "acceptance": "node scripts/e2e-acceptance.js",

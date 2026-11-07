@@ -1,10 +1,10 @@
-# Limitless Claude 8.0
+# Limitless Claude 8.1
 
-[![Version](https://img.shields.io/badge/version-8.0.0-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-8.1.0-blue.svg)](package.json)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)](package.json)
 [![CI](https://github.com/mahik504/limitless-claude/actions/workflows/test.yml/badge.svg)](https://github.com/mahik504/limitless-claude/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests: 100% Passing](https://img.shields.io/badge/tests-87%2F87%20passed-success.svg)](test/)
+[![Tests: 100% Passing](https://img.shields.io/badge/tests-91%2F91%20passed-success.svg)](test/)
 [![Acceptance: 6/6 Passed](https://img.shields.io/badge/e2e%20acceptance-6%2F6%20passed-success.svg)](scripts/e2e-acceptance.js)
 [![Diagnostics: 15/15 Healthy](https://img.shields.io/badge/doctor-15%2F15%20healthy-success.svg)](scripts/doctor.js)
 
@@ -32,6 +32,8 @@ flowchart TD
         PE["Prompt Engine<br/>Constitution, capability profiles, model adapters"]
         PL["Prompt Laboratory<br/>Fixture-based regression testing"]
         SM["Session & Context Manager<br/>Checkpoints, compaction, token accounting"]
+        PIN["Task Pinning Engine<br/>Task-to-model overrides"]
+        UNDO["File Checkpoint & Undo Engine<br/>Per-file atomic snapshots"]
         CE["Capability Evaluator<br/>6 formal lifecycle stages"]
         BC["Billing & Quota Classifier<br/>7 classes, strict free-only enforcement"]
         FBE["Fallback Engine<br/>Deprecation traps & circuit breakers"]
@@ -52,7 +54,7 @@ flowchart TD
     end
 
     subgraph Upstream["Upstream Providers"]
-        P_KR["Kiro AI (Sonnet 4.5, GLM-5, Haiku 4.5)"]
+        P_KR["Kiro AI (Sonnet 4.5, GLM-5, Haiku 4.5, Qwen3, DeepSeek 3.2)"]
         P_CF["Cloudflare Workers AI (LLaMA 3.3 70B, DeepSeek R1, Qwen 32B)"]
         P_GH["GitHub Copilot (GPT-4o, GPT-4o Mini)"]
         P_GQ["Groq Hardware (LPU inference)"]
@@ -108,14 +110,14 @@ flowchart TD
 
 ## Composite Model Tiers
 
-OmniRoute groups upstream models into four composite tiers:
+OmniRoute groups verified upstream models into four composite aliases. Every model is verified against live HTTP 200 responses before entering production combos:
 
 | Tier | Primary Purpose | Primary Endpoints | Billing Classes |
 | :--- | :--- | :--- | :--- |
-| **Haiku** (`limitless-haiku-4.5`) | Syntax checks, atomic line diffs, quick tool calls | Kiro Claude Haiku 4.5, Cloudflare LLaMA 3.3 70B, GitHub GPT-4o Mini, Groq LPU | `provider_free_quota`, `subscription-entitled` |
-| **Sonnet** (`limitless-sonnet-5.5`) | System architecture, code review, debugging | Kiro Claude Sonnet 4.5, Cloudflare DeepSeek R1, GitHub GPT-4o, GLM-5 | `subscription-entitled`, `provider_free_quota` |
-| **Fable** (`limitless-fable-reasoning`) | Frontier context synthesis and multi-agent coordination | GitHub GPT-4o, Kiro DeepSeek 3.2, Mistral Codestral | `subscription-entitled`, `paid-token` |
-| **Opus** (`limitless-opus-4.6`) | Long coding loops, fullstack features, 3D scenes | 23-model pool across all active providers | `provider_free_quota`, `subscription-entitled`, `paid-token` |
+| **Haiku** (`limitless-haiku-4.5`) | Syntax checks, atomic line diffs, quick tool calls | Kiro Claude Haiku 4.5, Cloudflare LLaMA 3.3 70B, GitHub GPT-4o Mini, Groq LPU, Cloudflare GLM 4.7 Flash, OpenRouter Nemotron Free | `provider_free_quota`, `subscription-entitled` |
+| **Sonnet** (`limitless-sonnet-5.5`) | System architecture, code review, debugging | Kiro Claude Sonnet 4.5, Kiro GLM-5, GitHub GPT-4o, Cloudflare DeepSeek R1, Kiro Qwen3 Coder, Kiro DeepSeek 3.2 | `subscription-entitled`, `provider_free_quota` |
+| **Fable** (`limitless-fable-reasoning`) | Frontier context synthesis and multi-agent coordination | Kiro Claude Sonnet 4.5, GitHub GPT-4o, Mistral Codestral, Kiro GLM-5, Cloudflare DeepSeek R1 | `subscription-entitled`, `paid-token` |
+| **Opus** (`limitless-opus-4.6`) | Long coding loops, fullstack features, 3D scenes | 23-model pool across Mistral Codestral, Kiro, Cloudflare, GitHub, Groq, and OpenRouter free tiers | `provider_free_quota`, `subscription-entitled`, `paid-token` |
 
 ### Billing Taxonomy
 - `provider_free_quota`: Vendor free tier with rate limits (Groq, Cloudflare Workers AI, Cerebras, NVIDIA NIM).
@@ -123,6 +125,45 @@ OmniRoute groups upstream models into four composite tiers:
 - `paid-token`: Metered per-token commercial APIs (Mistral, OpenAI, Anthropic, OpenRouter paid).
 - `local`: Self-hosted local inference (Ollama, vLLM).
 - `unknown`: Pricing is unverified. Returns `null` cost and is excluded in free-only mode.
+
+---
+
+## Task-to-Model Pinning
+
+Assign dedicated model endpoints to specific engineering tasks:
+
+```bash
+limitless pin --list                                   # Show active pin overrides
+limitless pin --task backend --model kiro/claude-sonnet-4.5 # Pin backend tasks to Sonnet 4.5
+limitless pin --task fast --model groq/openai/gpt-oss-20b   # Pin fast edits to Groq LPU
+limitless pin --remove backend                         # Clear backend pin override
+limitless pin --reset                                  # Reset all task pin overrides
+```
+
+Pinned models automatically receive top priority during candidate selection when their matching capability profile is requested.
+
+---
+
+## File Checkpoint & Undo
+
+Capture atomic snapshots of target files before running autonomous agent loops and roll back individual changes when needed:
+
+```bash
+# Capture a snapshot before edits
+limitless checkpoint --create "pre-refactor auth" src/auth.js src/db.js
+
+# Review and list stored snapshots
+limitless checkpoint --list
+
+# Verify what would change without modifying files
+limitless undo --dry-run
+
+# Revert files to the latest checkpoint
+limitless undo
+
+# Restore a specific historical checkpoint
+limitless undo --id ckpt-2026-11-07T19-09-41-274Z-604909
+```
 
 ---
 
@@ -146,6 +187,11 @@ limitless models inspect <id># View capability profile for a specific model
 limitless providers list     # List connected providers and billing classes
 limitless providers test     # Ping upstream provider endpoints through gateway
 
+# Task pinning and file safety
+limitless pin                # Pin specific models to engineering tasks
+limitless checkpoint         # Create file-level snapshots before autonomous runs
+limitless undo               # Revert modified files to the previous checkpoint
+
 # Prompts and budget
 limitless prompt list        # List capability profiles and provider adapters
 limitless prompt compose     # Render 5-layer prompt with hash and section previews
@@ -156,6 +202,7 @@ limitless budget             # View spend controls and daily token capacity esti
 limitless benchmark          # Run 12-task standardized benchmark
 limitless acceptance         # Run 6-test end-to-end acceptance suite
 limitless dashboard          # Open live terminal observability dashboard
+limitless rollback --create  # Create a WAL-safe SQLite and config snapshot
 limitless rollback --list    # List available database and config snapshots
 limitless rollback --latest  # Restore most recent snapshot
 ```
@@ -169,7 +216,7 @@ Use these prompts when setting up or repairing Limitless Claude in an AI coding 
 ### Prompt 1: Clean Installation (New Environment)
 
 ```text
-Set up a clean installation of Limitless Claude 8.0 on this machine following these steps:
+Set up a clean installation of Limitless Claude 8.1 on this machine following these steps:
 
 1. Repository setup:
    - Check if the repository exists at C:\projects\limitless-claude (or clone from https://github.com/mahik504/limitless-claude.git).
@@ -178,7 +225,7 @@ Set up a clean installation of Limitless Claude 8.0 on this machine following th
 2. Diagnostic check:
    - Run `node bin/limitless.js doctor`.
    - Confirm all 15 checkpoints pass, including database integrity, API key permissions, gateway reachability, model catalog, and billing guards.
-   - If the OmniRoute gateway is stopped, start it via `omniroute-daemon.bat` or `npm run launcher`.
+   - If the OmniRoute gateway is not running, open it from the Windows system tray or run `omniroute-daemon.bat` directly. Note that `npm run launcher` starts Claude Code with the scoped profile — it does not start the OmniRoute background daemon.
 
 3. Model discovery:
    - Run `node bin/limitless.js discover` to scan live providers (Groq, Cloudflare, Kiro, Mistral, NVIDIA, Cerebras, OpenRouter, GitHub Copilot).
@@ -216,7 +263,7 @@ Repair and re-synchronize an existing Limitless Claude installation using these 
 2. Database and key checks:
    - Check that ~/.omniroute/storage.sqlite is accessible.
    - Run `node bin/limitless.js doctor`. If the API key is in restricted mode, ensure all composite tiers are included in allowed_combos.
-   - Remove deprecated endpoints (such as obsolete Antigravity 2.29 version strings) from primary positions.
+   - Remove deprecated endpoints from primary positions.
 
 3. Discovery and classification:
    - Run `node bin/limitless.js discover` to read live gateway endpoints.
@@ -292,30 +339,31 @@ Run `limitless prompt test` or inspect [`docs/PROMPT-LAB-REPORT.md`](docs/PROMPT
 
 ## Session Continuity & Context Compaction
 
-- Turn Checkpoints (`src/core/session-manager.js`): Records in-memory checkpoints at conversation turns. If an upstream turn fails unrecoverably, the session can roll back to a known good turn.
-- Context Compaction (`src/core/context-manager.js`): Tracks token counts against context limits. When context reaches 80% capacity, it truncates verbose terminal dumps while preserving active objectives, modified file paths, and unresolved errors.
+- Turn Checkpoints (`src/core/session-manager.js`): Records in-memory checkpoints at conversation turns. If an upstream turn fails unrecoverably, the session rolls back to a known good turn.
+- Context Compaction (`src/core/context-manager.js`): Tracks token counts against context limits. When context reaches 80% capacity, it truncates verbose terminal output while preserving active objectives, modified file paths, and unresolved errors.
 
 ---
 
 ## Snapshots and Rollback
 
 Limitless Claude supports atomic configuration and database rollbacks:
-- Pre-switch snapshots are taken automatically before profile changes or tier updates.
+- Pre-switch snapshots are captured before profile changes or tier updates.
 - SQLite backups use clean WAL checkpoints (`VACUUM INTO` via `src/omniroute/db.js`), preventing database corruption.
 - Rollback commands:
   ```bash
-  limitless rollback --list      # Show available snapshots
-  limitless rollback --latest    # Restore the most recent snapshot
+  limitless rollback --create <tag> # Create a manual WAL-safe snapshot
+  limitless rollback --list         # Show available snapshots
+  limitless rollback --latest       # Restore the most recent snapshot
   ```
 
 ---
 
 ## Verification Results
 
-The 8.0.0 release passed all local automated gates:
+The 8.1.0 release passed all local automated gates:
 
 ```text
-Unit & Contract Tests (`npm test`)        : 87/87 passed
+Unit & Contract Tests (`npm test`)        : 91/91 passed (13 suites)
 System Diagnostic Doctor (`limitless doctor`): 15/15 passed (Orchestra Mode B Active)
 Tier Connectivity (`limitless verify`)     : 8/8 routes HTTP 200 OK
 End-to-End Acceptance (`limitless acceptance`): 6/6 passed

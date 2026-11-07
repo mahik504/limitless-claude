@@ -1,5 +1,5 @@
 /**
- * Limitless Claude 7.0.0 - End-to-End Release Acceptance Suite
+ * Limitless Claude 8.1.0 - End-to-End Release Acceptance Suite
  * Validates all 6 production acceptance criteria against live OmniRoute gateway:
  * 1. Repository Implementation
  * 2. Premium Frontend
@@ -83,7 +83,7 @@ async function runAcceptance() {
   const isVerbose = process.argv.includes("--verbose") || process.argv.includes("-v");
 
   console.log("================================================================================");
-  console.log("          LIMITLESS CLAUDE 7.0.0 — END-TO-END ACCEPTANCE SUITE");
+  console.log("          LIMITLESS CLAUDE 8.1.0 — END-TO-END ACCEPTANCE SUITE");
   console.log("================================================================================");
 
   let apiKey = null;
@@ -180,3 +180,4 @@ if (require.main === module) {
 }
 
 module.exports = { runAcceptance };
+

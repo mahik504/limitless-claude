@@ -30,9 +30,9 @@ if (fs.existsSync(dbPath)) {
 
 console.log(`
 ================================================================================
-                    LIMITLESS CLAUDE 8.0 RUNTIME STATUS
+                    LIMITLESS CLAUDE 8.1 RUNTIME STATUS
 ================================================================================
-  Version           : 8.0.0
+  Version           : 8.1.0
   Active Profile    : ${activeProfile.toUpperCase()}
   Local Gateway     : http://127.0.0.1:20128
   Catalogued Models : ${modelCount} models

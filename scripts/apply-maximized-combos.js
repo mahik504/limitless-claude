@@ -9,24 +9,24 @@ try {
     { provider: "github", model: "gpt-4o-mini" },
     { provider: "groq", model: "openai/gpt-oss-20b" },
     { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
-    { provider: "cloudflare-ai", model: "@cf/meta/llama-3.2-3b-instruct" }
+    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" }
   ];
 
   const sonnetModels = [
     { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "kiro", model: "glm-5" },
-    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
     { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
     { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "mistral", model: "codestral-latest" }
+    { provider: "kiro", model: "deepseek-3.2" }
   ];
 
   const fableModels = [
-    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "kiro", model: "claude-sonnet-4.5" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "mistral", model: "codestral-latest" },
     { provider: "kiro", model: "glm-5" },
-    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
-    { provider: "mistral", model: "codestral-latest" }
+    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" }
   ];
 
   const opusModels = [
@@ -49,10 +49,10 @@ try {
     { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
     { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning:free" },
     { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
-    { provider: "openrouter", model: "dots-studio/dots-3-note-preview:free" },
     { provider: "cloudflare-ai", model: "@cf/meta/llama-3.2-3b-instruct" },
     { provider: "groq", model: "openai/gpt-oss-20b" },
-    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" }
+    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
+    { provider: "openrouter", model: "dots-studio/dots-3-note-preview:free" }
   ];
 
   function updateCombo(id, name, desc, models) {
@@ -78,25 +78,26 @@ try {
   updateCombo(
     "combo/limitless-sonnet",
     "Limitless Sonnet 5.5 Tier",
-    "Elite chain-of-thought planning, architectural analysis, and deep reasoning.",
+    "Frontier system design, architectural reasoning, and multi-turn debugging.",
     sonnetModels
-  );
-
-  updateCombo(
-    "combo/limitless-opus",
-    "Limitless Opus 5.5 Tier",
-    "Massive load-balanced coding reservoir for multi-agent loops and large refactors.",
-    opusModels
   );
 
   updateCombo(
     "combo/limitless-fable",
     "Limitless Fable 5.1 Tier",
-    "Premier composite intelligence tier for maximum context synthesis and reasoning.",
+    "God-mode composite intelligence with frontier reasoning & thinking models.",
     fableModels
   );
 
-  console.log("All 4 combos updated successfully in SQLite!");
+  updateCombo(
+    "combo/limitless-opus",
+    "Limitless Opus 5.5 Tier",
+    "High-capacity agentic coding reservoir across 23 multi-provider models.",
+    opusModels
+  );
+
+  console.log("Successfully updated all 4 Limitless Claude combos with verified models!");
 } catch (err) {
-  console.error("Error updating combos:", err.message);
+  console.error("Failed to update combos:", err.message);
+  process.exit(1);
 }

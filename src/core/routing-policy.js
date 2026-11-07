@@ -10,9 +10,10 @@
  * - Retry budgets per turn/request
  */
 
-const { BILLING_CLASSES, defaultBillingClassifier } = require("./billing-classifier");
+const { BILLING_CLASSES, defaultClassifier: defaultBillingClassifier } = require("./billing-classifier");
 const { CAPABILITY_PROFILES, defaultCapabilityEvaluator } = require("./capability-evaluator");
 const { HEALTH_STATUS } = require("./model-registry");
+const { defaultTaskPinManager } = require("./task-pins");
 
 const CIRCUIT_STATE = {
   CLOSED: "CLOSED",       // Normal operation, all traffic allowed
@@ -98,6 +99,7 @@ class RoutingPolicy {
   constructor(options = {}) {
     this.billingClassifier = options.billingClassifier || defaultBillingClassifier;
     this.capabilityEvaluator = options.capabilityEvaluator || defaultCapabilityEvaluator;
+    this.taskPinManager = options.taskPinManager || defaultTaskPinManager;
     this.circuitBreakers = new Map(); // key -> CircuitBreaker
     this.maxRetries = options.maxRetries ?? 3;
     this.excludePaid = options.excludePaid ?? false;
@@ -168,11 +170,26 @@ class RoutingPolicy {
   orderCandidates(candidates = [], requiredProfile = null) {
     if (!Array.isArray(candidates)) return [];
 
+    const pinnedModel = requiredProfile && this.taskPinManager
+      ? this.taskPinManager.getPin(requiredProfile)
+      : null;
+
     return [...candidates].sort((a, b) => {
       const pA = a.provider || (a.model ? a.model.split("/")[0] : "");
       const mA = a.model || a.id || "";
       const pB = b.provider || (b.model ? b.model.split("/")[0] : "");
       const mB = b.model || b.id || "";
+
+      // 0. Task-specific pinned model override
+      if (pinnedModel) {
+        const fullA = `${pA}/${mA}`.toLowerCase();
+        const fullB = `${pB}/${mB}`.toLowerCase();
+        const pinLower = pinnedModel.toLowerCase();
+        const isPinnedA = fullA === pinLower || mA.toLowerCase() === pinLower;
+        const isPinnedB = fullB === pinLower || mB.toLowerCase() === pinLower;
+        if (isPinnedA && !isPinnedB) return -1;
+        if (!isPinnedA && isPinnedB) return 1;
+      }
 
       // 1. Circuit breaker availability check
       const cbA = this.getCircuitBreaker(pA, mA).isAvailable();

@@ -18,6 +18,7 @@
  *   limitless rollback --list
  */
 
+const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
 
@@ -55,9 +56,10 @@ const COMMANDS = {
 };
 
 function printHelp() {
+  const version = fs.readFileSync(path.join(PROJECT_ROOT, "VERSION"), "utf8").trim();
   console.log(`
 ================================================================================
-           LIMITLESS CLAUDE 8.2.0 — UNIVERSAL GLOBAL CLI
+           LIMITLESS CLAUDE ${version} — UNIVERSAL GLOBAL CLI
 ================================================================================
 
 Usage:

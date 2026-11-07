@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [8.2.1] - 2026-11-08
+
+### Changed
+- Orchestra sync calls `ow-sync --apply` instead of copying `CLAUDE.md` and skill folders by hand.
+- The adapter reads `VERSION` from the Orchestra checkout. A host file counts as synced when it contains `Orchestra <major.minor>` or the orchestra marker.
+- `limitless orchestra status` prints that version.
+
 ## [8.0.0] - 2026-11-07
 
 ### Added

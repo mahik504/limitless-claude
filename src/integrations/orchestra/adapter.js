@@ -1,8 +1,8 @@
 /**
- * Limitless Claude 8.2 - Orchestra 4.5.0 Interoperability Adapter (Mode B)
- * 
+ * Limitless Claude 8.2 - Orchestra interoperability adapter (Mode B)
+ *
  * Provides clean, decoupled contract consumption when Orchestra is detected:
- * - Translates Orchestra 4.5.0 task categories and skills to Limitless capability profiles
+ * - Translates Orchestra task categories and skills to Limitless capability profiles
  * - Forwards model tier recommendations (Haiku, Sonnet, Opus, Fable)
  * - Detects local Orchestra installations (C:/projects/orchestra-workflow, ~/orchestra-workflow)
  * - Safe fallback to Standalone Mode (Mode A) when Orchestra is absent
@@ -12,6 +12,13 @@
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
+
+function adapterMatches(content, version) {
+  const text = String(content || "");
+  if (text.includes("<!-- orchestra:start -->") || text.includes("<!-- orchestra:end -->")) return true;
+  const match = String(version || "").match(/^(\d+\.\d+)/);
+  return Boolean(match && text.includes(`Orchestra ${match[1]}`));
+}
 
 class OrchestraAdapter {
   constructor(options = {}) {
@@ -56,11 +63,11 @@ class OrchestraAdapter {
       };
     }
 
-    let version = "4.5.0";
+    let version = "unknown";
     try {
       const vPath = path.join(orchPath, "VERSION");
       if (fs.existsSync(vPath)) {
-        version = fs.readFileSync(vPath, "utf8").trim();
+        version = fs.readFileSync(vPath, "utf8").trim() || "unknown";
       }
     } catch (_) {}
 
@@ -77,7 +84,7 @@ class OrchestraAdapter {
     try {
       if (fs.existsSync(claudeMd)) {
         const content = fs.readFileSync(claudeMd, "utf8");
-        claudeAdapterSynced = content.includes("Orchestra 4.5") || content.includes("Orchestra 4.1");
+        claudeAdapterSynced = adapterMatches(content, version);
       }
     } catch (_) {}
 
@@ -171,5 +178,6 @@ const defaultOrchestraAdapter = new OrchestraAdapter();
 
 module.exports = {
   OrchestraAdapter,
+  adapterMatches,
   defaultOrchestraAdapter
 };

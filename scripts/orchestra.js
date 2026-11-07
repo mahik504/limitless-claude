@@ -3,7 +3,7 @@
  * Limitless Claude 8.2 - Orchestra Workflow Integration Manager
  * 
  * Verifies and manages bidirectional interoperability between Limitless Claude
- * runtime and the local Orchestra 4.5.0 control plane.
+ * runtime and the local Orchestra control plane. The version comes from that repo's VERSION file.
  * 
  * Usage:
  *   node scripts/orchestra.js status
@@ -13,7 +13,8 @@
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
-const { defaultOrchestraAdapter } = require("../src/integrations/orchestra/adapter");
+const { spawnSync } = require("child_process");
+const { adapterMatches, defaultOrchestraAdapter } = require("../src/integrations/orchestra/adapter");
 
 const GREEN = "\x1b[32m";
 const YELLOW = "\x1b[33m";
@@ -26,7 +27,8 @@ function printStatus() {
   const details = defaultOrchestraAdapter.getDetails();
 
   console.log("================================================================================");
-  console.log("            LIMITLESS CLAUDE 8.2 — ORCHESTRA 4.5.0 WORKFLOW STATUS");
+  const bannerVersion = details.detected ? details.version : "not detected";
+  console.log(`            LIMITLESS CLAUDE 8.2 — ORCHESTRA ${bannerVersion} WORKFLOW STATUS`);
   console.log("================================================================================");
 
   if (!details.detected) {
@@ -56,8 +58,8 @@ function printStatus() {
   // CLAUDE.md
   if (fs.existsSync(claudeMd)) {
     const mdContent = fs.readFileSync(claudeMd, "utf8");
-    const is45 = mdContent.includes("Orchestra 4.5");
-    console.log(`  [PASS] Claude Code CLAUDE.md     : ${is45 ? "Orchestra 4.5.0 Synced" : "Adapter present"}`);
+    const synced = adapterMatches(mdContent, details.version);
+    console.log(`  [PASS] Claude Code CLAUDE.md     : ${synced ? `Orchestra ${details.version} synced` : "Adapter present"}`);
   } else {
     console.log(`  [WARN] Claude Code CLAUDE.md     : Not found. Run 'limitless orchestra sync'`);
   }
@@ -86,46 +88,27 @@ function printStatus() {
 
 function syncOrchestra() {
   const details = defaultOrchestraAdapter.getDetails();
-  if (!details.detected) {
+  if (!details.detected || !details.path) {
     console.error(`${RED}[ERROR] Cannot sync: Orchestra workflow not found on this machine.${RESET}`);
     process.exit(1);
   }
 
-  console.log(`[*] Synchronizing Orchestra 4.5.0 artifacts into Claude Code configuration...`);
-
-  // 1. Sync CLAUDE.md
-  const sourceClaudeMd = path.join(details.path, "CLAUDE.md");
-  const targetClaudeMd = path.join(os.homedir(), ".claude", "CLAUDE.md");
-  if (fs.existsSync(sourceClaudeMd)) {
-    fs.copyFileSync(sourceClaudeMd, targetClaudeMd);
-    console.log(`  [OK] Synced CLAUDE.md -> ${targetClaudeMd}`);
+  const script = path.join(details.path, "runtime", "tools", "ow-sync.mjs");
+  if (!fs.existsSync(script)) {
+    console.error(`${RED}[ERROR] ow-sync is missing at ${script}${RESET}`);
+    process.exit(1);
   }
 
-  // 2. Sync Skills
-  const sourceSkills = path.join(details.path, "skills");
-  const targetSkills = path.join(os.homedir(), ".claude", "skills");
-  if (fs.existsSync(sourceSkills)) {
-    if (!fs.existsSync(targetSkills)) {
-      fs.mkdirSync(targetSkills, { recursive: true });
-    }
-
-    const skills = fs.readdirSync(sourceSkills).filter(f => !f.startsWith("."));
-    let copiedCount = 0;
-
-    for (const skill of skills) {
-      const srcSkillDir = path.join(sourceSkills, skill);
-      const tgtSkillDir = path.join(targetSkills, skill);
-      if (fs.statSync(srcSkillDir).isDirectory()) {
-        if (!fs.existsSync(tgtSkillDir)) {
-          fs.cpSync(srcSkillDir, tgtSkillDir, { recursive: true });
-          copiedCount++;
-        }
-      }
-    }
-    console.log(`  [OK] Checked ${skills.length} Orchestra skills (${copiedCount} newly synced into ~/.claude/skills)`);
+  console.log(`[*] Synchronizing Orchestra ${details.version} through ow-sync...`);
+  const result = spawnSync(process.execPath, [script, "--apply"], {
+    cwd: details.path,
+    stdio: "inherit",
+    env: process.env
+  });
+  if (result.status !== 0) {
+    process.exit(result.status || 1);
   }
-
-  console.log(`${GREEN}[SUCCESS] Orchestra workflow synchronization complete.${RESET}`);
+  console.log(`${GREEN}[SUCCESS] Orchestra ${details.version} synchronization complete.${RESET}`);
 }
 
 function main() {

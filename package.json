@@ -1,7 +1,7 @@
 {
   "name": "limitless-claude",
-  "version": "8.2.0",
-  "description": "Limitless Claude 8.2 - Autonomous Multi-Provider Coding Agent Runtime. Features interactive terminal TUI, live token & cost savings telemetry, local Ollama auto-discovery, Orchestra 4.5.0 workflow interop, task-to-model pinning, granular file checkpoints & atomic undo, 5-layer prompt engine, and billing safety.",
+  "version": "8.2.1",
+  "description": "Limitless Claude 8.2 - Autonomous Multi-Provider Coding Agent Runtime. Features interactive terminal TUI, live token and cost savings telemetry, local Ollama auto-discovery, Orchestra workflow interop, task-to-model pinning, granular file checkpoints and atomic undo, 5-layer prompt engine, and billing safety.",
   "license": "MIT",
   "author": "mahik504",
   "repository": {

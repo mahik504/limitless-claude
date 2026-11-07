@@ -1,6 +1,6 @@
 # Limitless Claude 8.2
 
-[![Version](https://img.shields.io/badge/version-8.2.0-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-8.2.1-blue.svg)](package.json)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)](package.json)
 [![CI](https://github.com/mahik504/limitless-claude/actions/workflows/test.yml/badge.svg)](https://github.com/mahik504/limitless-claude/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)

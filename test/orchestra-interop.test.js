@@ -3,9 +3,9 @@ const assert = require("node:assert/strict");
 const fs = require("fs");
 const path = require("path");
 
-const { OrchestraAdapter } = require("../src/integrations/orchestra/adapter");
+const { adapterMatches, OrchestraAdapter } = require("../src/integrations/orchestra/adapter");
 
-test.describe("Limitless Claude 8.2 - Orchestra 4.5.0 Interoperability Suite", () => {
+test.describe("Limitless Claude 8.2 - Orchestra interoperability suite", () => {
 
   test.it("Standalone Fallback - should fall back cleanly when Orchestra is absent", () => {
     const adapter = new OrchestraAdapter({ enabled: false });
@@ -19,7 +19,21 @@ test.describe("Limitless Claude 8.2 - Orchestra 4.5.0 Interoperability Suite", (
     assert.equal(result.tier, "limitless-sonnet-5.5");
   });
 
-  test.it("Orchestra 4.5.0 Contract Mapping - maps tasks to capabilities and frontier tiers", () => {
+  test.it("reads VERSION and treats the current major.minor or the orchestra marker as synced", () => {
+    const dir = fs.mkdtempSync(path.join(require("os").tmpdir(), "ow-adapter-"));
+    fs.writeFileSync(path.join(dir, "VERSION"), "9.9.0\n");
+    fs.mkdirSync(path.join(dir, "skills"));
+    const adapter = new OrchestraAdapter({ enabled: true });
+    adapter.candidatePaths = [dir];
+    const details = adapter.getDetails();
+    assert.equal(details.version, "9.9.0");
+    assert.equal(adapterMatches("Orchestra 9.9 lives here", "9.9.0"), true);
+    assert.equal(adapterMatches("<!-- orchestra:start -->\nnotes\n", "9.9.0"), true);
+    assert.equal(adapterMatches("Orchestra 4.1", "9.9.0"), false);
+    assert.equal(adapterMatches("personal notes", "9.9.0"), false);
+  });
+
+  test.it("Contract mapping - maps tasks to capabilities and frontier tiers", () => {
     const adapter = new OrchestraAdapter({ enabled: true });
     assert.equal(adapter.isAvailable(), true);
 

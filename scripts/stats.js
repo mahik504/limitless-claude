@@ -21,7 +21,7 @@ function printStats(isJson = false) {
   }
 
   console.log("================================================================================");
-  console.log("             LIMITLESS CLAUDE 8.2 — REAL-TIME TOKEN & SAVINGS TELEMETRY");
+  console.log("             LIMITLESS CLAUDE 8.3 — REAL-TIME TOKEN & SAVINGS TELEMETRY");
   console.log("================================================================================");
 
   if (!data.available) {
@@ -39,11 +39,13 @@ function printStats(isJson = false) {
     console.log(`    - Reasoning Tokens       : ${formatNumber(data.totalReasoningTokens)}`);
   }
   console.log("--------------------------------------------------------------------------------");
-  console.log("  ESTIMATED DIRECT ANTHROPIC VALUE & COST SAVINGS:");
-  console.log(`  • Sonnet 3.5 / 3.7 Equivalent Value : $${data.costSavings.sonnetEquivUsd.toFixed(2)} USD`);
-  console.log(`  • Opus 3.0 / 3.5 Equivalent Value   : $${data.costSavings.opusEquivUsd.toFixed(2)} USD`);
-  console.log(`  • Blended Savings (70% Sonnet, 20% Opus) : $${data.costSavings.blendedEquivUsd.toFixed(2)} USD`);
-  console.log(`  • Actual Billed Cost to You              : $0.00 USD (100% Free / Sponsored Stack)`);
+  console.log("  THREE-LAYER FINANCIAL ACCOUNTING:");
+  console.log(`  1. Actual Billed Cost to You   : $${(data.financials?.actualBilledUsd || 0).toFixed(2)} USD (Zero-Cost / Sponsored Stack)`);
+  console.log(`  2. Estimated Upstream Cost     : $${(data.financials?.estimatedProviderCostUsd || 0).toFixed(2)} USD`);
+  console.log(`  3. Counterfactual Anthropic Value (hypothetical list price for equivalent tokens):`);
+  console.log(`     • Sonnet 3.5 / 3.7 Baseline : $${data.costSavings.sonnetEquivUsd.toFixed(2)} USD`);
+  console.log(`     • Opus 3.0 / 3.5 Baseline   : $${data.costSavings.opusEquivUsd.toFixed(2)} USD`);
+  console.log(`     • Blended Baseline (70/20)  : $${data.costSavings.blendedEquivUsd.toFixed(2)} USD`);
   console.log("--------------------------------------------------------------------------------");
   
   console.log("  TOKEN VOLUME BY COMBO TIER:");

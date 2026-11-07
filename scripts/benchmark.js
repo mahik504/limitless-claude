@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Limitless Claude 7.0 - Benchmark Runner CLI
+ * Limitless Claude - Benchmark Runner CLI
  * 
  * Runs the 12-task capability benchmark against OmniRoute gateway.
  * 
@@ -10,12 +10,12 @@
 
 const { BenchmarkEngine, BENCHMARK_TASKS } = require("../src/core/benchmark-engine");
 const { getDatabase } = require("../src/omniroute/db");
-const { getOmniRouteApiKey } = require("../src/omniroute/permissions");
+const { findTargetApiKey } = require("../src/omniroute/permissions");
 const { logger } = require("../src/utils/logger");
 
 function printHelp() {
   console.log(`
-Limitless Claude 7.0 - Benchmark Runner CLI
+Limitless Claude - Benchmark Runner CLI
 
 Usage:
   node scripts/benchmark.js [options]
@@ -30,7 +30,7 @@ Options:
 
 async function main() {
   const args = process.argv.slice(2);
-  let target = "auto";
+  let target = "limitless-sonnet-5.5";
   let singleTaskId = null;
   let isJson = false;
 
@@ -39,77 +39,92 @@ async function main() {
     if (a === "--help" || a === "-h") {
       printHelp();
       process.exit(0);
-    } else if (a === "--target") {
+    } else if (a === "--target" && args[i + 1]) {
       target = args[++i];
-    } else if (a === "--task") {
+    } else if (a === "--task" && args[i + 1]) {
       singleTaskId = args[++i];
     } else if (a === "--json") {
       isJson = true;
     }
   }
 
-  // Obtain OmniRoute API key from local database or default fallback
-  let apiKey = null;
-  try {
-    const db = getDatabase();
-    const row = db.prepare("SELECT key FROM api_keys WHERE is_active = 1 LIMIT 1").get();
-    if (row && row.key) apiKey = row.key;
-  } catch (_) {}
+  // Obtain OmniRoute API key from local database or environment
+  let apiKey = process.env.ANTHROPIC_AUTH_TOKEN || process.env.ANTHROPIC_API_KEY || null;
   if (!apiKey) {
-    apiKey = "sk-ant-api03-85702967f40fcc12-f121cd-a362127e";
+    try {
+      const db = getDatabase();
+      const row = findTargetApiKey(db);
+      if (row && row.key) apiKey = row.key;
+    } catch (_) {}
+  }
+
+  if (!apiKey) {
+    console.error("\x1b[31m[ERROR] No authorized OmniRoute API key found for benchmarking.\x1b[0m");
+    console.error("Please configure an API key via ~/.claude/settings.json or run `limitless setup`.");
+    process.exit(1);
   }
 
   const engine = new BenchmarkEngine();
 
   if (!isJson) {
     console.log("\n================================================================================");
-    console.log("             LIMITLESS CLAUDE 7.0 - 12-TASK CAPABILITY BENCHMARK");
+    console.log("             LIMITLESS CLAUDE — 12-TASK CAPABILITY BENCHMARK");
     console.log("================================================================================");
     console.log(` Target Endpoint : ${target}`);
     console.log(` Gateway         : 127.0.0.1:20128\n`);
   }
 
-  if (singleTaskId) {
-    const task = BENCHMARK_TASKS.find(t => t.id === singleTaskId);
-    if (!task) {
-      logger.error(`Unknown task ID: ${singleTaskId}`);
-      process.exit(1);
-    }
-    const res = await engine.runTask(task, target, apiKey);
-    if (isJson) {
-      console.log(JSON.stringify(res, null, 2));
-    } else {
-      console.log(`Task        : ${res.taskName} (${res.taskId})`);
-      console.log(`Profile     : ${res.profile}`);
-      console.log(`Status      : ${res.passed ? "\x1b[32mPASS\x1b[0m" : "\x1b[31mFAIL\x1b[0m"} (Score: ${res.score}%)`);
-      console.log(`Latency     : ${res.latencyMs} ms`);
-      console.log(`Snippet     : ${res.outputSnippet}`);
-    }
-    return;
+  const tasksToRun = singleTaskId 
+    ? BENCHMARK_TASKS.filter(t => t.id === singleTaskId)
+    : BENCHMARK_TASKS;
+
+  if (tasksToRun.length === 0) {
+    console.error(`Task "${singleTaskId}" not found.`);
+    process.exit(1);
   }
 
-  const results = await engine.runSuite(target, apiKey);
+  const results = [];
+  for (const t of tasksToRun) {
+    if (!isJson) {
+      process.stdout.write(` Running [${(t.profile || t.tier || "TASK").padEnd(7)}] ${t.name.padEnd(36)} ... `);
+    }
+    const r = await engine.runTask(t, target, apiKey);
+    results.push(r);
+
+    if (!isJson) {
+      if (r.passed) {
+        console.log(`\x1b[32mPASS\x1b[0m (${r.latencyMs}ms, score: ${r.score}%)`);
+      } else {
+        console.log(`\x1b[31mFAIL\x1b[0m (HTTP ${r.statusCode || 0}, ${r.error || "assertion failed"})`);
+      }
+    }
+  }
+
+  const totalPassed = results.filter(r => r.passed).length;
+  const avgLatency = Math.round(results.reduce((acc, r) => acc + (r.latencyMs || 0), 0) / results.length);
+  const totalTokens = results.reduce((acc, r) => acc + (r.tokensUsed || 0), 0);
+  const scorePercent = Math.round((totalPassed / results.length) * 100);
 
   if (isJson) {
-    console.log(JSON.stringify(results, null, 2));
-    return;
+    console.log(JSON.stringify({
+      target,
+      totalPassed,
+      totalTasks: results.length,
+      scorePercent,
+      avgLatencyMs: avgLatency,
+      totalTokens,
+      results
+    }, null, 2));
+  } else {
+    console.log("\n--------------------------------------------------------------------------------");
+    console.log(` Benchmark Summary: ${totalPassed}/${results.length} Passed (${scorePercent}%) | Avg Latency: ${avgLatency}ms | Total Tokens: ${totalTokens}`);
+    console.log("================================================================================\n");
   }
-
-  console.log("  TASK ID                  PROFILE    LATENCY    SCORE   STATUS");
-  console.log("  -----------------------  ---------  ---------  ------  --------");
-  for (const t of results.tasks) {
-    const statusStr = t.passed ? "\x1b[32mPASS\x1b[0m" : "\x1b[31mFAIL\x1b[0m";
-    console.log(`  ${t.taskId.padEnd(23)}  ${t.profile.padEnd(9)}  ${(t.latencyMs + " ms").padEnd(9)}  ${(t.score + "%").padEnd(6)}  ${statusStr}`);
-  }
-
-  console.log("--------------------------------------------------------------------------------");
-  console.log(` Overall Score : ${results.overallScore}% (${results.passedCount}/${results.totalCount} passed)`);
-  console.log("================================================================================\n");
 }
 
 if (require.main === module) {
   main().catch(err => {
-    logger.error(`Benchmark failed: ${err.message}`);
+    logger.error(`Benchmark runner failed: ${err.message}`);
     process.exit(1);
   });
 }

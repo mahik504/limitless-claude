@@ -84,7 +84,7 @@ Model & Provider Intelligence:
   pin                Pin specific models to task profiles (backend, frontend, etc.)
 
 Orchestration & Workflow:
-  orchestra status   Verify connection to local Orchestra 4.5.0 control plane
+  orchestra status   Verify connection to local Orchestra control plane
   orchestra sync     Sync Orchestra CLAUDE.md adapter and skills into ~/.claude/
 
 Prompt Engineering & Budget:

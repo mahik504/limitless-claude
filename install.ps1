@@ -44,11 +44,24 @@ if (-not (Test-Path "C:\projects")) {
 }
 
 if (Test-Path (Join-Path $targetDir ".git")) {
-    Write-Host "  -> Existing repository found at $targetDir. Pulling latest release..." -ForegroundColor Cyan
+    Write-Host "  -> Existing repository found at $targetDir. Checking repository status..." -ForegroundColor Cyan
     Push-Location $targetDir
-    git fetch origin master
-    git reset --hard origin/master
-    Pop-Location
+    try {
+        $status = git status --porcelain
+        if ($status -and ($args -notcontains "-Force")) {
+            Write-Host "  [WARNING] Uncommitted changes detected in $targetDir." -ForegroundColor Yellow
+            Write-Host "  Refusing to overwrite dirty working tree. Please commit, stash, or run with -Force." -ForegroundColor Red
+            Pop-Location
+            exit 1
+        }
+        Write-Host "  -> Updating repository via fast-forward..." -ForegroundColor Cyan
+        git fetch origin master
+        git pull --ff-only origin master
+    } catch {
+        Write-Host "  [NOTICE] Fast-forward update could not be applied automatically. Manual check recommended." -ForegroundColor Yellow
+    } finally {
+        Pop-Location
+    }
 } else {
     Write-Host "  -> Cloning Limitless Claude into $targetDir..." -ForegroundColor Cyan
     if (-not (Test-Path (Split-Path $targetDir))) {

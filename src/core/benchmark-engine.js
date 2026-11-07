@@ -152,13 +152,16 @@ class BenchmarkEngine {
   }
 
   evaluateOutput(task, outputText) {
+    if (!task || !task.expectedTokens || !Array.isArray(task.expectedTokens)) {
+      return { passed: false, score: 0, matchedTokens: [] };
+    }
     if (!outputText || typeof outputText !== "string") {
       return { passed: false, score: 0, matchedTokens: [] };
     }
 
     const textLower = outputText.toLowerCase();
     const matched = task.expectedTokens.filter(t => textLower.includes(t.toLowerCase()));
-    const ratio = matched.length / task.expectedTokens.length;
+    const ratio = task.expectedTokens.length > 0 ? (matched.length / task.expectedTokens.length) : 0;
     const score = Math.round(ratio * 100);
 
     return {
@@ -168,7 +171,26 @@ class BenchmarkEngine {
     };
   }
 
-  async runTask(task, modelOrCombo, apiKey = null) {
+  async runTask(taskOrId, modelOrCombo, apiKey = null) {
+    const task = typeof taskOrId === "string" 
+      ? BENCHMARK_TASKS.find(t => t.id === taskOrId)
+      : taskOrId;
+
+    if (!task) {
+      return {
+        taskId: taskOrId,
+        taskName: "Unknown Task",
+        profile: "UNKNOWN",
+        statusCode: 404,
+        latencyMs: 0,
+        passed: false,
+        score: 0,
+        error: `Task "${taskOrId}" not found in benchmark registry`,
+        matchedTokens: [],
+        outputSnippet: ""
+      };
+    }
+
     const resolvedModel = normalizeTarget(modelOrCombo, task.tier);
     const startTime = Date.now();
     return new Promise((resolve) => {

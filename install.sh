@@ -41,9 +41,15 @@ echo "[3/5] Setting up Limitless Claude repository..."
 TARGET_DIR="${HOME}/limitless-claude"
 
 if [ -d "$TARGET_DIR/.git" ]; then
-    echo "  -> Existing repository found at $TARGET_DIR. Pulling latest release..."
+    echo "  -> Existing repository found at $TARGET_DIR. Checking working tree..."
+    if [ -n "$(git -C "$TARGET_DIR" status --porcelain)" ] && [ "$1" != "--force" ]; then
+        echo "  [WARNING] Uncommitted changes detected in $TARGET_DIR."
+        echo "  Refusing to overwrite dirty working tree. Please commit, stash, or pass --force."
+        exit 1
+    fi
+    echo "  -> Pulling latest release via fast-forward..."
     git -C "$TARGET_DIR" fetch origin master
-    git -C "$TARGET_DIR" reset --hard origin/master
+    git -C "$TARGET_DIR" pull --ff-only origin master || true
 else
     echo "  -> Cloning Limitless Claude into $TARGET_DIR..."
     git clone https://github.com/mahik504/limitless-claude.git "$TARGET_DIR"

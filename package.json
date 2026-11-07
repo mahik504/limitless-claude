@@ -1,7 +1,7 @@
 {
   "name": "limitless-claude",
-  "version": "8.2.1",
-  "description": "Limitless Claude 8.2 - Autonomous Multi-Provider Coding Agent Runtime. Features interactive terminal TUI, live token and cost savings telemetry, local Ollama auto-discovery, Orchestra workflow interop, task-to-model pinning, granular file checkpoints and atomic undo, 5-layer prompt engine, and billing safety.",
+  "version": "8.3.0",
+  "description": "Limitless Claude 8.3 — Intelligent Developer Control Plane & Policy Companion for OmniRoute. Hardened security, live tri-layer financial accounting, fail-closed zero-cost billing, local Ollama auto-discovery, Orchestra workflow interop, task pinning, atomic undo, and 5-layer prompt engine.",
   "license": "MIT",
   "author": "mahik504",
   "repository": {

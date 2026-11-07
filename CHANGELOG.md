@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [8.3.0] - 2026-11-08
+
+### Security
+- **Dynamic Credential Resolution**: Removed hardcoded API key fallbacks from `scripts/verify-combos.js` and `scripts/benchmark.js`. Keys are now resolved dynamically from SQLite using `findTargetApiKey` with fail-closed error handling.
+- **Safe Key Masking**: Truncated secret displays in verification reports and benchmark logs (`sk-***...[redacted]`).
+- **Non-Destructive Installers**: Replaced `git reset --hard` in `install.ps1` and `install.sh` with working tree dirty checks (`git status --porcelain`). Installers now refuse to overwrite modified files unless explicitly passed `-Force`.
+- **Fail-Closed Zero-Marginal Billing**: Enforced `allowUnknown = false` in `src/core/routing-policy.js` under `--free-only` mode, preventing unmetered commercial models from leaking into zero-cost combos.
+- **WAL-Safe SQLite Backups**: Removed unsafe raw file copy fallbacks during database snapshots in `src/core/config-manager.js`, ensuring all writes are checkpointed before backup promotion.
+
+### Fixed
+- **Model Registry Alias Export**: Exported `defaultModelRegistry` in `src/core/model-registry.js` to resolve an unhandled import error in `src/core/fallback-engine.js`.
+- **Benchmark Engine Task Resolution**: Fixed task lookup and expected token scoring in `src/core/benchmark-engine.js` and `scripts/benchmark.js` so live benchmarks execute cleanly against local endpoints.
+- **Context Size Ceiling & Cursor Rules Directory**: Added 50KB context file size cap in `src/core/prompt-engine.js` and added recursive scanning for `.cursor/rules` (`.md` and `.mdc` rule files).
+- **Diagnostic Doctor Checkpoints**: Enhanced `scripts/doctor.js` with `PRAGMA quick_check(1)` verification, table counting, and explicit `[NOT_TESTED]` state handling for dependent checks when offline.
+
+### Changed
+- **Architectural Truth Realignment**: Documented Limitless Claude as the Developer Control Plane and Policy Companion above the OmniRoute Execution Gateway, clarifying that coding clients connect directly to port 20128 while Limitless Claude manages tiers, prompts, pinning, and safety.
+- **Tri-Layer Financial Accounting**: Split telemetry metrics in `src/core/token-tracker.js` and `scripts/stats.js` into three explicit layers: Actual Billed Cost to You, Estimated Upstream Cost, and Counterfactual Anthropic Value.
+
 ## [8.2.1] - 2026-11-08
 
 ### Changed

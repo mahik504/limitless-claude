@@ -232,7 +232,7 @@ class RoutingPolicy {
       const p = c.provider || (c.model ? c.model.split("/")[0] : "");
       const m = c.model || c.id || "";
 
-      if (shouldExcludePaid && !this.billingClassifier.isSafeUnderFreeOnly(p, m, true)) {
+      if (shouldExcludePaid && !this.billingClassifier.isSafeUnderFreeOnly(p, m, false)) {
         continue;
       }
 

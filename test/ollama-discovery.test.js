@@ -57,6 +57,7 @@ test.describe("Limitless Claude 8.2 - Ollama Auto-Discovery Engine Suite", () =>
       assert.equal(qwen.provider, "ollama");
       assert.equal(qwen.billing, "free");
       assert.equal(qwen.pricing, "free");
+      assert.equal(qwen.is_empirical, false);
       assert.equal(qwen.tools, true);
 
       const r1 = inventory.find(m => m.id === "ollama/deepseek-r1:14b");

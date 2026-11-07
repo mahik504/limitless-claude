@@ -1,5 +1,5 @@
 /**
- * Limitless Claude 8.2 - Token & Savings Telemetry Engine
+ * Limitless Claude - Token & Savings Telemetry Engine
  * 
  * Aggregates live token usage from storage.sqlite (call_logs and daily_usage_summary)
  * to compute token volume, provider breakdown, combo distribution, and estimated
@@ -43,6 +43,12 @@ class TokenTracker {
         totalOutputTokens: 0,
         totalTokens: 0,
         costSavingsUsd: 0,
+        costSavings: { sonnetEquivUsd: 0, opusEquivUsd: 0, haikuEquivUsd: 0, blendedEquivUsd: 0 },
+        financials: {
+          actualBilledUsd: 0,
+          estimatedProviderCostUsd: 0,
+          counterfactualAnthropicUsd: { sonnetBaseline: 0, opusBaseline: 0, haikuBaseline: 0, blendedBaseline: 0 }
+        },
         combos: {},
         providers: {},
         dailySummary: []
@@ -129,8 +135,14 @@ class TokenTracker {
         `).all() || [];
       } catch (_) {}
 
-      // 5. Cost Savings Model
-      // Estimated Anthropic direct cost if routed to Sonnet ($3 / $15)
+      // 5. Three-Layer Financial Model:
+      // A. Actual Billed Cost
+      let actualBilled = 0.00;
+      for (const d of dailySummary) {
+        if (d.billed_cost) actualBilled += Number(d.billed_cost);
+      }
+
+      // B. Counterfactual Anthropic Value (Hypothetical cost if routed to Anthropic list prices)
       const inM = overall.in_tok / 1_000_000;
       const outM = overall.out_tok / 1_000_000;
       
@@ -141,6 +153,11 @@ class TokenTracker {
       // Blended baseline (70% Sonnet, 20% Opus, 10% Haiku)
       const blendedAnthropicEquiv = (sonnetEquivCost * 0.70) + (opusEquivCost * 0.20) + (haikuEquivCost * 0.10);
 
+      const sonnetRound = Number(sonnetEquivCost.toFixed(2));
+      const opusRound = Number(opusEquivCost.toFixed(2));
+      const haikuRound = Number(haikuEquivCost.toFixed(2));
+      const blendedRound = Number(blendedAnthropicEquiv.toFixed(2));
+
       return {
         available: true,
         totalCalls: overall.count,
@@ -148,11 +165,21 @@ class TokenTracker {
         totalOutputTokens: overall.out_tok,
         totalReasoningTokens: overall.reasoning_tok,
         totalTokens: overall.in_tok + overall.out_tok,
+        financials: {
+          actualBilledUsd: actualBilled,
+          estimatedProviderCostUsd: actualBilled,
+          counterfactualAnthropicUsd: {
+            sonnetBaseline: sonnetRound,
+            opusBaseline: opusRound,
+            haikuBaseline: haikuRound,
+            blendedBaseline: blendedRound
+          }
+        },
         costSavings: {
-          sonnetEquivUsd: Number(sonnetEquivCost.toFixed(2)),
-          opusEquivUsd: Number(opusEquivCost.toFixed(2)),
-          haikuEquivUsd: Number(haikuEquivCost.toFixed(2)),
-          blendedEquivUsd: Number(blendedAnthropicEquiv.toFixed(2))
+          sonnetEquivUsd: sonnetRound,
+          opusEquivUsd: opusRound,
+          haikuEquivUsd: haikuRound,
+          blendedEquivUsd: blendedRound
         },
         combos,
         providers,
@@ -164,7 +191,12 @@ class TokenTracker {
         error: e.message,
         totalCalls: 0,
         totalTokens: 0,
-        costSavings: { blendedEquivUsd: 0 },
+        costSavings: { sonnetEquivUsd: 0, opusEquivUsd: 0, haikuEquivUsd: 0, blendedEquivUsd: 0 },
+        financials: {
+          actualBilledUsd: 0,
+          estimatedProviderCostUsd: 0,
+          counterfactualAnthropicUsd: { sonnetBaseline: 0, opusBaseline: 0, haikuBaseline: 0, blendedBaseline: 0 }
+        },
         combos: {},
         providers: {},
         dailySummary: []

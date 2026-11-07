@@ -34,7 +34,7 @@ class ConfigManager {
   constructor(options = {}) {
     this.homeDir = options.homeDir || os.homedir();
     this.claudeDir = path.join(this.homeDir, ".claude");
-    this.omnirouteDir = path.join(this.homeDir, ".omniroute");
+    this.omnirouteDir = options.omnirouteDir || process.env.OMNIROUTE_DIR || path.join(this.homeDir, ".omniroute");
     this.projectRoot = options.projectRoot || path.resolve(__dirname, "../..");
     this.backupsDir = path.join(this.projectRoot, "backups");
     this.activeProfileFile = path.join(this.projectRoot, ".active-profile");
@@ -139,19 +139,12 @@ class ConfigManager {
           dbBackedUp = true;
           backedUp.push("storage.sqlite");
         } catch (dbErr) {
-          logger.warn(`WAL-safe backup encountered error: ${dbErr.message}. Falling back to atomic checkpoint copy.`);
+          logger.warn(`WAL-safe backup failed: ${dbErr.message}. Omitting SQLite snapshot to prevent storing corrupted uncheckpointed state.`);
         } finally {
           if (db && typeof db.close === "function") {
             try { db.close(); } catch (_) {}
           }
         }
-      }
-
-      if (!dbBackedUp) {
-        try {
-          fs.copyFileSync(dbPath, dbDestPath);
-          backedUp.push("storage.sqlite");
-        } catch (_) {}
       }
     }
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Limitless Claude 8.1 - System & Gateway Doctor (15-Point Diagnostics)
+ * Limitless Claude 8.3 - System & Gateway Doctor (16-Point Diagnostics)
  * 
  * Verifies end-to-end environment readiness:
  * - Runtime version & platform
@@ -23,7 +23,7 @@ const { defaultCapacityCalculator } = require("../src/core/capacity-calculator")
 async function runDoctor() {
   console.log(`
 ================================================================================
-          LIMITLESS CLAUDE 8.2 — SYSTEM & GATEWAY DIAGNOSTIC DOCTOR
+          LIMITLESS CLAUDE 8.3 — SYSTEM & GATEWAY DIAGNOSTIC DOCTOR
 ================================================================================
 `);
 
@@ -31,14 +31,16 @@ async function runDoctor() {
   let passedCount = 0;
   let warnCount = 0;
   let failCount = 0;
+  let notTestedCount = 0;
 
   function report(name, status, detail) {
     if (status === "PASS") passedCount++;
     else if (status === "WARN") warnCount++;
+    else if (status === "NOT_TESTED") notTestedCount++;
     else failCount++;
 
-    const icon = status === "PASS" ? "[PASS]" : (status === "WARN" ? "[WARN]" : "[FAIL]");
-    console.log(`  ${icon.padEnd(8)} ${name.padEnd(36)} : ${detail}`);
+    const icon = status === "PASS" ? "[PASS]" : (status === "WARN" ? "[WARN]" : (status === "NOT_TESTED" ? "[NOT_TESTED]" : "[FAIL]"));
+    console.log(`  ${icon.padEnd(14)} ${name.padEnd(36)} : ${detail}`);
   }
 
   // 1. Node.js Runtime
@@ -53,28 +55,37 @@ async function runDoctor() {
   report("Platform Architecture", "PASS", `${os.platform()} (${os.arch()}), ${os.cpus().length} cores`);
 
   // 3. Database File Existence
-  const omnirouteDir = path.join(os.homedir(), ".omniroute");
+  const omnirouteDir = process.env.OMNIROUTE_DIR || path.join(os.homedir(), ".omniroute");
   const dbPath = path.join(omnirouteDir, "storage.sqlite");
   const dbExists = fs.existsSync(dbPath);
   if (dbExists) {
     report("OmniRoute Database File", "PASS", dbPath);
   } else {
-    report("OmniRoute Database File", "FAIL", `Missing at ${dbPath}`);
+    report("OmniRoute Database File", "WARN", `Missing at ${dbPath}`);
   }
 
   let db = null;
   let apiKey = null;
 
-  // 4. SQLite Readability & Journal Mode
+  // 4. SQLite Readability, Integrity & Schema Verification
   if (dbExists) {
     try {
       db = openDatabase(dbPath, { readonly: true });
       const journalMode = db.prepare("PRAGMA journal_mode;").get();
       const modeStr = journalMode ? Object.values(journalMode)[0] : "unknown";
-      report("SQLite Integrity & Journal Mode", "PASS", `Journal: ${modeStr.toUpperCase()}`);
+      const integrity = db.prepare("PRAGMA quick_check(1);").get();
+      const integrityOk = integrity && Object.values(integrity)[0] === "ok";
+      const tableCount = db.prepare("SELECT count(*) as c FROM sqlite_master WHERE type='table';").get()?.c || 0;
+      if (integrityOk) {
+        report("SQLite Integrity & Schema Health", "PASS", `Journal: ${modeStr.toUpperCase()}, ${tableCount} tables verified`);
+      } else {
+        report("SQLite Integrity & Schema Health", "WARN", `Journal: ${modeStr.toUpperCase()}, integrity quick_check flagged issues`);
+      }
     } catch (e) {
-      report("SQLite Integrity & Journal Mode", "FAIL", e.message);
+      report("SQLite Integrity & Schema Health", "FAIL", e.message);
     }
+  } else {
+    report("SQLite Integrity & Schema Health", "NOT_TESTED", "Skipped: storage.sqlite does not exist");
   }
 
   // 5. Active API Key
@@ -91,6 +102,8 @@ async function runDoctor() {
     } catch (e) {
       report("OmniRoute API Key Authorization", "FAIL", e.message);
     }
+  } else {
+    report("OmniRoute API Key Authorization", "NOT_TESTED", "Skipped: database offline or not present");
   }
 
   // 6. Local Gateway Connectivity
@@ -110,7 +123,7 @@ async function runDoctor() {
       report("Local Gateway Reachability (:20128)", "WARN", `HTTP ${res.status} returned from gateway`);
     }
   } catch (e) {
-    report("Local Gateway Reachability (:20128)", "FAIL", `Cannot connect to ${gatewayUrl} (${e.message})`);
+    report("Local Gateway Reachability (:20128)", "WARN", `Cannot connect to ${gatewayUrl} (${e.message})`);
   }
 
   // 7. Configured Providers Count
@@ -122,6 +135,8 @@ async function runDoctor() {
     } catch (e) {
       report("Configured Provider Connections", "WARN", e.message);
     }
+  } else {
+    report("Configured Provider Connections", "NOT_TESTED", "Skipped: database offline or not present");
   }
 
   // 8. Model Catalog Inventory
@@ -155,6 +170,8 @@ async function runDoctor() {
     } catch (e) {
       report("Composite Routing Tiers (4 Tiers)", "FAIL", e.message);
     }
+  } else {
+    report("Composite Routing Tiers (4 Tiers)", "NOT_TESTED", "Skipped: database offline or not present");
   }
 
   // 10. Capability Evaluator Lifecycle
@@ -216,7 +233,7 @@ async function runDoctor() {
 
   console.log(`
 --------------------------------------------------------------------------------
-Diagnostic Summary: ${passedCount} PASSED, ${warnCount} WARNINGS, ${failCount} FAILURES
+Diagnostic Summary: ${passedCount} PASSED, ${warnCount} WARNINGS, ${notTestedCount} NOT TESTED, ${failCount} FAILURES
 ${failCount === 0 ? ">>> System is healthy, operational, and production-ready." : ">>> Please resolve highlighted failures above."}
 ================================================================================
 `);

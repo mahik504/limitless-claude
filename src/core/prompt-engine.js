@@ -20,7 +20,8 @@ const DEFAULT_PROMPTS_ROOT = path.resolve(__dirname, "../../prompts");
 class PromptEngine {
   constructor(options = {}) {
     this.promptsRoot = options.promptsRoot || DEFAULT_PROMPTS_ROOT;
-    this.version = "8.0.0";
+    this.version = "8.3.0";
+    this.maxContextBytes = options.maxContextBytes || 50000;
   }
 
   // --- Sanitization & Injection Defense ---
@@ -105,10 +106,21 @@ class PromptEngine {
     for (const c of candidates) {
       const fullPath = path.join(projectDir, c);
       try {
-        if (fs.existsSync(fullPath) && fs.statSync(fullPath).isFile()) {
-          const rawContent = fs.readFileSync(fullPath, "utf8");
+        if (!fs.existsSync(fullPath)) continue;
+        const stat = fs.statSync(fullPath);
+
+        if (stat.isFile()) {
+          const rawContent = fs.readFileSync(fullPath, "utf8").slice(0, this.maxContextBytes);
           const sanitized = this.sanitizeUntrustedInput(rawContent);
           discoveredRules.push(`### Project Rule File: ${c}\n${sanitized}`);
+        } else if (stat.isDirectory()) {
+          const subFiles = fs.readdirSync(fullPath).filter(f => f.endsWith(".md") || f.endsWith(".mdc"));
+          for (const sf of subFiles.slice(0, 10)) {
+            const subPath = path.join(fullPath, sf);
+            const rawContent = fs.readFileSync(subPath, "utf8").slice(0, 10000);
+            const sanitized = this.sanitizeUntrustedInput(rawContent);
+            discoveredRules.push(`### Project Rule File: ${c}/${sf}\n${sanitized}`);
+          }
         }
       } catch (_) {}
     }

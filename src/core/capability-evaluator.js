@@ -42,81 +42,81 @@ const LIFECYCLE_STATES = {
 
 class CapabilityEvaluator {
   constructor() {
-    // Verified empirical benchmark rankings (1-10 scale)
+    // Verified catalog benchmark rankings (1-10 scale)
     this.modelProfiles = new Map([
       ["mistral/codestral-latest", {
         coding: 9.6, reasoning: 8.8, tools: 9.4, frontend: 8.5, threeD: 8.0, backend: 9.7, speed: 9.8,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.FAST, CAPABILITY_PROFILES.BACKEND, CAPABILITY_PROFILES.BALANCED]
       }],
       ["kiro/claude-sonnet-4.5", {
         coding: 9.8, reasoning: 9.9, tools: 9.7, frontend: 9.6, threeD: 9.3, backend: 9.8, speed: 8.5,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.REASONING, CAPABILITY_PROFILES.REVIEW, CAPABILITY_PROFILES.FRONTEND, CAPABILITY_PROFILES.THREE_D]
       }],
       ["kiro/glm-5", {
         coding: 9.5, reasoning: 9.3, tools: 9.2, frontend: 9.1, threeD: 8.7, backend: 9.4, speed: 8.9,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.BALANCED, CAPABILITY_PROFILES.BACKEND, CAPABILITY_PROFILES.REASONING]
       }],
       ["kiro/qwen3-coder-next", {
         coding: 9.6, reasoning: 9.2, tools: 9.3, frontend: 9.2, threeD: 8.5, backend: 9.5, speed: 9.0,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.BACKEND, CAPABILITY_PROFILES.BALANCED, CAPABILITY_PROFILES.FAST]
       }],
       ["kiro/deepseek-3.2", {
         coding: 9.7, reasoning: 9.8, tools: 9.5, frontend: 9.0, threeD: 8.8, backend: 9.7, speed: 8.2,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.REASONING, CAPABILITY_PROFILES.BACKEND, CAPABILITY_PROFILES.REVIEW]
       }],
       ["github/gpt-4o", {
         coding: 9.4, reasoning: 9.3, tools: 9.6, frontend: 9.2, threeD: 8.8, backend: 9.3, speed: 8.8,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.REASONING, CAPABILITY_PROFILES.BALANCED, CAPABILITY_PROFILES.FRONTEND]
       }],
       ["github/gpt-4o-mini", {
         coding: 8.6, reasoning: 8.2, tools: 9.1, frontend: 8.3, threeD: 7.5, backend: 8.4, speed: 9.7,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.FAST]
       }],
       ["cloudflare-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast", {
         coding: 9.2, reasoning: 9.1, tools: 8.9, frontend: 8.8, threeD: 8.2, backend: 9.1, speed: 9.5,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.FAST, CAPABILITY_PROFILES.BALANCED]
       }],
       ["cloudflare-ai/@cf/deepseek-ai/deepseek-r1-distill-qwen-32b", {
         coding: 9.3, reasoning: 9.7, tools: 8.7, frontend: 8.5, threeD: 8.2, backend: 9.2, speed: 8.6,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.REASONING, CAPABILITY_PROFILES.REVIEW]
       }],
       ["cloudflare-ai/@cf/qwen/qwen2.5-coder-32b-instruct", {
         coding: 9.3, reasoning: 8.9, tools: 9.1, frontend: 8.9, threeD: 8.1, backend: 9.3, speed: 9.2,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.BALANCED, CAPABILITY_PROFILES.BACKEND]
       }],
       ["kilo-gateway/nvidia/nemotron-3.5-lightning:free", {
         coding: 8.8, reasoning: 8.7, tools: 8.9, frontend: 8.4, threeD: 7.9, backend: 8.7, speed: 9.6,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.FAST]
       }],
       ["openrouter/nvidia/nemotron-3.5-lightning:free", {
         coding: 8.8, reasoning: 8.7, tools: 8.9, frontend: 8.4, threeD: 7.9, backend: 8.7, speed: 9.6,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.FAST]
       }],
       ["openrouter/cohere/north-mini-code:free", {
         coding: 8.7, reasoning: 8.3, tools: 8.8, frontend: 8.1, threeD: 7.4, backend: 8.6, speed: 9.4,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.FAST]
       }],
       ["cerebras/llama3.1-8b", {
         coding: 8.5, reasoning: 8.2, tools: 8.6, frontend: 8.0, threeD: 7.2, backend: 8.4, speed: 9.9,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.FAST]
       }],
       ["groq/llama-3.3-70b-versatile", {
         coding: 9.2, reasoning: 9.1, tools: 9.0, frontend: 8.8, threeD: 8.1, backend: 9.1, speed: 9.8,
-        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true,
+        lifecycle: LIFECYCLE_STATES.PRODUCTION_APPROVED, isEmpirical: true, provenance: "catalog_benchmark",
         primaryProfiles: [CAPABILITY_PROFILES.FAST, CAPABILITY_PROFILES.BALANCED]
       }]
     ]);
@@ -129,7 +129,7 @@ class CapabilityEvaluator {
     if (!provider || !model) {
       return {
         coding: 5.0, reasoning: 5.0, tools: 5.0, frontend: 5.0, threeD: 5.0, backend: 5.0, speed: 5.0,
-        lifecycle: LIFECYCLE_STATES.DISCOVERED, isEmpirical: false, primaryProfiles: [CAPABILITY_PROFILES.BALANCED]
+        lifecycle: LIFECYCLE_STATES.DISCOVERED, isEmpirical: false, provenance: "uninitialized", primaryProfiles: [CAPABILITY_PROFILES.BALANCED]
       };
     }
 
@@ -185,6 +185,7 @@ class CapabilityEvaluator {
       speed,
       lifecycle: LIFECYCLE_STATES.ESTIMATED,
       isEmpirical: false,
+      provenance: "heuristic_prior",
       heuristicPrior: { coding, reasoning, tools, frontend, threeD, backend, speed },
       primaryProfiles: profiles
     };
@@ -197,6 +198,7 @@ class CapabilityEvaluator {
     const key = `${provider}/${model}`.toLowerCase();
     const current = this.evaluateModel(provider, model);
     current.lifecycle = success ? LIFECYCLE_STATES.SMOKE_TESTED : LIFECYCLE_STATES.QUARANTINED;
+    current.provenance = success ? "smoke_tested" : "quarantined";
     current.lastSmokeTest = { timestamp: new Date().toISOString(), success, ...metadata };
     this.dynamicEvaluations.set(key, current);
     return current;
@@ -206,6 +208,7 @@ class CapabilityEvaluator {
     const key = `${provider}/${model}`.toLowerCase();
     const current = this.evaluateModel(provider, model);
     current.lifecycle = success ? LIFECYCLE_STATES.TOOL_TESTED : LIFECYCLE_STATES.QUARANTINED;
+    current.provenance = success ? "tool_tested" : "quarantined";
     current.lastToolTest = { timestamp: new Date().toISOString(), success, ...metadata };
     this.dynamicEvaluations.set(key, current);
     return current;
@@ -216,6 +219,7 @@ class CapabilityEvaluator {
     const current = this.evaluateModel(provider, model);
     current.lifecycle = LIFECYCLE_STATES.BENCHMARKED;
     current.isEmpirical = true;
+    current.provenance = "live_benchmark";
     current.benchmarkScores = taskScores;
 
     if (taskScores.coding !== undefined) current.coding = taskScores.coding;
@@ -234,6 +238,7 @@ class CapabilityEvaluator {
     const key = `${provider}/${model}`.toLowerCase();
     const current = this.evaluateModel(provider, model);
     current.lifecycle = LIFECYCLE_STATES.PRODUCTION_APPROVED;
+    current.provenance = current.isEmpirical ? "production_approved" : "provisional_approval";
     this.dynamicEvaluations.set(key, current);
     return current;
   }

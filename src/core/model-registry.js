@@ -111,5 +111,6 @@ module.exports = {
   MODEL_STAGES,
   HEALTH_STATUS,
   ModelRegistry,
-  defaultRegistry
+  defaultRegistry,
+  defaultModelRegistry: defaultRegistry
 };

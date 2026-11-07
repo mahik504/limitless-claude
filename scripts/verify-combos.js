@@ -13,12 +13,18 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const { getDatabase } = require('../src/omniroute/db');
+const { findTargetApiKey } = require('../src/omniroute/permissions');
+const { redactSecret } = require('../src/utils/redact');
 
 const DEFAULT_BASE_URL = process.env.ANTHROPIC_BASE_URL || 'http://127.0.0.1:20128';
 
 function resolveApiKey() {
   if (process.env.ANTHROPIC_AUTH_TOKEN) {
     return process.env.ANTHROPIC_AUTH_TOKEN;
+  }
+  if (process.env.ANTHROPIC_API_KEY) {
+    return process.env.ANTHROPIC_API_KEY;
   }
 
   // Check command line arguments
@@ -35,22 +41,22 @@ function resolveApiKey() {
       if (parsed?.env?.ANTHROPIC_AUTH_TOKEN) {
         return parsed.env.ANTHROPIC_AUTH_TOKEN;
       }
-    } catch (_) {}
-  }
-
-  // Check ~/.omniroute/storage.sqlite
-  const dbPath = path.join(os.homedir(), '.omniroute', 'storage.sqlite');
-  if (fs.existsSync(dbPath)) {
-    try {
-      const content = fs.readFileSync(dbPath, 'latin1');
-      const match = content.match(/sk-[a-f0-9]{16}-[a-f0-9]{6}-[a-f0-9]{8}/);
-      if (match) {
-        return match[0];
+      if (parsed?.ANTHROPIC_API_KEY) {
+        return parsed.ANTHROPIC_API_KEY;
       }
     } catch (_) {}
   }
 
-  return 'sk-85702967f40fcc12-f121cd-a362127e';
+  // Query authorized key from OmniRoute SQLite database
+  try {
+    const db = getDatabase();
+    const keyRow = findTargetApiKey(db);
+    if (keyRow && keyRow.key) {
+      return keyRow.key;
+    }
+  } catch (_) {}
+
+  return null;
 }
 
 async function verifyModel(baseUrl, apiKey, modelId, label) {
@@ -64,59 +70,62 @@ async function verifyModel(baseUrl, apiKey, modelId, label) {
 
   const payload = {
     model: modelId,
-    max_tokens: 24,
-    messages: [{ role: 'user', content: 'Respond with the exact word: PONG' }]
+    max_tokens: 32,
+    messages: [
+      { role: 'user', content: 'Reply with the single word PONG and nothing else.' }
+    ]
   };
 
-  const t0 = performance.now();
+  const start = Date.now();
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
+
     const res = await fetch(url, {
       method: 'POST',
       headers,
       body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(25000)
+      signal: controller.signal
     });
+    clearTimeout(timeout);
 
-    const elapsed = ((performance.now() - t0) / 1000).toFixed(2);
-    if (!res.ok) {
-      const errText = await res.text();
+    const elapsed = ((Date.now() - start) / 1000).toFixed(2);
+
+    if (res.ok) {
+      const data = await res.json();
+      let text = '';
+      if (data.content && Array.isArray(data.content)) {
+        text = data.content.map(c => c.text || '').join('');
+      } else if (typeof data.content === 'string') {
+        text = data.content;
+      }
       return {
-        success: false,
-        modelId,
-        label,
+        success: true,
         status: res.status,
         elapsed,
-        error: errText.slice(0, 160)
+        output: (text || 'OK').trim().slice(0, 50).replace(/\r?\n/g, ' ')
+      };
+    } else {
+      const errText = await res.text();
+      let errMsg = errText;
+      try {
+        const errJson = JSON.parse(errText);
+        errMsg = errJson.error?.message || errJson.message || errText;
+      } catch (_) {}
+      return {
+        success: false,
+        status: res.status,
+        elapsed,
+        error: redactSecret(errMsg.slice(0, 100))
       };
     }
-
-    const data = await res.json();
-    let text = '';
-    if (Array.isArray(data?.content)) {
-      for (const block of data.content) {
-        if (block?.type === 'text') text += block.text || '';
-      }
-    } else if (typeof data?.text === 'string') {
-      text = data.text;
-    }
-
-    return {
-      success: true,
-      modelId,
-      label,
-      status: res.status,
-      elapsed,
-      output: text.trim().slice(0, 60)
-    };
   } catch (err) {
-    const elapsed = ((performance.now() - t0) / 1000).toFixed(2);
+    const elapsed = ((Date.now() - start) / 1000).toFixed(2);
     return {
       success: false,
-      modelId,
-      label,
-      status: 'TIMEOUT/NET_ERR',
+      status: 'TIMEOUT/ERR',
       elapsed,
-      error: err.message
+      error: redactSecret(err.message)
     };
   }
 }
@@ -130,7 +139,15 @@ async function main() {
   console.log('║           LIMITLESS CLAUDE - LIVE COMBO VERIFICATION              ║');
   console.log('╚═══════════════════════════════════════════════════════════════════╝');
   console.log(`Gateway:  ${baseUrl}`);
-  console.log(`API Key:  ${apiKey.slice(0, 7)}...${apiKey.slice(-6)}`);
+
+  if (!apiKey) {
+    console.error('\x1b[31m[ERROR] No authorized OmniRoute API key found.\x1b[0m');
+    console.error('Please configure an API key via ~/.claude/settings.json, pass --key <key>, or run `limitless setup`.');
+    process.exit(1);
+  }
+
+  const maskedKey = apiKey.length > 10 ? `${apiKey.slice(0, 6)}...[redacted]` : '[redacted]';
+  console.log(`API Key:  ${maskedKey}`);
   console.log('');
 
   const tests = [

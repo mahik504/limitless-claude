@@ -3,6 +3,8 @@ const fs = require("fs");
 const os = require("os");
 const { openDatabase } = require("../src/omniroute/db");
 const { findTargetApiKey } = require("../src/omniroute/permissions");
+const { defaultCapabilityEvaluator } = require("../src/core/capability-evaluator");
+const { defaultClassifier } = require("../src/core/billing-classifier");
 
 const cliArgs = process.argv.slice(2);
 if (cliArgs.includes("--help") || cliArgs.includes("-h")) {
@@ -58,11 +60,11 @@ const providerInventory = providers.map(p => {
     configured: true,
     active: p.is_active === 1,
     authentication_state: "unverified", // Cannot infer auth is valid just from DB flag
-    free_or_paid: "unverified",
-    quota_class: "unverified",
+    free_or_paid: defaultClassifier.classify(p.provider, "default"),
+    quota_class: defaultClassifier.classify(p.provider, "default"),
     tool_support: "unverified",
     last_scanned: new Date().toISOString(),
-    notes: "Metadata inferred from local database row. Needs runtime verification."
+    notes: "Metadata inferred from local database row and classifier taxonomy."
   };
 });
 
@@ -141,21 +143,23 @@ async function fetchModels() {
       const provider = parts.shift();
       const modelName = parts.join("/");
 
-      let billing = "unverified";
-      if (provider === "openrouter" && modelName.includes(":free")) billing = "free";
+      const evalData = defaultCapabilityEvaluator.evaluateModel(provider, modelName);
+      const billingClass = defaultClassifier.classify(provider, modelName);
+      const costEst = defaultClassifier.estimateCost(provider, modelName, 1000, 1000);
 
       return {
         id: m.id,
         provider,
         model: modelName,
-        billing,
+        billing: billingClass,
+        lifecycle: evalData.lifecycle,
+        is_empirical: evalData.isEmpirical,
+        primary_profiles: evalData.primaryProfiles || [],
         context: m.context_length !== undefined ? m.context_length : "unknown",
         tools: m.capabilities?.tool_calling !== undefined ? m.capabilities.tool_calling : "unknown",
         reasoning: m.capabilities?.reasoning !== undefined ? m.capabilities.reasoning : "unknown",
         vision: m.capabilities?.vision !== undefined ? m.capabilities.vision : (m.input_modalities && m.input_modalities.includes("image") ? true : "unknown"),
-        latency_data: "unverified",
-        pricing: "unverified",
-        quota: "unverified",
+        pricing: costEst === 0 ? "free" : (costEst === null ? "unknown" : "metered"),
         last_scanned: new Date().toISOString()
       };
     });

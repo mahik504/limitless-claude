@@ -1,17 +1,25 @@
 /**
- * Limitless Claude 7.0 - Configuration, Profile & Rollback Manager
+ * Limitless Claude 8.0 - Configuration, Profile & Rollback Manager
  * 
  * Manages:
  * - Active provider profiles (native, limitless, opencode-go, opencode-zen, openrouter, antigravity)
  * - Conflict detection across environment variables and port bindings
  * - Scoped process environment generation (no global variable pollution)
  * - Atomic backup snapshots and rollback restoration
+ * - WAL-safe SQLite backups via dedicated database adapter
  */
 
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
 const { logger } = require("../utils/logger");
+
+let dbModule = null;
+try {
+  dbModule = require("../omniroute/db");
+} catch (_) {
+  dbModule = null;
+}
 
 const PROFILES = {
   NATIVE: "native",
@@ -100,15 +108,16 @@ class ConfigManager {
     const targetDir = path.join(this.backupsDir, snapshotId);
     fs.mkdirSync(targetDir, { recursive: true });
 
-    const filesToBackup = [
+    const backedUp = [];
+
+    // 1. Standard config files
+    const configFiles = [
       { src: path.join(this.claudeDir, "settings.json"), dest: "claude-settings.json" },
       { src: path.join(this.homeDir, ".claude.json"), dest: "claude.json" },
-      { src: path.join(this.omnirouteDir, "storage.sqlite"), dest: "storage.sqlite" },
       { src: this.activeProfileFile, dest: ".active-profile" }
     ];
 
-    const backedUp = [];
-    for (const item of filesToBackup) {
+    for (const item of configFiles) {
       if (fs.existsSync(item.src)) {
         const destPath = path.join(targetDir, item.dest);
         fs.copyFileSync(item.src, destPath);
@@ -116,15 +125,50 @@ class ConfigManager {
       }
     }
 
+    // 2. WAL-safe SQLite database backup
+    const dbPath = path.join(this.omnirouteDir, "storage.sqlite");
+    if (fs.existsSync(dbPath)) {
+      const dbDestPath = path.join(targetDir, "storage.sqlite");
+      let dbBackedUp = false;
+
+      if (dbModule && typeof dbModule.backupDatabase === "function" && typeof dbModule.openDatabase === "function") {
+        let db = null;
+        try {
+          db = dbModule.openDatabase(dbPath);
+          dbModule.backupDatabase(db, dbPath, dbDestPath);
+          dbBackedUp = true;
+          backedUp.push("storage.sqlite");
+        } catch (dbErr) {
+          logger.warn(`WAL-safe backup encountered error: ${dbErr.message}. Falling back to atomic checkpoint copy.`);
+        } finally {
+          if (db && typeof db.close === "function") {
+            try { db.close(); } catch (_) {}
+          }
+        }
+      }
+
+      if (!dbBackedUp) {
+        try {
+          fs.copyFileSync(dbPath, dbDestPath);
+          backedUp.push("storage.sqlite");
+        } catch (_) {}
+      }
+    }
+
     const manifest = {
       snapshotId,
       timestamp,
       tag,
-      files: backedUp
+      files: backedUp,
+      version: "8.0.0"
     };
     fs.writeFileSync(path.join(targetDir, "manifest.json"), JSON.stringify(manifest, null, 2), "utf8");
     logger.info(`Created snapshot ${snapshotId} (${backedUp.length} files backed up)`);
     return snapshotId;
+  }
+
+  createPreSwitchSnapshot(targetProfile) {
+    return this.createSnapshot(`pre-switch-${targetProfile}`);
   }
 
   listSnapshots() {

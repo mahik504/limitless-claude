@@ -4,219 +4,142 @@
     "configured": true,
     "active": true,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "provider_free_quota",
+    "quota_class": "provider_free_quota",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.598Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.998Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
     "provider": "openrouter",
     "configured": true,
     "active": true,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "paid-token",
+    "quota_class": "paid-token",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
-  },
-  {
-    "provider": "deepseek",
-    "configured": true,
-    "active": false,
-    "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
-    "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.998Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
     "provider": "antigravity",
     "configured": true,
     "active": true,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "subscription-entitled",
+    "quota_class": "subscription-entitled",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.998Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
     "provider": "github-models",
     "configured": true,
     "active": false,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "unknown",
+    "quota_class": "unknown",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.998Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
     "provider": "cerebras",
     "configured": true,
-    "active": true,
+    "active": false,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "provider_free_quota",
+    "quota_class": "provider_free_quota",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
-  },
-  {
-    "provider": "huggingchat",
-    "configured": true,
-    "active": true,
-    "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
-    "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
     "provider": "nvidia",
     "configured": true,
     "active": true,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "provider_free_quota",
+    "quota_class": "provider_free_quota",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
     "provider": "qwen-web",
     "configured": true,
     "active": false,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "unknown",
+    "quota_class": "unknown",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
     "provider": "kilo-gateway",
     "configured": true,
     "active": true,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "provider_free_quota",
+    "quota_class": "provider_free_quota",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
     "provider": "kiro",
     "configured": true,
     "active": true,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "subscription-entitled",
+    "quota_class": "subscription-entitled",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
     "provider": "ollama-cloud",
     "configured": true,
     "active": true,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "provider_free_quota",
+    "quota_class": "provider_free_quota",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
-  },
-  {
-    "provider": "agentrouter",
-    "configured": true,
-    "active": true,
-    "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
-    "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
     "provider": "cloudflare-ai",
     "configured": true,
     "active": true,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "provider_free_quota",
+    "quota_class": "provider_free_quota",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
-  },
-  {
-    "provider": "bluesminds",
-    "configured": true,
-    "active": true,
-    "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
-    "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
     "provider": "mistral",
     "configured": true,
     "active": true,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "paid-token",
+    "quota_class": "paid-token",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
-  },
-  {
-    "provider": "muse-spark-web",
-    "configured": true,
-    "active": true,
-    "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
-    "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
     "provider": "github",
     "configured": true,
     "active": true,
     "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
+    "free_or_paid": "subscription-entitled",
+    "quota_class": "subscription-entitled",
     "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
-  },
-  {
-    "provider": "opencode",
-    "configured": true,
-    "active": true,
-    "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
-    "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
-  },
-  {
-    "provider": "sambanova",
-    "configured": true,
-    "active": false,
-    "authentication_state": "unverified",
-    "free_or_paid": "unverified",
-    "quota_class": "unverified",
-    "tool_support": "unverified",
-    "last_verified": "2026-10-09T20:29:22.599Z",
-    "notes": "Metadata inferred from local database row. Needs runtime verification."
+    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "notes": "Metadata inferred from local database row and classifier taxonomy."
   }
 ]

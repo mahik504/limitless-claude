@@ -1,496 +1,391 @@
-# Limitless Claude 7.0 — Intelligent Multi-Provider Coding Agent Router
+# Limitless Claude 8.0 — Autonomous Multi-Provider Coding Agent Runtime
 
-[![Version](https://img.shields.io/badge/version-7.0.0-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-8.0.0-blue.svg)](package.json)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)](package.json)
 [![CI](https://github.com/mahik504/limitless-claude/actions/workflows/test.yml/badge.svg)](https://github.com/mahik504/limitless-claude/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Unit Tests: 68/68 Passed](https://img.shields.io/badge/tests-68%2F68%20passed-success.svg)](docs/RELEASE-TEST-REPORT.md)
-[![Acceptance: 6/6 Passed](https://img.shields.io/badge/e2e%20acceptance-6%2F6%20passed-success.svg)](docs/RELEASE-TEST-REPORT.md)
-[![Live Gateway: 8/8 Healthy](https://img.shields.io/badge/live%20gateway-8%2F8%20healthy-success.svg)](scripts/verify-combos.js)
+[![Tests: 100% Passing](https://img.shields.io/badge/tests-82%2F82%20passed-success.svg)](test/)
+[![Acceptance: 6/6 Passed](https://img.shields.io/badge/e2e%20acceptance-6%2F6%20passed-success.svg)](scripts/e2e-acceptance.js)
+[![Diagnostics: 15/15 Healthy](https://img.shields.io/badge/doctor-15%2F15%20healthy-success.svg)](scripts/doctor.js)
 
-**Limitless Claude** is a high-performance, provider-neutral routing engine and control plane designed for **Claude Code CLI**, **Cursor IDE**, **Antigravity IDE**, **Superdesign / Open Design**, and **OpenCode**. It bridges agent workflows to multiple upstream AI providers through **OmniRoute**, maximizing free-tier quotas and paid entitlements with dynamic capability routing, automatic upstream deprecation trap detection, circuit breakers, truthful Anthropic-grade system prompt injection, and zero-registry configuration isolation.
+**Limitless Claude 8.0** is an open, provider-neutral, high-performance coding agent runtime designed to liberate developers from proprietary vendor lock-in. It delivers intelligent multi-model routing, bidirectional protocol adaptation (Anthropic Messages API <-> OpenAI Chat API), automated fallback chains, an original 5-layer prompt engine, session state persistence, fine-grained quota intelligence, and zero-registry configuration isolation for **Claude Code CLI**, **Cursor IDE**, **Antigravity IDE**, **Superdesign**, and **OpenCode**.
 
 ---
 
-## Highlights & System Capabilities
+## Highlights & Core Capabilities
 
-- **Universal Global CLI (`limitless`):** Execute `limitless verify`, `limitless benchmark`, `limitless acceptance`, `limitless dashboard`, `limitless switch-profile`, or `limitless launcher` from any directory or terminal.
-- **Strict 4-Tier Composite Architecture:**
-  - **Haiku Tier (`combo/limitless-haiku`):** Exactly 5–6 sub-second, rapid-response models for AST syntax verification, atomic file edits, and rapid tool iterations.
-  - **Sonnet Tier (`combo/limitless-sonnet`):** Exactly 5–6 premier brainstorming, system design, architectural review, and deep reasoning models (Claude Sonnet 4.5, GLM-5, DeepSeek R1, GPT-4o, Qwen 3 Coder, Codestral).
-  - **Fable Tier (`combo/limitless-fable`):** Exactly 4–5 paid and flagship frontier models for maximum context synthesis, complex multi-agent orchestration, and top-tier intelligence.
-  - **Opus Tier (`combo/limitless-opus`):** A massive **23-model coding reservoir** across all connected providers for heavy autonomous coding loops, Next.js/React 19, 3D WebGL (R3F), backend PostgreSQL RLS, and full-stack development, maximizing daily token throughput.
-- **Truthful Anthropic-Grade System Prompts:** Injects authoritative agent system prompts into OmniRoute's SQLite combos (`system_message`), enabling models to respond cleanly with exact `file_path:line_number` coordinates, complete unified diffs, and zero placeholder stubs (`// TODO`).
-- **Active Deprecation Trap Engine:** Detects upstream deprecation notices (`"This version is no longer supported"`) embedded inside HTTP 200 OK responses and fails over in <500ms before your agent sees broken output.
-- **Automatic Background Startup Daemon:** Installs an auto-recovery launcher to Windows Startup (`Limitless-OmniRoute-Launcher.vbs`) and Unix environments (`start-daemon.sh`), ensuring OmniRoute automatically launches in the background whenever the computer boots.
-- **Zero-Registry Isolation:** Scoped launcher runs Claude Code without polluting your global user environment (`setx`) or Windows system registry.
-- **Real-Time Terminal Observability:** Live monitoring dashboard displaying requests, latency percentiles (p50/p95), token velocity, and secret redaction.
-- **100% Verified Production Suite:** 68/68 unit tests, 6/6 end-to-end acceptance tests, and 8/8 live gateway routes verified.
+- **Standalone First Architecture (Mode A vs Mode B):**
+  - **Mode A (Standalone):** Runs 100% autonomously out of the box. Zero imports or dependencies on external frameworks (Orchestra, private Brains, or host registries). Natively reads standard project rules (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.cursorrules`).
+  - **Mode B (Optional Orchestra Interoperability):** Clean, loose contract adapter in `src/integrations/orchestra/` that consumes public tasks and constraints without creating a second conductor.
+- **Original 5-Layer Prompt Engine (`src/core/prompt-engine.js`):**
+  - **Layer 1: Universal Engineering Constitution:** Understand before modifying, surgical minimal diffs, anti-slop zero stubs (`// TODO`), and verification before assertion.
+  - **Layer 2: Task-Specific Capability Profiles:** Fast, Balanced, Reasoning, Frontend (React 19), 3D (Three.js/R3F), Backend (PostgreSQL RLS), Hostile Review, and Documentation.
+  - **Layer 3: Upstream Model Adapters:** DeepSeek reasoning `<think>` blocks, Kiro XML structures, Mistral types, and Qwen schemas.
+  - **Layer 4: Project Context Adapter:** Auto-discovers and sanitizes repository rule files with prompt injection defense.
+  - **Layer 5: Tool & Execution Contract:** Strict JSON parameter compliance and filesystem safety.
+- **Bidirectional Protocol & Tool Translation (`src/core/agent-client.js`):** Complete schema mapping between Anthropic Messages API (`input_schema`, `tool_use`, `tool_result`) and OpenAI Chat API (`parameters`, `tool_calls`, `role: 'tool'`), with streaming SSE chunk normalization.
+- **Truth-in-Model Intelligence & Formal Lifecycles:**
+  - 6 lifecycle states (`DISCOVERED`, `ESTIMATED`, `SMOKE_TESTED`, `TOOL_TESTED`, `BENCHMARKED`, `PRODUCTION_APPROVED`).
+  - Zero fabricated benchmark scores from name regexes. Heuristic priors are strictly isolated from empirical evidence.
+- **Fine-Grained Billing & Quota Safety:**
+  - 7 billing classes (`provider_free_quota`, `subscription-entitled`, `promotional`, `paid-token`, `pay-as-you-go`, `local`, `unknown`).
+  - Unknown costs return `unknown` (never `$0.00`). Free-only mode strictly excludes unmetered commercial endpoints.
+  - Verified OpenRouter credit policy ($10 credit unlocks 1,000 req/day on `:free` models) with concrete token capacity calculators.
+- **Context & Session Intelligence:** Multi-turn session tracking, atomic turn checkpoints, and sliding-window compaction preserving essential tool state while pruning verbose command output.
+- **Universal Global CLI (`limitless`):** 18 specialized commands including `doctor`, `init`, `status`, `verify`, `discover`, `models`, `providers`, `budget`, `prompt`, `benchmark`, `acceptance`, `rollback`, and `launcher`.
+- **Database Safety & WAL Rollback:** Atomic SQLite snapshot backups using clean WAL checkpoints (`VACUUM INTO`) via `src/omniroute/db.js`.
 
 ---
 
 ## Table of Contents
 
-1. [Architecture Overview](#1-architecture-overview)
-2. [Composite Model Tiers & Quotas](#2-composite-model-tiers--quotas)
-3. [Universal Global CLI Reference](#3-universal-global-cli-reference)
-4. [Master Agent Prompts (New Setup & Update/Repair)](#4-master-agent-prompts-new-setup--updaterepair)
+1. [Architecture & System Overview](#1-architecture--system-overview)
+2. [Operating Modes: Standalone vs Orchestra](#2-operating-modes-standalone-vs-orchestra)
+3. [Original 5-Layer Prompt Engine](#3-original-5-layer-prompt-engine)
+4. [Composite Model Tiers & Quota Taxonomy](#4-composite-model-tiers--quota-taxonomy)
+5. [Universal Global CLI Reference](#5-universal-global-cli-reference)
+6. [Master Agent Prompts (New Setup & Update/Repair)](#6-master-agent-prompts-new-setup--updaterepair)
    - [Prompt 1: Clean Installation Master Prompt (New Setup)](#prompt-1-clean-installation-master-prompt-new-setup)
    - [Prompt 2: Repair, Update & Re-Sync Master Prompt (Broken or Existing Setup)](#prompt-2-repair-update--re-sync-master-prompt-broken-or-existing-setup)
-5. [OmniRoute Gateway Integration](#5-omniroute-gateway-integration)
-6. [Supported Providers & Ecosystem](#6-supported-providers--ecosystem)
-7. [Active Deprecation Trap Engine & Circuit Breakers](#7-active-deprecation-trap-engine--circuit-breakers)
-8. [Configuration Profiles (6 Profiles)](#8-configuration-profiles-6-profiles)
-9. [Claude Code & IDE Integrations](#9-claude-code--ide-integrations)
-10. [Benchmark Suite (12 Evaluation Tasks)](#10-benchmark-suite-12-evaluation-tasks)
-11. [End-to-End Acceptance Suite](#11-end-to-end-acceptance-suite)
-12. [Disaster Recovery & Snapshots](#12-disaster-recovery--snapshots)
-13. [Contributing](#13-contributing)
-14. [License](#14-license)
+7. [Agent Client Protocol & Tool Translation](#7-agent-client-protocol--tool-translation)
+8. [Token Capacity & OpenRouter Quota Intelligence](#8-token-capacity--openrouter-quota-intelligence)
+9. [Prompt Laboratory & A/B Benchmarking](#9-prompt-laboratory--ab-benchmarking)
+10. [Session Continuity & Context Compaction](#10-session-continuity--context-compaction)
+11. [Disaster Recovery, Snapshots & Rollback](#11-disaster-recovery-snapshots--rollback)
+12. [Verification Suites & Production Readiness](#12-verification-suites--production-readiness)
+13. [Contributing & License](#13-contributing--license)
 
 ---
 
-## 1. Architecture Overview
+## 1. Architecture & System Overview
 
 ```mermaid
 flowchart TD
-    subgraph Clients["Developer Agents & Harnesses"]
-        CC["Claude Code CLI"]
-        CUR["Cursor IDE"]
-        AGY["Antigravity IDE"]
-        SD["Superdesign / Open Design"]
-        OC["OpenCode CLI"]
+    subgraph Clients["Developer Agents & Client Harnesses"]
+        CC["Claude Code CLI (@anthropic-ai/claude-code)"]
+        CCE["Claude Code Extension (VS Code / Cursor)"]
+        CUR["Cursor AI Editor"]
+        AGY["Antigravity IDE & CLI"]
+        SD["Superdesign / Open Design CLI"]
+        OC["OpenCode CLI / Desktop"]
     end
 
-    subgraph Core["Limitless Claude 7.0 Control Plane"]
-        CLI_BIN["Universal Global CLI (limitless)"]
+    subgraph Core["Limitless Claude 8.0 Runtime Control Plane"]
+        CLI["Universal Global CLI (bin/limitless.js)"]
         LAUNCHER["Scoped Environment Launcher"]
+        ACM["Agent Client Protocol Adapter<br/>• Schema Bidirectional Translation<br/>• Tool Call & Result Mapping<br/>• SSE Chunk Normalization"]
+        PE["Original 5-Layer Prompt Engine<br/>• Constitution • Profiles • Adapters • Context • Contract"]
+        PL["Prompt Laboratory (A/B Regression Evaluation)"]
+        SM["Session & Context Manager<br/>• Checkpoints • Compaction • Token Accounting"]
+        CE["Capability Evaluator (6 Lifecycle States)"]
+        BC["Billing & Quota Classifier (7 Classes)"]
         FBE["Active Deprecation Trap & Fallback Engine"]
-        CB["Circuit Breakers (Open/Half-Open/Closed)"]
-        CE["Capability Evaluator (7 Profiles)"]
-        TEL["Real-Time Telemetry & Cost Accounting"]
+        CFG["Config Manager (WAL-Safe Snapshots)"]
     end
 
-    subgraph Gateway["OmniRoute Local Proxy (127.0.0.1:20128)"]
-        MAP["Model Combo Mappings & Routing Table"]
-        SQL["WAL-Consistent SQLite (storage.sqlite)"]
+    subgraph Gateway["Local Reverse Proxy (:20128)"]
+        Omni["OmniRoute Reverse Proxy Daemon"]
+        DB["WAL-Consistent SQLite (storage.sqlite)"]
+        Perms["API Key & Allowed Combos Gate"]
     end
 
-    subgraph Tiers["Composite Multi-Model Tiers"]
-        H["Limitless Haiku Tier\n(5-6 Rapid Models, <1s SLA)"]
-        S["Limitless Sonnet Tier\n(5-6 Brainstorming & Architecture Models)"]
-        F["Limitless Fable Tier\n(4-5 Paid Flagship Frontier Models)"]
-        O["Limitless Opus Tier\n(23-Model Massive Coding Reservoir)"]
+    subgraph Tiers["Composite Routing Tiers"]
+        H["Haiku Tier (Rapid Edits & Syntax, <1s SLA)"]
+        S["Sonnet Tier (Brainstorming & Architecture)"]
+        F["Fable Tier (Paid Flagship Frontier Models)"]
+        O["Opus Tier (Massive Coding Reservoir)"]
     end
 
-    subgraph Providers["Upstream Provider Ecosystem"]
-        P_KR["Kiro AI (Sonnet 4.5, GLM-5, Haiku 4.5)"]
+    subgraph Upstream["Connected Inference Providers"]
+        P_KR["Kiro AI (Claude Sonnet 4.5, GLM-5, Haiku 4.5)"]
         P_CF["Cloudflare Workers AI (LLaMA 3.3 70B, DeepSeek R1, Qwen 32B)"]
         P_GH["GitHub Copilot (GPT-4o, GPT-4o Mini)"]
         P_GQ["Groq Hardware (LPU High-Speed Inference)"]
         P_MS["Mistral AI (Codestral Latest)"]
-        P_OR["OpenRouter Free Tier (Nemotron Ultra 550B, Cohere North Mini)"]
-        P_KG["Kilo Gateway (Nemotron 3.5 Lightning Free)"]
+        P_NVI["NVIDIA NIM (Nemotron 3.5 Lightning Free)"]
+        P_CER["Cerebras Wafer-Scale (Llama 3.1 8B Ultra-Fast)"]
+        P_OR["OpenRouter Free & Metered Tier"]
+        P_OLL["Ollama Cloud / Local Loopback"]
     end
 
     Clients --> LAUNCHER
-    CLI_BIN --> LAUNCHER
+    CLI --> LAUNCHER
     LAUNCHER --> Core
     Core --> Gateway
     Gateway --> Tiers
-    H --> P_KR & P_CF & P_GH & P_GQ
-    S --> P_KR & P_CF & P_GH & P_MS
-    F --> P_GH & P_KR & P_CF & P_MS
-    O --> P_MS & P_KR & P_CF & P_GH & P_GQ & P_OR & P_KG
+    Tiers --> Upstream
 ```
 
 ---
 
-## 2. Composite Model Tiers & Quotas
+## 2. Operating Modes: Standalone vs Orchestra
 
-Limitless Claude configures 4 distinct composite tiers inside OmniRoute. Each tier is curated to fulfill a specific role in an autonomous coding workflow:
+Limitless Claude is engineered from the ground up as a **Standalone-First** runtime:
 
-| Tier | Combo ID | Primary Alias | Quota | Optimization Target | Verified Candidate Models |
-| :--- | :--- | :--- | :---: | :--- | :--- |
-| **Haiku 5.5** | `combo/limitless-haiku` | `claude-haiku-4-5` | **Strict 5–6 Models** | Sub-second rapid syntax verification, atomic file edits, regex extraction, tool calls | `kiro/claude-haiku-4.5`<br>`cloudflare-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast`<br>`github/gpt-4o-mini`<br>`groq/openai/gpt-oss-20b`<br>`cloudflare-ai/@cf/zai-org/glm-4.7-flash`<br>`cloudflare-ai/@cf/meta/llama-3.2-3b-instruct` |
-| **Sonnet 5.5** | `combo/limitless-sonnet` | `claude-sonnet-5` | **Strict 5–6 Models** | Brainstorming, system design, architectural review, debugging, deep reasoning | `kiro/claude-sonnet-4.5`<br>`kiro/glm-5`<br>`cloudflare-ai/@cf/deepseek-ai/deepseek-r1-distill-qwen-32b`<br>`github/gpt-4o-2024-11-20`<br>`kiro/qwen3-coder-next`<br>`mistral/codestral-latest` |
-| **Fable 5.1** | `combo/limitless-fable` | `claude-fable-5-1` | **Strict 4–5 Models** | Paid & elite flagship frontier models, high-context synthesis, complex orchestration | `github/gpt-4o-2024-11-20`<br>`kiro/claude-sonnet-4.5`<br>`kiro/glm-5`<br>`cloudflare-ai/@cf/deepseek-ai/deepseek-r1-distill-qwen-32b`<br>`mistral/codestral-latest` |
-| **Opus 5.5** | `combo/limitless-opus` | `claude-opus-4-8` | **23+ Model Reservoir** | Autonomous full-stack coding, React 19, 3D WebGL (R3F), PostgreSQL RLS, multi-turn refactors | `mistral/codestral-latest`<br>`kiro/claude-sonnet-4.5`<br>`kiro/qwen3-coder-next`<br>`kiro/glm-5`<br>`kiro/deepseek-3.2`<br>`kiro/minimax-m2.1`<br>`cloudflare-ai/@cf/qwen/qwen2.5-coder-32b-instruct`<br>`cloudflare-ai/@cf/deepseek-ai/deepseek-r1-distill-qwen-32b`<br>`cloudflare-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast`<br>`cloudflare-ai/@cf/qwen/qwq-32b`<br>`github/gpt-4o-2024-11-20`<br>`groq/openai/gpt-oss-120b`<br>`openrouter/nvidia/nemotron-3-ultra-550b-a55b:free`<br>`kilo-gateway/nvidia/nemotron-3-ultra-550b-a55b:free`<br>`openrouter/cohere/north-mini-code:free`<br>`kilo-gateway/cohere/north-mini-code:free`<br>`openrouter/nvidia/nemotron-3.5-lightning:free`<br>`kilo-gateway/nvidia/nemotron-3.5-lightning:free`<br>`openrouter/liquid/lfm-2.5-2.6b:free`<br>`openrouter/dots-studio/dots-3-note-preview:free`<br>`cloudflare-ai/@cf/meta/llama-3.2-3b-instruct`<br>`groq/openai/gpt-oss-20b`<br>`cloudflare-ai/@cf/zai-org/glm-4.7-flash` |
+### Mode A: Standalone Mode (Default & Primary)
+- Functions completely out of the box without any external orchestrator.
+- Automatically discovers standard project configuration files:
+  - `AGENTS.md`
+  - `CLAUDE.md`
+  - `GEMINI.md`
+  - `.cursorrules`
+- Core runtime modules in `src/core/*` strictly contain **zero imports** from Orchestra.
+- Full capability evaluation, billing safety, prompt engineering, session persistence, and CLI operations run independently.
+
+### Mode B: Orchestra Interoperability (Optional Extension)
+- Encapsulated cleanly within `src/integrations/orchestra/adapter.js`.
+- Consumes public contracts (task capability requirements, model profile selections, project constraints) as a loose external consumer.
+- If Orchestra is absent or disabled, the adapter gracefully falls back to Mode A without throwing errors or halting execution.
+- Does **not** create a second conductor; Orchestra handles workflow coordination while Limitless manages model routing and protocol execution.
 
 ---
 
-## 3. Universal Global CLI Reference
+## 3. Original 5-Layer Prompt Engine
 
-Limitless Claude includes a first-class global CLI executable (`limitless`) available across any terminal:
+Limitless Claude avoids static monolithic prompts. It dynamically composes system prompts across five orthogonal layers (`src/core/prompt-engine.js`):
+
+```mermaid
+flowchart TD
+    L1["Layer 1: Universal Engineering Constitution<br/>• Understand before modifying • Zero empty stubs • Invariant checks"] --> L2
+    L2["Layer 2: Task Capability Profiles<br/>• Fast • Balanced • Reasoning • Frontend • 3D • Backend • Review • Docs"] --> L3
+    L3["Layer 3: Model Family Adapters<br/>• DeepSeek reasoning tags • Kiro XML • Mistral types • Qwen formats"] --> L4
+    L4["Layer 4: Project Context Adapter<br/>• AGENTS.md • CLAUDE.md • GEMINI.md • .cursorrules (Sanitized)"] --> L5
+    L5["Layer 5: Tool & Execution Contract<br/>• Strict JSON schemas • Path verification • Error recovery"]
+```
+
+### Layer Details:
+1. **Universal Constitution (`prompts/universal/constitution.md`):** Core anti-slop rules, minimal surgical edits, and empirical verification before completion.
+2. **Capability Profiles (`prompts/capabilities/`):** Dedicated task profiles for `fast`, `balanced`, `reasoning`, `frontend` (React 19), `3d` (Three.js/R3F), `backend` (PostgreSQL RLS), `review` (hostile vulnerability triage), and `documentation`.
+3. **Provider Adapters (`prompts/providers/`):** Tailored syntax handling (e.g. DeepSeek `<think>` reasoning tags, Kiro XML tags, Mistral typed signatures).
+4. **Project Context (`prompts/context/`):** Auto-discovers workspace instructions with delimiter escaping and prompt injection defenses (`<<<PROJECT_CONTEXT_START>>>`).
+5. **Tool Contract (`prompts/contracts/standard-contract.md`):** Enforces exact argument types, boundary checking, and actionable error reporting.
+
+---
+
+## 4. Composite Model Tiers & Quota Taxonomy
+
+Limitless Claude organizes upstream models into 4 composite tiers inside OmniRoute:
+
+| Composite Tier | Purpose & SLA | Primary Upstream Candidates | Billing Classes |
+| :--- | :--- | :--- | :--- |
+| **Haiku Tier** (`limitless-haiku-4.5`) | Sub-second rapid edits, AST checks, atomic fixes | Kiro Claude Haiku 4.5, Cloudflare LLaMA 3.3 70B, GitHub GPT-4o Mini, Groq LPU | `provider_free_quota`, `subscription-entitled` |
+| **Sonnet Tier** (`limitless-sonnet-5.5`) | Brainstorming, system architecture, deep reasoning | Kiro Claude Sonnet 4.5, Cloudflare DeepSeek R1, GitHub GPT-4o, GLM-5 | `subscription-entitled`, `provider_free_quota` |
+| **Fable Tier** (`limitless-fable-reasoning`) | Flagship frontier intelligence & multi-agent routing | GitHub GPT-4o, Kiro DeepSeek 3.2, Mistral Codestral | `subscription-entitled`, `paid-token` |
+| **Opus Tier** (`limitless-opus-4.6`) | Heavy autonomous coding loops & fullstack development | 23-model massive reservoir across all connected providers | `provider_free_quota`, `subscription-entitled`, `paid-token` |
+
+### Billing Taxonomy
+- **`provider_free_quota`:** Vendor-provided free quota with rate limits (Groq, Cloudflare Workers AI, Cerebras, NVIDIA NIM).
+- **`subscription-entitled`:** Flat monthly subscription covering inference without per-token charges (GitHub Copilot, Kiro AI).
+- **`paid-token`:** Metered per-token commercial APIs (Mistral, OpenAI, Anthropic, OpenRouter paid).
+- **`local`:** Self-hosted zero-cost inference (Ollama, vLLM).
+- **`unknown`:** Unverified pricing. Returns `null` cost and is strictly excluded in free-only mode.
+
+---
+
+## 5. Universal Global CLI Reference
+
+The `limitless` CLI is installed globally and accessible from any working directory:
 
 ```bash
-# Verify all 8 tier endpoints and direct combos live
-limitless verify
+# Core Operations
+limitless init               # Run zero-config onboarding & pre-setup validation
+limitless doctor             # Run 15-point system, gateway, and database diagnostics
+limitless status             # Display active profile, gateway URL, and routing tiers
+limitless verify             # Test live HTTP 200 connectivity across all 4 tiers
+limitless setup              # Sync live OmniRoute models into composite tiers
+limitless launcher           # Launch Claude Code under scoped profile (no registry pollution)
 
-# Run the 12-task capability benchmark against live models
-limitless benchmark
+# Model & Provider Intelligence
+limitless discover           # Scan and catalog live models and providers
+limitless models list        # List catalogued models (--free-only, --profile <name>)
+limitless models inspect <id># Inspect detailed capability profile of a specific model
+limitless providers list     # List connected providers, states, and billing taxonomy
+limitless providers test     # Test live gateway ping latency to inference endpoints
 
-# Run the complete end-to-end acceptance suite (all 6 criteria)
-limitless acceptance
+# Prompt Engineering & Budget
+limitless prompt list        # List available 5-layer capability profiles & adapters
+limitless prompt compose     # Compose full 5-layer prompt with hash & section preview
+limitless prompt test        # Run Prompt Laboratory fixture regression suite
+limitless budget             # View spend controls & OpenRouter token capacity calculator
 
-# Open real-time terminal observability dashboard
-limitless dashboard
-limitless dashboard --watch
-
-# List or switch active provider profiles
-limitless switch-profile --list
-limitless switch-profile limitless
-limitless switch-profile native
-limitless switch-profile opencode-go
-limitless switch-profile openrouter
-
-# Launch Claude Code inside a clean, scoped environment
-limitless launcher
-limitless launcher --print "Refactor authentication flow"
-
-# Rollback configurations to a previous WAL-safe snapshot
-limitless rollback --list
-limitless rollback --latest
+# Benchmarks & Resilience
+limitless benchmark          # Run 12-task standardized capability benchmark
+limitless acceptance         # Run 6-test End-to-End production acceptance suite
+limitless dashboard          # Open real-time terminal observability dashboard
+limitless rollback --list    # List available atomic database snapshots
+limitless rollback --latest  # Restore most recent database snapshot
 ```
 
 ---
 
-## 4. Master Agent Prompts (New Setup & Update/Repair)
+## 6. Master Agent Prompts (New Setup & Update/Repair)
 
-Below are the two complete, production-grade master instruction prompts. Copy and paste the appropriate prompt directly into **Cursor**, **Antigravity**, or any agent coding environment.
-
----
+Use these production-grade master agent prompts to install or repair Limitless Claude in any AI agent (Google Antigravity, Cursor, or OpenCode).
 
 ### Prompt 1: Clean Installation Master Prompt (New Setup)
 
-```markdown
-# MISSION: CLEAN INSTALLATION OF LIMITLESS CLAUDE 7.0 & OMNIROUTE GATEWAY
+```text
+You are the Lead Systems Infrastructure Engineer configuring a fresh, production-grade installation of Limitless Claude 8.0 on this machine.
 
-You are tasked with installing and configuring Limitless Claude 7.0 from scratch.
-Execute every step methodically, verifying output after each command. Do not leave placeholder stubs.
+Execute the following sequential installation workflow cleanly without skipping steps or fabricating output:
 
-### STEP 1: PREFLIGHT ENVIRONMENT VALIDATION
-1. Verify Node.js version is >= 22.0.0:
-   node -v
-   If Node is not installed or version < 22, alert the user to install Node.js 22 LTS or newer.
-2. Verify Git is available:
-   git --version
+1. WORKSPACE & REPOSITORY CLONE:
+   - Check if the repository exists at C:\projects\limitless-claude (or clone from https://github.com/mahik504/limitless-claude.git).
+   - Verify Node.js version is >= 22 (node -v). Run `npm install` inside the project root.
 
-### STEP 2: OMNIROUTE GATEWAY INSTALLATION & DAEMON INITIALIZATION
-1. Check if OmniRoute is installed globally:
-   npm list -g omniroute --depth=0
-   If missing, install globally:
-   npm install -g omniroute
-2. Verify port 20128 status:
-   - On Windows: netstat -ano | findstr :20128
-   - On Unix: lsof -i :20128
-   If a dead or hanging process occupies port 20128, terminate it cleanly:
-   - Windows: taskkill /F /PID <PID>
-   - Unix: kill -9 <PID>
-3. Start OmniRoute gateway in the background:
-   - Windows: Start-Process -NoNewWindow npx -ArgumentList "omniroute serve"
-   - Unix/macOS: nohup npx omniroute serve > omniroute.log 2>&1 &
-4. Wait 3 seconds and verify gateway availability:
-   curl -s http://127.0.0.1:20128/health || curl -s http://127.0.0.1:20128/
+2. RUN SYSTEM DIAGNOSTICS:
+   - Execute `node bin/limitless.js doctor`.
+   - Verify that all 15 diagnostic checkpoints pass: Node version, platform architecture, SQLite integrity, API key permissions, gateway reachability (:20128), model catalog, composite routing tiers, capability governance, and billing guards.
+   - If OmniRoute gateway is not running, launch the background daemon via `omniroute-daemon.bat` or `npm run launcher`.
 
-### STEP 3: CLONE LIMITLESS CLAUDE & INSTALL DEPENDENCIES
-1. Clone the repository into a persistent directory (e.g., C:\projects\limitless-claude or ~/projects/limitless-claude):
-   git clone https://github.com/mahik504/limitless-claude.git C:\projects\limitless-claude
-   cd C:\projects\limitless-claude
-2. Install dependencies:
-   npm install
-3. Install the universal global CLI executable:
-   npm link (or run node bin/limitless.js directly)
+3. MODEL & PROVIDER DISCOVERY:
+   - Run `node bin/limitless.js discover` to scan live providers (Groq, Cloudflare AI, Kiro, Mistral, NVIDIA NIM, Cerebras, OpenRouter, GitHub Copilot).
+   - Confirm that `config/provider-inventory.json` and `config/model-inventory.json` are written with formal lifecycle states (DISCOVERED / PRODUCTION_APPROVED) and accurate billing classifications.
 
-### STEP 4: VERIFY PROVIDER CONNECTIONS
-1. Inform the user to ensure their provider credentials are connected in the OmniRoute dashboard at:
-   http://localhost:20128/providers
-2. Supported provider setups:
-   - Free providers: Cloudflare Workers AI, Groq, Kiro AI, Mistral, OpenRouter (free tier), Kilo Gateway.
-   - Subscription/Paid providers: GitHub Copilot, OpenCode Go, OpenRouter ($10 credit), Antigravity.
-3. Check active database keys:
-   Verify ~/.omniroute/storage.sqlite exists and contains an active API key in table api_keys.
+4. COMPOSITE ROUTING SETUP:
+   - Execute `node bin/limitless.js setup` to synchronize intelligent multi-model composite tiers into OmniRoute SQLite:
+     * Haiku Tier: 5-6 sub-second rapid models for AST syntax verification and atomic edits.
+     * Sonnet Tier: 5-6 premier brainstorming, system design, and architectural reasoning models.
+     * Opus Tier: 23-model massive reservoir across all connected providers for heavy autonomous coding loops.
+     * Fable Tier: Paid flagship frontier reasoning models.
+   - Inject the 5-layer Universal Engineering Constitution into combos.system_message.
 
-### STEP 5: EXECUTE DYNAMIC DISCOVERY, TIER SYNC & PROMPT INJECTION
-1. Run the Limitless setup engine:
-   node scripts/setup.js
-   This automatically:
-   - Scans all live models from http://127.0.0.1:20128/v1/models.
-   - Enforces tier quotas: Haiku (5-6 rapid sub-second models), Sonnet (5-6 brainstorming & architecture models), Fable (4-5 paid flagship models), Opus (20+ coding reservoir models).
-   - Injects truthful, Anthropic-grade agent system prompts into each combo (combos.system_message in SQLite) so models respond identically to real Claude Code without fake tags or stubs.
-   - Configures pattern mappings (claude*haiku*, claude*sonnet*, claude*opus*, claude*fable*, *best*, *opusplan*).
-   - Installs the background auto-recovery startup daemon (Limitless-OmniRoute-Launcher.vbs on Windows Startup) so OmniRoute starts automatically whenever the computer powers on.
-   - Updates ~/.claude/settings.json with ANTHROPIC_BASE_URL (http://127.0.0.1:20128) and the active API key.
+5. VERIFICATION & ACCEPTANCE GATES:
+   - Run `node bin/limitless.js verify` to confirm HTTP 200 connectivity across all 4 tiers.
+   - Run `node bin/limitless.js acceptance` to execute the 6-test End-to-End production acceptance suite.
+   - Run `npm test` to confirm all unit and contract tests pass.
 
-### STEP 6: VERIFICATION & ACCEPTANCE
-1. Execute live endpoint verification:
-   node bin/limitless.js verify
-   Ensure all 8 aliases and combos return HTTP 200 with non-empty responses.
-2. Execute the full unit test suite:
-   npm test
-   Ensure 68/68 tests pass.
-3. Run the end-to-end acceptance suite:
-   node bin/limitless.js acceptance
-   Ensure all 6 acceptance criteria pass.
-4. Report final installation status and demonstrate launching Claude Code:
-   limitless launcher --print "System status check"
+6. FINAL STATUS & LAUNCHER:
+   - Run `node bin/limitless.js status` to display the active configuration overview.
+   - Provide the user with the command `limitless launcher` to begin their coding agent session.
 ```
 
 ---
 
 ### Prompt 2: Repair, Update & Re-Sync Master Prompt (Broken or Existing Setup)
 
-```markdown
-# MISSION: REPAIR, UPDATE & RE-SYNC LIMITLESS CLAUDE 7.0 INSTALLATION
+```text
+You are the Principal AI Infrastructure Recovery Engineer repairing, updating, or re-synchronizing an existing Limitless Claude installation.
 
-You are tasked with diagnosing, repairing, updating, or re-synchronizing an existing Limitless Claude installation.
-Preserve existing user provider credentials and API keys throughout this operation.
+Execute this surgical repair and migration protocol to resolve any flaws, broken models, or stale configurations:
 
-### STEP 1: PREFLIGHT DIAGNOSTICS & PROCESS INSPECTION
-1. Inspect running OmniRoute daemon and port 20128:
-   - Windows: netstat -ano | findstr :20128
-   - Unix: lsof -i :20128
-2. Check SQLite database integrity:
-   node -e "const db = require('better-sqlite3')(require('path').join(require('os').homedir(), '.omniroute', 'storage.sqlite'), { readonly: true }); console.log('Integrity check:', db.prepare('PRAGMA quick_check').get());"
-3. Test live gateway connectivity:
-   curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:20128/v1/models
-   If gateway is unreachable, unresponsive, or returning HTTP 500:
-   - Terminate hanging OmniRoute processes on port 20128.
-   - Restart daemon cleanly: npx omniroute serve
+1. ATOMIC BACKUP & SNAPSHOT:
+   - Run `node bin/limitless.js rollback --create pre-repair` to capture a WAL-safe SQLite and configuration snapshot before making changes.
+   - Preserve existing API keys, provider configurations, and user credentials.
 
-### STEP 2: CREATE WAL-CONSISTENT DATABASE BACKUP
-1. Before applying updates, take an immediate verified backup:
-   - Windows: Copy-Item "$HOME\.omniroute\storage.sqlite" "$HOME\.omniroute\storage.sqlite.manual_bak"
-   - Unix: cp ~/.omniroute/storage.sqlite ~/.omniroute/storage.sqlite.manual_bak
+2. GATEWAY & SCHEMA REPAIR:
+   - Verify OmniRoute database at ~/.omniroute/storage.sqlite is accessible and healthy.
+   - Check API key permissions using `node bin/limitless.js doctor`. If the active key is in restricted mode, ensure all 4 composite tiers are authorized in allowed_combos.
+   - Eliminate any deprecated endpoints (such as obsolete Antigravity 2.29 version strings) from primary positions.
 
-### STEP 3: PULL LATEST RELEASE & REBUILD
-1. Navigate to the Limitless Claude directory (e.g., C:\projects\limitless-claude):
-   cd C:\projects\limitless-claude
-2. Fetch and merge latest updates from master:
-   git fetch origin
-   git checkout master
-   git pull origin master
-3. Refresh dependencies:
-   npm install
+3. CATALOG RE-DISCOVERY & LIFECYCLE RE-CLASSIFICATION:
+   - Run `node bin/limitless.js discover` to fetch live endpoints from the local gateway.
+   - Re-classify uncatalogued models into formal lifecycle states (ESTIMATED, SMOKE_TESTED, PRODUCTION_APPROVED).
+   - Ensure unknown model pricing returns null, never $0.00, preventing accidental chargeable invocations.
 
-### STEP 4: RESOLVE UPSTREAM DEPRECATIONS & RE-SYNC COMBOS
-1. Run the dynamic model setup script:
-   node scripts/setup.js
-   This command will:
-   - Re-scan live models and filter out any upstream endpoints returning deprecation warnings (e.g. Antigravity IDE version notices).
-   - Re-populate Haiku (5-6 rapid models), Sonnet (5-6 architectural reasoning models), Fable (4-5 paid models), and Opus (20+ coding reservoir models).
-   - Re-inject authoritative Anthropic system prompts into combos table to ensure truthful formatting and no hallucinated tags.
-   - Repair and re-link model_combo_mappings.
-   - Ensure the Windows Startup auto-recovery launcher (Limitless-OmniRoute-Launcher.vbs) is intact.
-2. Synchronize ~/.claude/settings.json:
-   Verify env.ANTHROPIC_BASE_URL is http://127.0.0.1:20128 and ANTHROPIC_AUTH_TOKEN matches the active key.
+4. TIER RE-SYNCHRONIZATION:
+   - Run `node bin/limitless.js setup` to re-populate Haiku, Sonnet, Opus, and Fable tiers with verified active endpoints.
+   - Re-inject the updated 5-layer Universal Engineering Constitution into combos.system_message.
 
-### STEP 5: VERIFICATION & ACCEPTANCE AUDIT
-1. Verify all 8 tier aliases and direct combos:
-   node bin/limitless.js verify
-   Confirm 8/8 pass with valid LLM reasoning (not deprecation strings).
-2. Run unit tests:
-   npm test
-   Confirm 68/68 pass.
-3. Run end-to-end acceptance tests:
-   node bin/limitless.js acceptance
-   Confirm 6/6 pass.
-4. If any tier fails, inspect scripts/apply-maximized-combos.js, run node scripts/apply-maximized-combos.js, and re-test.
-
-### STEP 6: ROLLBACK CONTINGENCY (IF FAILURES OCCUR)
-If the update encounters unresolvable provider errors:
-1. Revert to latest snapshot:
-   node bin/limitless.js rollback --latest
-2. Restart OmniRoute daemon:
-   npx omniroute serve
+5. VERIFICATION & RECOVERY CONFIRMATION:
+   - Execute `node bin/limitless.js verify` to prove live HTTP 200 connectivity on all 4 tiers.
+   - Execute `node bin/limitless.js prompt test` to verify Prompt Laboratory fixtures pass.
+   - Execute `npm test` to verify all test suites are green.
+   - Print `limitless status` and confirm the repair is fully verified.
 ```
 
 ---
 
-## 5. OmniRoute Gateway Integration
+## 7. Agent Client Protocol & Tool Translation
 
-OmniRoute operates on `http://127.0.0.1:20128` as a local reverse proxy. Limitless Claude configures the underlying SQLite storage (`~/.omniroute/storage.sqlite`) with automated WAL-mode checkpoints, creating pattern-based mappings:
+Limitless Claude provides complete bidirectional protocol translation across client harnesses:
 
-```
-claude*haiku*     --> combo/limitless-haiku
-claude*sonnet*    --> combo/limitless-sonnet
-claude*opus*      --> combo/limitless-opus
-claude*fable*     --> combo/limitless-fable
-*best*            --> combo/limitless-fable
-*opusplan*        --> combo/limitless-sonnet
-```
+```mermaid
+sequenceDiagram
+    participant Client as Client Harness (OpenCode / Cursor / Claude Code)
+    participant Adapter as AgentClient Protocol Adapter
+    participant Gateway as OmniRoute Gateway (:20128)
+    participant Provider as Upstream LLM Provider
 
----
-
-## 6. Supported Providers & Ecosystem
-
-Limitless Claude supports all major AI inference platforms categorized by billing model:
-
-1. **Zero-Marginal-Cost Providers:**
-   - **Cloudflare Workers AI:** Edge inference with LLaMA 3.3 70B, DeepSeek R1 32B, GLM 4.7 Flash, and Qwen 2.5 Coder.
-   - **Groq:** Ultra-high-speed LPU inference delivering 500+ tokens/sec.
-   - **OpenRouter Free Tier:** Nemotron Ultra 550B, Cohere North Mini Code, Nemotron Lightning.
-   - **Kilo Gateway:** Free community access endpoints.
-2. **Subscription-Entitled Providers:**
-   - **GitHub Copilot:** GPT-4o and GPT-4o Mini with entitlement quotas.
-   - **Kiro AI:** Claude Sonnet 4.5, GLM-5, Claude Haiku 4.5, Qwen 3 Coder.
-   - **OpenCode Go:** Flat-rate unlimited model subscription.
-3. **Metered / Paid Inference:**
-   - **Mistral AI:** High-precision Codestral Latest.
-   - **OpenRouter Paid ($10 Balance):** Unlocks 1,000 requests/day and frontier wholesale reasoning models.
-
----
-
-## 7. Active Deprecation Trap Engine & Circuit Breakers
-
-Upstream providers occasionally deprecate client versions or return text warnings inside **HTTP 200 OK** payloads:
-```json
-{
-  "choices": [{
-    "message": {
-      "content": "This version of Antigravity is no longer supported. Please download the latest version..."
-    }
-  }]
-}
-```
-A generic proxy forwards this text directly to your agent, breaking file edits and confusing the LLM. 
-
-Limitless Claude implements the **Active Deprecation Trap Engine** ([`src/core/fallback-engine.js`](src/core/fallback-engine.js)):
-1. Inspects upstream responses in real-time.
-2. Detects deprecation patterns (`/no longer supported/i`, `/deprecated client/i`, `/outdated version/i`).
-3. Instantly trips the provider's **Circuit Breaker** to `OPEN` status.
-4. Transparently re-routes the agent's turn to the next candidate model in the tier in `<500ms`.
-
----
-
-## 8. Configuration Profiles (6 Profiles)
-
-Easily switch routing strategies depending on your task and network configuration:
-
-| Profile | Command | Description |
-| :--- | :--- | :--- |
-| **`limitless`** | `limitless switch-profile limitless` | Default 4-tier composite load-balanced router maximizing free tokens. |
-| **`native`** | `limitless switch-profile native` | Direct Anthropic API pass-through for zero-proxy native latency. |
-| **`opencode-go`** | `limitless switch-profile opencode-go` | Flat-rate subscription router optimized for OpenCode Go users. |
-| **`opencode-zen`** | `limitless switch-profile opencode-zen` | Metered, budget-capped pay-as-you-go router. |
-| **`openrouter`** | `limitless switch-profile openrouter` | Dedicated OpenRouter hub switching between free and funded models. |
-| **`antigravity`** | `limitless switch-profile antigravity` | Scoped route for Google Antigravity OAuth-entitled inference. |
-
----
-
-## 9. Claude Code & IDE Integrations
-
-### Claude Code CLI
-Limitless Claude writes non-destructive configuration to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "ANTHROPIC_BASE_URL": "http://127.0.0.1:20128",
-    "ANTHROPIC_AUTH_TOKEN": "YOUR_OMNIROUTE_API_KEY"
-  },
-  "primaryModel": "claude-opus-4-8"
-}
-```
-Launch scoped Claude Code without modifying Windows system variables:
-```bash
-limitless launcher
-```
-
-### Cursor & Antigravity IDE
-In your IDE settings, set:
-- **Anthropic Base URL:** `http://127.0.0.1:20128`
-- **Anthropic API Key:** Your OmniRoute key (`sk-ant-...`)
-- **Model Override:** `claude-sonnet-5` (for architecture) or `claude-opus-4-8` (for coding)
-
----
-
-## 10. Benchmark Suite (12 Evaluation Tasks)
-
-The built-in benchmark engine ([`scripts/benchmark.js`](scripts/benchmark.js)) evaluates models across 12 realistic software engineering tasks:
-
-```bash
-limitless benchmark
-```
-
-```
-================================================================================
-             LIMITLESS CLAUDE 7.0 - 12-TASK CAPABILITY BENCHMARK
-================================================================================
- Target Endpoint : auto
- Gateway         : 127.0.0.1:20128
-
-  TASK ID                  PROFILE    LATENCY    SCORE   STATUS
-  -----------------------  ---------  ---------  ------  --------
-  task-01-fast-patch       FAST       761 ms     100%    PASS
-  task-02-balanced-refactor  BALANCED   4517 ms    100%    PASS
-  task-03-reasoning-arch   REASONING  3317 ms    60%     PASS
-  task-04-frontend-react19  FRONTEND   1546 ms    67%     PASS
-  task-05-3d-webgl-r3f     3D         1473 ms    50%     PASS
-  task-06-backend-rls      BACKEND    6351 ms    100%    PASS
-  task-07-hostile-review   REVIEW     2687 ms    75%     PASS
-  task-08-tool-json        REASONING  1180 ms    100%    PASS
-  task-09-context-recall   REASONING  1500 ms    100%    PASS
-  task-10-regex-extract    FAST       700 ms     100%    PASS
-  task-11-typescript-strict  BACKEND    4507 ms    75%     PASS
-  task-12-fullstack-api    BALANCED   25004 ms   0%      FAIL
---------------------------------------------------------------------------------
- Overall Score : 76% (11/12 passed)
-================================================================================
+    Client->>Adapter: Sends Request (OpenAI or Anthropic format)
+    Adapter->>Adapter: Translates Tool Schemas (parameters <-> input_schema)
+    Adapter->>Adapter: Maps Messages (tool_calls <-> tool_use/tool_result)
+    Adapter->>Gateway: Dispatches Normalized Payload
+    Gateway->>Provider: Routes to Upstream Inference Model
+    Provider-->>Gateway: Streams Chunks (SSE)
+    Gateway-->>Adapter: Relays Raw SSE Stream
+    Adapter->>Adapter: Normalizes SSE Events (content_block_delta <-> choices.delta)
+    Adapter-->>Client: Emits Client-Native Stream
 ```
 
 ---
 
-## 11. End-to-End Acceptance Suite
+## 8. Token Capacity & OpenRouter Quota Intelligence
 
-The acceptance test suite ([`scripts/e2e-acceptance.js`](scripts/e2e-acceptance.js)) verifies all 6 core criteria live against your running OmniRoute daemon:
+### OpenRouter Verified Credit Policy (November 2026)
+- **Unfunded Accounts:** Capped at **50 requests per day** on `:free` models.
+- **Funded Accounts (\$10.00 USD Credit Deposit):** Unlocks **1,000 requests per day** on `:free` models without consuming the \$10 deposit on free endpoints.
+- **Disclaimers:** Calculations represent theoretical daily throughput bounds. Actual delivery depends on upstream model concurrency and rate limits.
 
-```bash
-limitless acceptance
-```
+### Daily Throughput Reference Table
 
-```
-================================================================================
-          LIMITLESS CLAUDE 7.0.0 — END-TO-END ACCEPTANCE SUITE
-================================================================================
-Running Test 1: Repository Multi-File Implementation (Haiku)...
-  -> Status: PASS (2858ms)
-Running Test 2: Premium Frontend React 19 Component (Opus)...
-  -> Status: PASS (5977ms)
-Running Test 3: Complex Backend PostgreSQL RLS Policy (Sonnet)...
-  -> Status: PASS (6030ms)
-Running Test 4: 3D R3F Canvas & Frame Budget (Opus)...
-  -> Status: PASS (1945ms)
-Running Test 5: Model Routing & Frontier Reasoning (Fable)...
-  -> Status: PASS (13539ms)
-Running Test 6: Provider Profile Switching (Config Manager)...
-  -> Status: PASS (2ms)
---------------------------------------------------------------------------------
-End-to-End Acceptance Results: 6/6 PASSED
-================================================================================
+| Workload Profile | Tokens / Req | 50 Req/Day (Unfunded) | 1,000 Req/Day (\$10 Deposit) |
+| :--- | :---: | :---: | :---: |
+| **Micro-Patch / Syntax** (1k in / 1k out) | 2,000 | **0.10M tokens/day** | **2.00M tokens/day** |
+| **Standard Feature / Unit Test** (4k in / 1k out) | 5,000 | **0.25M tokens/day** | **5.00M tokens/day** |
+| **Full Architecture / Backend RLS** (10k in / 2k out) | 12,000 | **0.60M tokens/day** | **12.00M tokens/day** |
+
+*Access live in CLI:* `limitless budget` or inspect [`docs/TOKEN-CAPACITY.md`](docs/TOKEN-CAPACITY.md).
+
+---
+
+## 9. Prompt Laboratory & A/B Benchmarking
+
+The Prompt Laboratory (`src/core/prompt-lab.js`) provides fixture-based regression testing for prompt engineering:
+- Evaluates prompt variants against standard fixtures: syntax repair, PostgreSQL RLS, Three.js `.dispose()` cleanup, and hostile secret leak review.
+- Tracks average score, pass rate, latency, and token efficiency.
+- Automatically halts deployment if regressions are detected.
+
+*Run in CLI:* `limitless prompt test` or inspect [`docs/PROMPT-LAB-REPORT.md`](docs/PROMPT-LAB-REPORT.md).
+
+---
+
+## 10. Session Continuity & Context Compaction
+
+- **Session Checkpoints (`src/core/session-manager.js`):** Creates in-memory checkpoints at critical conversation turns. If an agent turn encounters an unrecoverable failure, the session state rolls back instantaneously.
+- **Sliding-Window Compaction (`src/core/context-manager.js`):** Monitors token accumulation. When context approaches model limits (default 80%), it automatically compresses verbose command output and redundant logs while preserving active goals, edited file paths, and unresolved errors.
+
+---
+
+## 11. Disaster Recovery, Snapshots & Rollback
+
+Limitless Claude enforces atomic configuration transitions:
+- Pre-switch snapshots are created automatically before profile transitions or tier modifications.
+- SQLite backups execute WAL-safe transactions (`VACUUM INTO` or atomic checkpoints via `src/omniroute/db.js`), preventing database corruption.
+- Instant rollback:
+  ```bash
+  limitless rollback --list      # View snapshots
+  limitless rollback --latest    # Restore previous snapshot
+  ```
+
+---
+
+## 12. Verification Suites & Production Readiness
+
+Every release of Limitless Claude is validated through rigorous automated gates:
+
+```text
+Unit & Contract Test Suite (`npm test`)        : 100% Pass (82/82 tests passed)
+System Diagnostic Doctor (`limitless doctor`)   : 100% Pass (15/15 checks healthy)
+Tier Connectivity Verification (`limitless verify`): 100% Pass (4/4 tiers HTTP 200 OK)
+End-to-End Acceptance (`limitless acceptance`)  : 100% Pass (6/6 acceptance tests passed)
+Prompt Laboratory Fixtures (`limitless prompt test`): 100% Pass (4/4 fixtures satisfied)
 ```
 
 ---
 
-## 12. Disaster Recovery & Snapshots
+## 13. Contributing & License
 
-Every run of `limitless setup` or `limitless switch-profile` automatically takes a WAL-consistent snapshot before writing changes. If anything unexpected happens, roll back with one command:
-
-```bash
-# List all snapshots
-limitless rollback --list
-
-# Roll back to the most recent snapshot
-limitless rollback --latest
-```
-
----
-
-## 13. Contributing
-
-Contributions, issues, and feature requests are welcome. Check out the [Issues](https://github.com/mahik504/limitless-claude/issues) tab and submit a pull request with passing tests (`npm test`).
-
----
-
-## 14. License
+Contributions are welcome! Please run `npm test` and `node bin/limitless.js doctor` before submitting pull requests.
 
 Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for details.

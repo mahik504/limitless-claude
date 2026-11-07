@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [8.0.0] - 2026-11-07
+
+### Added
+- **Standalone First Architecture (Mode A vs Mode B)**: Complete independence from external frameworks (Orchestra). Core runtime in `src/core/*` operates with zero external imports. Auto-discovers standard project instruction files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.cursorrules`).
+- **Original 5-Layer Prompt Engine (`src/core/prompt-engine.js`)**: Dynamic composition across Universal Constitution (Layer 1), Task Capability Profiles (Layer 2), Provider Adapters (Layer 3), Project Context (Layer 4), and Tool Contracts (Layer 5) with delimiter escaping and prompt injection defenses.
+- **Prompt Laboratory (`src/core/prompt-lab.js`)**: Fixture-based regression testing suite evaluating prompt variants against standardized coding fixtures (syntax repair, PostgreSQL RLS, Three.js `.dispose()`, hostile secret audit) with automated regression halting.
+- **Bidirectional Protocol & Tool Translation (`src/core/agent-client.js`)**: Full translation between Anthropic Messages API (`tools`, `tool_use`, `tool_result`, `input_schema`) and OpenAI Chat API (`tools: [{type: 'function'}]`, `tool_calls`, `role: 'tool'`, `parameters`) with streaming SSE chunk normalization.
+- **Truth-in-Model Intelligence**: Formal 6-stage lifecycle (`DISCOVERED`, `ESTIMATED`, `SMOKE_TESTED`, `TOOL_TESTED`, `BENCHMARKED`, `PRODUCTION_APPROVED`). Replaced heuristic score fabrication with strict separation of heuristic priors from empirical benchmark scores.
+- **Fine-Grained Billing & Quota Safety (`src/core/billing-classifier.js`)**: 7 billing classes (`provider_free_quota`, `subscription-entitled`, `promotional`, `paid-token`, `pay-as-you-go`, `local`, `unknown`). Unknown costs return `unknown` (never `$0.00`). Free-only mode strictly excludes unmetered commercial endpoints.
+- **OpenRouter Quota Intelligence & Token Capacity Calculator (`src/core/capacity-calculator.js`)**: Full documentation of OpenRouter's $10 deposit unlocking 1,000 req/day on `:free` models (verified November 2026) with concrete daily token capacity calculator across micro-patch, feature, and architecture workloads.
+- **Context & Session Intelligence (`src/core/session-manager.js`, `src/core/context-manager.js`)**: Multi-turn session tracking, atomic turn checkpoints with rollback, and sliding-window compaction preserving essential tool state while pruning verbose command output.
+- **Universal Global CLI Expansion (`bin/limitless.js`)**: 18 specialized commands including `limitless doctor` (15-point diagnostic), `init` (zero-config setup), `status`, `verify`, `discover`, `models list/inspect`, `providers list/test`, `budget`, `prompt list/compose/test`, `benchmark`, `acceptance`, `rollback`, and `launcher`.
+- **Optional Orchestra Interoperability (`src/integrations/orchestra/`)**: Decoupled contract consumer adapter that maps Orchestra task categories to Limitless capabilities, with zero core coupling and safe standalone fallback.
+- **Comprehensive Audit Suite**: Published `AUDIT.md`, `ARCHITECTURE-REVIEW.md`, `TECHNICAL-DEBT.md`, `KNOWN-ISSUES.md`, `IMPROVEMENT-ROADMAP.md`, `docs/COMPETITOR-ANALYSIS.md`, and `docs/STANDALONE-VERIFICATION.md`.
+
+### Fixed
+- Fixed SQLite raw file copying during snapshots: `src/core/config-manager.js` now executes WAL-safe atomic backups via `src/omniroute/db.js` (`VACUUM INTO` and clean WAL checkpoints).
+- Fixed billing classifier risk where unknown model costs reported `$0.00`.
+- Fixed heuristic capability evaluator which previously fabricated empirical scores based on model name strings.
+
+---
+
 ## [7.0.0] - 2026-11-07
 
 ### Added

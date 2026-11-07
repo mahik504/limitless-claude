@@ -1,28 +1,43 @@
 /**
- * Limitless Claude 7.0 - Billing & Quota Intelligence Classifier
+ * Limitless Claude 8.0 - Billing & Quota Intelligence Classifier
  * 
  * Accurately classifies provider models into verifiable billing categories.
- * Enforces spending thresholds and prevents accidental chargeable invocation.
+ * Prevents accidental invocation of chargeable or unverified endpoints.
+ * 
+ * Categories:
+ * - provider_free_quota: Free tier provided by vendor with rate limits (Groq, Cloudflare AI, etc.)
+ * - subscription-entitled: Flat monthly fee covering inference (GitHub Copilot, Kiro, Antigravity)
+ * - promotional: Temporary trial credits
+ * - paid-token: Metered per-token commercial APIs (OpenAI, Anthropic, Mistral, OpenRouter paid)
+ * - pay-as-you-go: Metered prepaid/postpaid router accounts (OpenCode Zen)
+ * - local: Self-hosted zero-dollar inference (Ollama, vLLM)
+ * - unknown: Pricing cannot be determined (strictly excluded from free-only mode)
  */
 
 const BILLING_CLASSES = {
-  ZERO_MARGINAL_COST: "zero-marginal-cost",
+  PROVIDER_FREE_QUOTA: "provider_free_quota",
   SUBSCRIPTION_ENTITLED: "subscription-entitled",
   PAID_TOKEN: "paid-token",
   PAY_AS_YOU_GO: "pay-as-you-go",
   PROMOTIONAL: "promotional",
   LOCAL: "local",
-  UNKNOWN: "unknown"
+  UNKNOWN: "unknown",
+  // Backward compatibility alias for 7.0 code & tests
+  ZERO_MARGINAL_COST: "provider_free_quota"
 };
 
-// Pricing reference per 1M tokens (USD) for known chargeable models
+// Verified pricing reference per 1M tokens (USD)
 const KNOWN_PRICING_PER_M = {
   "mistral/codestral-latest": { input: 0.30, output: 0.90 },
   "openrouter/anthropic/claude-3.5-sonnet": { input: 3.00, output: 15.00 },
   "openrouter/deepseek/deepseek-chat": { input: 0.14, output: 0.28 },
   "openrouter/qwen/qwen-2.5-coder-32b-instruct": { input: 0.08, output: 0.16 },
   "github/gpt-4o": { input: 0.00, output: 0.00, subscription: true },
-  "github/gpt-4o-mini": { input: 0.00, output: 0.00, subscription: true }
+  "github/gpt-4o-mini": { input: 0.00, output: 0.00, subscription: true },
+  "kiro/claude-sonnet-4.5": { input: 0.00, output: 0.00, subscription: true },
+  "kiro/deepseek-3.2": { input: 0.00, output: 0.00, subscription: true },
+  "kiro/glm-5": { input: 0.00, output: 0.00, subscription: true },
+  "kiro/qwen3-coder-next": { input: 0.00, output: 0.00, subscription: true }
 };
 
 class BillingClassifier {
@@ -43,10 +58,10 @@ class BillingClassifier {
 
     // 2. Explicit verified free tag suffix on router hubs
     if (m.includes(":free") || m.endsWith("-free")) {
-      return BILLING_CLASSES.ZERO_MARGINAL_COST;
+      return BILLING_CLASSES.PROVIDER_FREE_QUOTA;
     }
 
-    // 3. Subscription-entitled accounts (paid seat covers inference, no per-token charges)
+    // 3. Subscription-entitled accounts (seat covers inference, no per-token charges)
     if (["github", "kiro", "opencode-go", "bluesminds"].includes(p)) {
       return BILLING_CLASSES.SUBSCRIPTION_ENTITLED;
     }
@@ -66,9 +81,9 @@ class BillingClassifier {
       return BILLING_CLASSES.PAID_TOKEN;
     }
 
-    // 7. Verified zero-cost community developer endpoints
+    // 7. Verified developer free quota endpoints with vendor daily/minute limits
     if (["cloudflare-ai", "cf", "groq", "kilo-gateway", "kg", "ollama-cloud", "ollamacloud", "cerebras", "nvidia"].includes(p)) {
-      return BILLING_CLASSES.ZERO_MARGINAL_COST;
+      return BILLING_CLASSES.PROVIDER_FREE_QUOTA;
     }
 
     // 8. Antigravity OAuth (when healthy, Google One AI subscription entitled)
@@ -96,13 +111,43 @@ class BillingClassifier {
   }
 
   estimateCost(provider, model, inputTokens = 0, outputTokens = 0) {
+    const classification = this.classify(provider, model);
+
+    // Free classes return 0.0
+    if (
+      classification === BILLING_CLASSES.PROVIDER_FREE_QUOTA ||
+      classification === BILLING_CLASSES.SUBSCRIPTION_ENTITLED ||
+      classification === BILLING_CLASSES.LOCAL
+    ) {
+      return 0.0;
+    }
+
     const key = `${provider}/${model}`.toLowerCase();
     const pricing = KNOWN_PRICING_PER_M[key];
-    if (!pricing || pricing.subscription) return 0.0;
 
-    const inCost = (inputTokens / 1_000_000) * pricing.input;
-    const outCost = (outputTokens / 1_000_000) * pricing.output;
-    return parseFloat((inCost + outCost).toFixed(6));
+    if (pricing) {
+      if (pricing.subscription) return 0.0;
+      const inCost = (inputTokens / 1_000_000) * pricing.input;
+      const outCost = (outputTokens / 1_000_000) * pricing.output;
+      return parseFloat((inCost + outCost).toFixed(6));
+    }
+
+    // Unknown pricing must NOT return 0.0 (financial hazard)
+    return null;
+  }
+
+  estimateCostDetailed(provider, model, inputTokens = 0, outputTokens = 0) {
+    const classification = this.classify(provider, model);
+    const cost = this.estimateCost(provider, model, inputTokens, outputTokens);
+
+    return {
+      provider,
+      model,
+      billingClass: classification,
+      cost,
+      status: cost === null ? "unknown" : (cost === 0 ? "free" : "metered"),
+      currency: "USD"
+    };
   }
 }
 

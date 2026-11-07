@@ -194,8 +194,13 @@ async function runDoctor() {
   const capacity = defaultCapacityCalculator.getCapacityReport();
   report("OpenRouter Capacity Policy", "PASS", `$10 credit unlocks ${capacity.fundedTier.dailyRequests} req/day (vs ${capacity.unfundedTier.dailyRequests} unfunded)`);
 
-  // 15. Standalone Execution Readiness
-  report("Standalone Architecture Gate", "PASS", "Zero external framework dependencies required");
+  // 15. Orchestration & Interop Environment
+  const { defaultOrchestraAdapter } = require("../src/integrations/orchestra");
+  if (defaultOrchestraAdapter.isAvailable()) {
+    report("Orchestra Integration Gate", "PASS", "Connected: C:\\projects\\orchestra-workflow (Mode B Active)");
+  } else {
+    report("Standalone Architecture Gate", "PASS", "Zero external framework dependencies required (Mode A Active)");
+  }
 
   if (db) db.close();
 

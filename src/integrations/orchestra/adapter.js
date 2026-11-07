@@ -14,7 +14,25 @@ class OrchestraAdapter {
   }
 
   detectOrchestra() {
-    return !!(process.env.ORCHESTRA_CONTRACT || process.env.ORCHESTRA_VAULT || process.env.ORCHESTRA_ENGINE);
+    if (process.env.ORCHESTRA_CONTRACT || process.env.ORCHESTRA_VAULT || process.env.ORCHESTRA_ENGINE) {
+      return true;
+    }
+
+    const fs = require("fs");
+    const path = require("path");
+    const os = require("os");
+
+    const candidatePaths = [
+      path.resolve("C:/projects/orchestra-workflow"),
+      path.join(os.homedir(), "projects", "orchestra-workflow"),
+      path.join(os.homedir(), "orchestra-workflow")
+    ];
+
+    try {
+      return candidatePaths.some(p => fs.existsSync(p));
+    } catch (_) {
+      return false;
+    }
   }
 
   isAvailable() {

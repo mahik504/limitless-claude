@@ -21,6 +21,7 @@
     "rollback": "node scripts/rollback.js",
     "dashboard": "node scripts/dashboard.js",
     "benchmark": "node scripts/benchmark.js",
+    "acceptance": "node scripts/e2e-acceptance.js",
     "test": "node --test test/*.test.js"
   },
   "optionalDependencies": {

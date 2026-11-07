@@ -26,7 +26,9 @@ const COMMANDS = {
   benchmark: path.join(SCRIPTS_DIR, "benchmark.js"),
   rollback: path.join(SCRIPTS_DIR, "rollback.js"),
   setup: path.join(SCRIPTS_DIR, "setup.js"),
-  verify: path.join(SCRIPTS_DIR, "verify-combos.js")
+  verify: path.join(SCRIPTS_DIR, "verify-combos.js"),
+  acceptance: path.join(SCRIPTS_DIR, "e2e-acceptance.js"),
+  e2e: path.join(SCRIPTS_DIR, "e2e-acceptance.js")
 };
 
 function printHelp() {
@@ -46,6 +48,7 @@ Commands:
   rollback           List or restore atomic configuration & database snapshots
   setup              Sync live OmniRoute models into intelligent composite tiers
   verify             Test live HTTP 200 connectivity across all 4 tiers
+  acceptance         Run the 6-test End-to-End production acceptance suite (--verbose)
 
 Examples:
   limitless launcher

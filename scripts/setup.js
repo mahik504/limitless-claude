@@ -271,13 +271,12 @@ Options:
 
   // Phase 7: Haiku (Speed & Sub-Second Edits - Strict 5-6 Models)
   const haikuRaw = [
+    { provider: "kiro", model: "claude-haiku-4.5" },
     { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
     { provider: "github", model: "gpt-4o-mini" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning:free" },
-    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
     { provider: "groq", model: "openai/gpt-oss-20b" },
-    { provider: "antigravity", model: "gemini-3-flash" },
-    { provider: "antigravity", model: "gemini-3.5-flash-lite" }
+    { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
+    { provider: "openrouter", model: "openai/gpt-oss-20b:free" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   // Phase 8: Sonnet (Architectural Planning & Deep Reasoning - Strict 7-8 Models)
@@ -285,43 +284,33 @@ Options:
     { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "kiro", model: "glm-5" },
     { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "github", model: "gpt-4o" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
-    { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
-    { provider: "kiro", model: "minimax-m2.5" },
-    { provider: "antigravity", model: "gemini-3-flash" }
+    { provider: "mistral", model: "codestral-latest" },
+    { provider: "antigravity", model: "claude-sonnet-4-6" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
-  // Phase 9: Opus (High-Capacity Agentic Reservoir - 10-25 Coding Models)
+  // Phase 9: Opus (High-Capacity Agentic Coding Reservoir - 8 Coding Models)
   const opusRaw = [
     { provider: "mistral", model: "codestral-latest" },
-    { provider: "kiro", model: "glm-5" },
-    { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "kiro", model: "claude-sonnet-4.5" },
-    { provider: "kiro", model: "deepseek-3.2" },
+    { provider: "kiro", model: "qwen3-coder-next" },
+    { provider: "kiro", model: "glm-5" },
     { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
-    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
-    { provider: "github", model: "gpt-4o" },
     { provider: "github", model: "gpt-4o-2024-11-20" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3.5-lightning:free" },
-    { provider: "openrouter", model: "nvidia/nemotron-3.5-lightning:free" },
-    { provider: "kilo-gateway", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
-    { provider: "groq", model: "openai/gpt-oss-120b" },
-    { provider: "ollama-cloud", model: "nemotron-3-ultra" },
-    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "antigravity", model: "gpt-oss-120b-medium" },
-    { provider: "kilo-gateway", model: "cohere/north-mini-code:free" },
-    { provider: "openrouter", model: "cohere/north-mini-code:free" }
+    { provider: "openrouter", model: "cohere/north-mini-code:free" },
+    { provider: "openrouter", model: "z-ai/glm-5.2:free" },
+    { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   // Phase 13: Fable (God-Mode Composite Intelligence Tier - Strict 5 Flagship Models)
   const fableRaw = [
     { provider: "kiro", model: "claude-sonnet-4.5" },
-    { provider: "kiro", model: "deepseek-3.2" },
     { provider: "kiro", model: "glm-5" },
     { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
-    { provider: "antigravity", model: "claude-opus-4-6-thinking" }
+    { provider: "openrouter", model: "moonshotai/kimi-k3" },
+    { provider: "openrouter", model: "z-ai/glm-5.3" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   // Dynamic Heuristic Multi-Provider Discovery Engine
@@ -416,7 +405,7 @@ Options:
   let haikuCandidates = haikuRaw.slice(0, 6);
   let sonnetCandidates = sonnetRaw.slice(0, 8);
   let fableCandidates = fableRaw.slice(0, 5);
-  let opusCandidates = opusRaw.slice(0, 25);
+  let opusCandidates = opusRaw.slice(0, 8);
 
   if (excludePaid) {
     haikuCandidates = filterCandidatesByBilling(haikuCandidates, true, allowUnknown);

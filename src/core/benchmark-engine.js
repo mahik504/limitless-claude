@@ -129,11 +129,26 @@ const BENCHMARK_TASKS = [
   }
 ];
 
+function normalizeTarget(target, taskTier = "sonnet") {
+  if (!target || target === "auto" || target === "all") {
+    if (taskTier === "haiku") return "claude-haiku-4-5";
+    if (taskTier === "opus") return "claude-opus-4-8";
+    if (taskTier === "fable") return "claude-fable-5-1";
+    return "claude-sonnet-5";
+  }
+  const lower = target.toLowerCase();
+  if (lower.includes("haiku")) return "claude-haiku-4-5";
+  if (lower.includes("opus")) return "claude-opus-4-8";
+  if (lower.includes("fable")) return "claude-fable-5-1";
+  if (lower.includes("sonnet")) return "claude-sonnet-5";
+  return target;
+}
+
 class BenchmarkEngine {
   constructor(options = {}) {
     this.gatewayHost = options.gatewayHost || "127.0.0.1";
     this.gatewayPort = options.gatewayPort || 20128;
-    this.timeoutMs = options.timeoutMs || 15000;
+    this.timeoutMs = options.timeoutMs || 25000;
   }
 
   evaluateOutput(task, outputText) {
@@ -154,12 +169,13 @@ class BenchmarkEngine {
   }
 
   async runTask(task, modelOrCombo, apiKey = null) {
+    const resolvedModel = normalizeTarget(modelOrCombo, task.tier);
     const startTime = Date.now();
     return new Promise((resolve) => {
       const payload = JSON.stringify({
-        model: modelOrCombo,
+        model: resolvedModel,
         messages: [{ role: "user", content: task.prompt }],
-        max_tokens: 300,
+        max_tokens: 350,
         temperature: 0.1
       });
 
@@ -170,6 +186,7 @@ class BenchmarkEngine {
 
       if (apiKey) {
         headers["Authorization"] = `Bearer ${apiKey}`;
+        headers["x-api-key"] = apiKey;
       }
 
       const req = http.request({
@@ -189,7 +206,10 @@ class BenchmarkEngine {
           try {
             const parsed = JSON.parse(body);
             if (parsed.choices && parsed.choices[0] && parsed.choices[0].message) {
-              content = parsed.choices[0].message.content || "";
+              const msg = parsed.choices[0].message;
+              content = msg.content || msg.reasoning_content || msg.reasoning || "";
+            } else if (Array.isArray(parsed.content)) {
+              content = parsed.content.map(b => b.text || "").join("");
             }
           } catch (_) {}
 
@@ -239,7 +259,7 @@ class BenchmarkEngine {
     });
   }
 
-  async runSuite(targetModelOrCombo = "limitless-sonnet-5.5", apiKey = null) {
+  async runSuite(targetModelOrCombo = "auto", apiKey = null) {
     const results = [];
     for (const task of BENCHMARK_TASKS) {
       const res = await this.runTask(task, targetModelOrCombo, apiKey);

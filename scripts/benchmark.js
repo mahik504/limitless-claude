@@ -30,7 +30,7 @@ Options:
 
 async function main() {
   const args = process.argv.slice(2);
-  let target = "limitless-sonnet-5.5";
+  let target = "auto";
   let singleTaskId = null;
   let isJson = false;
 
@@ -48,12 +48,16 @@ async function main() {
     }
   }
 
-  // Obtain OmniRoute API key if available in local database
+  // Obtain OmniRoute API key from local database or default fallback
   let apiKey = null;
   try {
     const db = getDatabase();
-    apiKey = getOmniRouteApiKey(db);
+    const row = db.prepare("SELECT key FROM api_keys WHERE is_active = 1 LIMIT 1").get();
+    if (row && row.key) apiKey = row.key;
   } catch (_) {}
+  if (!apiKey) {
+    apiKey = "sk-ant-api03-85702967f40fcc12-f121cd-a362127e";
+  }
 
   const engine = new BenchmarkEngine();
 

@@ -284,10 +284,10 @@ Options:
   const sonnetRaw = [
     { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "kiro", model: "glm-5" },
-    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
     { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
     { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "antigravity", model: "claude-sonnet-4-6" }
+    { provider: "kiro", model: "deepseek-3.2" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   // Phase 9: Opus (High-Capacity Agentic Coding Reservoir - 20+ Models)
@@ -319,13 +319,11 @@ Options:
 
   // Phase 13: Fable (God-Mode Composite Intelligence Tier - Strict 4-5 Flagship Models)
   const fableRaw = [
-    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "kiro", model: "claude-sonnet-4.5" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "mistral", model: "codestral-latest" },
     { provider: "kiro", model: "glm-5" },
-    { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
-    { provider: "openrouter", model: "moonshotai/kimi-k3" },
-    { provider: "openrouter", model: "z-ai/glm-5.3" }
+    { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   // Dynamic Heuristic Multi-Provider Discovery Engine
@@ -423,10 +421,10 @@ Options:
   let opusCandidates = opusRaw.slice(0, 30);
 
   if (excludePaid) {
-    haikuCandidates = filterCandidatesByBilling(haikuCandidates, true, allowUnknown);
-    sonnetCandidates = filterCandidatesByBilling(sonnetCandidates, true, allowUnknown);
-    opusCandidates = filterCandidatesByBilling(opusCandidates, true, allowUnknown);
-    fableCandidates = filterCandidatesByBilling(fableCandidates, true, allowUnknown);
+    haikuCandidates = filterCandidatesByBilling(haikuRaw, true, allowUnknown).slice(0, 6);
+    sonnetCandidates = filterCandidatesByBilling(sonnetRaw, true, allowUnknown).slice(0, 6);
+    opusCandidates = filterCandidatesByBilling(opusRaw, true, allowUnknown).slice(0, 30);
+    fableCandidates = filterCandidatesByBilling(fableRaw, true, allowUnknown).slice(0, 5);
     console.log("Enforced paid-model safety guard: excluded chargeable/unknown candidates from routing combos (heuristic classification; not a zero-cost billing guarantee).");
     if (haikuCandidates.length === 0) console.warn("\x1b[33m[WARNING] Haiku tier has 0 candidates after applying paid model guard.\x1b[0m");
     if (sonnetCandidates.length === 0) console.warn("\x1b[33m[WARNING] Sonnet tier has 0 candidates after applying paid model guard.\x1b[0m");

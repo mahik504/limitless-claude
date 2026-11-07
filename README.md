@@ -12,6 +12,34 @@ Limitless Claude routes coding-agent traffic across local and hosted model provi
 
 ---
 
+## One-Line Instant Installation
+
+Run the installer command for your operating system:
+
+### Windows (PowerShell)
+```powershell
+irm https://raw.githubusercontent.com/mahik504/limitless-claude/master/install.ps1 | iex
+```
+
+### macOS & Linux (Terminal)
+```bash
+curl -fsSL https://raw.githubusercontent.com/mahik504/limitless-claude/master/install.sh | bash
+```
+
+The script verifies Node.js 22+, clones the repository, installs dependencies, registers the global `limitless` CLI command, auto-starts the local gateway, provisions a local API key, and synchronizes routing tiers.
+
+---
+
+## What's New in Limitless Claude 8.1
+
+- **One-line automated installers (`install.ps1`, `install.sh`):** Automates cloning, dependency setup, global binary linking, and zero-config initialization.
+- **Self-healing `limitless init` wizard:** Automatically detects gateway state, launches the daemon if stopped, provisions local API keys into SQLite, and configures `~/.claude/settings.json`.
+- **Task-to-model pinning (`limitless pin`):** Allows pinning specific model endpoints to engineering tasks (backend, fast diffs, reasoning, frontend), prioritizing them during candidate selection.
+- **Granular file checkpoints & undo (`limitless checkpoint` & `limitless undo`):** Captures atomic file-level snapshots before autonomous loops and rolls back individual changes without touching git history.
+- **Clean verified routing combos:** Smoke-tested all endpoints against live HTTP 200 responses, removing deprecation strings and unroutable stubs.
+
+---
+
 ## Architecture Overview
 
 ```mermaid
@@ -133,11 +161,11 @@ OmniRoute groups verified upstream models into four composite aliases. Every mod
 Assign dedicated model endpoints to specific engineering tasks:
 
 ```bash
-limitless pin --list                                   # Show active pin overrides
+limitless pin --list                                        # Show active pin overrides
 limitless pin --task backend --model kiro/claude-sonnet-4.5 # Pin backend tasks to Sonnet 4.5
 limitless pin --task fast --model groq/openai/gpt-oss-20b   # Pin fast edits to Groq LPU
-limitless pin --remove backend                         # Clear backend pin override
-limitless pin --reset                                  # Reset all task pin overrides
+limitless pin --remove backend                              # Clear backend pin override
+limitless pin --reset                                       # Reset all task pin overrides
 ```
 
 Pinned models automatically receive top priority during candidate selection when their matching capability profile is requested.
@@ -173,7 +201,7 @@ The `limitless` binary runs globally from any working directory:
 
 ```bash
 # Core operations
-limitless init               # Run zero-config environment setup
+limitless init               # Run zero-config self-healing initialization wizard
 limitless doctor             # Run 15-point diagnostic sweep
 limitless status             # Print active profile, gateway URL, and routing tiers
 limitless verify             # Test HTTP 200 connectivity across all tiers
@@ -222,29 +250,20 @@ Set up a clean installation of Limitless Claude 8.1 on this machine following th
    - Check if the repository exists at C:\projects\limitless-claude (or clone from https://github.com/mahik504/limitless-claude.git).
    - Ensure Node.js is version 22 or higher. Run `npm install` inside the project root.
 
-2. Diagnostic check:
+2. Run self-healing initialization wizard:
+   - Run `node bin/limitless.js init`.
+   - The wizard automatically verifies Node 22+, checks/starts the OmniRoute gateway daemon, auto-provisions a local SQLite API key if none exists, configures ~/.claude/settings.json, captures a safety snapshot, discovers models, and configures the 4 composite tiers.
+
+3. Diagnostic check:
    - Run `node bin/limitless.js doctor`.
    - Confirm all 15 checkpoints pass, including database integrity, API key permissions, gateway reachability, model catalog, and billing guards.
-   - If the OmniRoute gateway is not running, open it from the Windows system tray or run `omniroute-daemon.bat` directly. Note that `npm run launcher` starts Claude Code with the scoped profile — it does not start the OmniRoute background daemon.
 
-3. Model discovery:
-   - Run `node bin/limitless.js discover` to scan live providers (Groq, Cloudflare, Kiro, Mistral, NVIDIA, Cerebras, OpenRouter, GitHub Copilot).
-   - Confirm `config/provider-inventory.json` and `config/model-inventory.json` are generated with formal lifecycle states and billing classifications.
-
-4. Composite tier setup:
-   - Run `node bin/limitless.js setup` to register the composite tiers in OmniRoute:
-     * Haiku Tier: 6 sub-second models for syntax checks and atomic edits.
-     * Sonnet Tier: 6 models for system architecture and reasoning.
-     * Opus Tier: 23-model pool for autonomous coding loops.
-     * Fable Tier: 5 models for high-context frontier tasks.
-   - Inject the Universal Engineering Constitution into combos.system_message.
-
-5. Verification:
+4. Verification:
    - Run `node bin/limitless.js verify` to confirm HTTP 200 connectivity on all 4 tiers.
    - Run `node bin/limitless.js acceptance` to execute the 6-test acceptance suite.
    - Run `npm test` to verify unit and contract tests pass.
 
-6. Completion:
+5. Completion:
    - Run `node bin/limitless.js status` to display the active tier configuration.
    - Use `limitless launcher` to start a Claude Code session.
 ```

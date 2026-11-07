@@ -14,7 +14,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.844Z"
   },
   {
     "id": "auto/best-reasoning",
@@ -31,7 +31,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/best-fast",
@@ -48,7 +48,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/best-vision",
@@ -65,7 +65,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/best-chat",
@@ -82,7 +82,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/best-coding-fast",
@@ -99,7 +99,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/pro-coding",
@@ -116,7 +116,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/pro-reasoning",
@@ -133,7 +133,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/pro-vision",
@@ -150,7 +150,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/pro-chat",
@@ -167,7 +167,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/pro-fast",
@@ -184,7 +184,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/coding",
@@ -201,7 +201,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/fast",
@@ -218,7 +218,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/chat",
@@ -235,7 +235,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/cheap",
@@ -252,7 +252,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/offline",
@@ -269,7 +269,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/smart",
@@ -286,7 +286,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/claude-opus",
@@ -304,7 +304,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/claude-sonnet",
@@ -321,7 +321,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/claude-haiku",
@@ -338,7 +338,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/best-free",
@@ -355,7 +355,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/subscription",
@@ -372,7 +372,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/thrifty",
@@ -389,7 +389,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/best-chaos",
@@ -406,7 +406,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/chaos",
@@ -423,7 +423,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/coding:fast",
@@ -440,7 +440,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/coding:cheap",
@@ -457,7 +457,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/coding:free",
@@ -474,7 +474,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/coding:pro",
@@ -491,7 +491,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/coding:reliable",
@@ -508,7 +508,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/reasoning",
@@ -525,7 +525,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/reasoning:pro",
@@ -542,7 +542,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/vision",
@@ -559,7 +559,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/multimodal",
@@ -576,7 +576,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/glm",
@@ -593,7 +593,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/minimax",
@@ -612,7 +612,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/mimo",
@@ -629,7 +629,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.046Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/zai",
@@ -646,7 +646,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/gemma",
@@ -663,7 +663,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/llama",
@@ -680,7 +680,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/gemini",
@@ -697,7 +697,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/kimi",
@@ -714,7 +714,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.845Z"
   },
   {
     "id": "auto/qwen",
@@ -731,7 +731,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.846Z"
   },
   {
     "id": "auto/deepseek",
@@ -748,7 +748,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.846Z"
   },
   {
     "id": "auto/gpt",
@@ -765,7 +765,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.846Z"
   },
   {
     "id": "kr/claude-sonnet-5",
@@ -782,7 +782,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-sonnet-5",
@@ -799,7 +799,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-sonnet-4.5",
@@ -816,7 +816,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-sonnet-4.5",
@@ -836,7 +836,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-haiku-4.5",
@@ -853,7 +853,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-haiku-4.5",
@@ -870,7 +870,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/deepseek-3.2",
@@ -887,7 +887,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/deepseek-3.2",
@@ -906,7 +906,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/minimax-m2.5",
@@ -925,7 +925,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/minimax-m2.5",
@@ -944,7 +944,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/minimax-m2.1",
@@ -963,7 +963,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/minimax-m2.1",
@@ -982,7 +982,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/glm-5",
@@ -999,7 +999,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/glm-5",
@@ -1018,7 +1018,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/qwen3-coder-next",
@@ -1036,7 +1036,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/qwen3-coder-next",
@@ -1055,7 +1055,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/gpt-5.6-sol",
@@ -1072,7 +1072,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/gpt-5.6-sol",
@@ -1089,7 +1089,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/gpt-5.6-terra",
@@ -1106,7 +1106,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/gpt-5.6-terra",
@@ -1123,7 +1123,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/gpt-5.6-luna",
@@ -1140,7 +1140,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/gpt-5.6-luna",
@@ -1157,7 +1157,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-sonnet-5-low",
@@ -1174,7 +1174,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-sonnet-5-medium",
@@ -1191,7 +1191,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-sonnet-5-high",
@@ -1208,7 +1208,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-sonnet-5-xhigh",
@@ -1225,7 +1225,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-sonnet-5-low",
@@ -1242,7 +1242,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-sonnet-5-medium",
@@ -1259,7 +1259,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-sonnet-5-high",
@@ -1276,7 +1276,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-sonnet-5-xhigh",
@@ -1293,7 +1293,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-sonnet-4.5-low",
@@ -1310,7 +1310,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-sonnet-4.5-medium",
@@ -1327,7 +1327,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-sonnet-4.5-high",
@@ -1344,7 +1344,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-sonnet-4.5-low",
@@ -1361,7 +1361,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-sonnet-4.5-medium",
@@ -1378,7 +1378,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-sonnet-4.5-high",
@@ -1395,7 +1395,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-haiku-4.5-low",
@@ -1412,7 +1412,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-haiku-4.5-medium",
@@ -1429,7 +1429,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-haiku-4.5-high",
@@ -1446,7 +1446,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-haiku-4.5-low",
@@ -1463,7 +1463,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-haiku-4.5-medium",
@@ -1480,7 +1480,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-haiku-4.5-high",
@@ -1497,7 +1497,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kr/claude-sonnet-5",
@@ -1514,7 +1514,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kiro/claude-sonnet-5",
@@ -1531,7 +1531,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kr/claude-sonnet-4.5",
@@ -1548,7 +1548,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kiro/claude-sonnet-4.5",
@@ -1565,7 +1565,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kr/claude-haiku-4.5",
@@ -1582,7 +1582,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kiro/claude-haiku-4.5",
@@ -1599,7 +1599,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kr/claude-sonnet-5-max",
@@ -1617,7 +1617,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "kiro/claude-sonnet-5-max",
@@ -1635,7 +1635,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kr/claude-sonnet-5-low",
@@ -1652,7 +1652,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kr/claude-sonnet-5-medium",
@@ -1669,7 +1669,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kr/claude-sonnet-5-high",
@@ -1686,7 +1686,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kr/claude-sonnet-5-xhigh",
@@ -1703,7 +1703,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kr/claude-sonnet-5-max",
@@ -1721,7 +1721,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kiro/claude-sonnet-5-low",
@@ -1738,7 +1738,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kiro/claude-sonnet-5-medium",
@@ -1755,7 +1755,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kiro/claude-sonnet-5-high",
@@ -1772,7 +1772,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kiro/claude-sonnet-5-xhigh",
@@ -1789,7 +1789,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/kiro/claude-sonnet-5-max",
@@ -1807,7 +1807,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/gemini-3-flash",
@@ -1824,7 +1824,7 @@
     "reasoning": false,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/gemini-3.5-flash-lite",
@@ -1841,7 +1841,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/claude-sonnet-4-6",
@@ -1858,7 +1858,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/claude-opus-4-6-thinking",
@@ -1876,7 +1876,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/gpt-oss-120b-medium",
@@ -1894,7 +1894,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/gemini-3.1-flash-lite",
@@ -1911,7 +1911,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/gemini-3.8-flash-tiered",
@@ -1928,7 +1928,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/gemini-3.1-flash-image",
@@ -1945,7 +1945,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/claude-sonnet-4-6-low",
@@ -1962,7 +1962,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/claude-sonnet-4-6-medium",
@@ -1979,7 +1979,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/claude-sonnet-4-6-high",
@@ -1996,7 +1996,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/claude-opus-4-6-thinking-low",
@@ -2014,7 +2014,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/claude-opus-4-6-thinking-medium",
@@ -2032,7 +2032,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "antigravity/claude-opus-4-6-thinking-high",
@@ -2050,7 +2050,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/antigravity/claude-sonnet-4-6",
@@ -2067,7 +2067,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "no-think/antigravity/claude-opus-4-6-thinking",
@@ -2085,7 +2085,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/claude-fable-5",
@@ -2102,7 +2102,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/claude-fable-5",
@@ -2119,7 +2119,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/claude-opus-5",
@@ -2137,7 +2137,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/claude-opus-5",
@@ -2155,7 +2155,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/claude-opus-4.8-fast",
@@ -2174,7 +2174,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/claude-opus-4.8-fast",
@@ -2193,7 +2193,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/claude-opus-4.8",
@@ -2211,7 +2211,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/claude-opus-4.8",
@@ -2229,7 +2229,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/claude-opus-4.7",
@@ -2247,7 +2247,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/claude-opus-4.7",
@@ -2265,7 +2265,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/claude-opus-4.6",
@@ -2283,7 +2283,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/claude-opus-4.6",
@@ -2301,7 +2301,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/claude-sonnet-4.6",
@@ -2318,7 +2318,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/claude-sonnet-4.6",
@@ -2335,7 +2335,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/claude-opus-4.5",
@@ -2353,7 +2353,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/claude-opus-4.5",
@@ -2371,7 +2371,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/claude-sonnet-5",
@@ -2388,7 +2388,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/claude-sonnet-5",
@@ -2405,7 +2405,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/claude-sonnet-4.5",
@@ -2422,7 +2422,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/claude-sonnet-4.5",
@@ -2439,7 +2439,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/claude-haiku-4.5",
@@ -2456,7 +2456,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/claude-haiku-4.5",
@@ -2473,7 +2473,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/gemini-3.1-pro-preview",
@@ -2490,7 +2490,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/gemini-3.1-pro-preview",
@@ -2507,7 +2507,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/gemini-3.7-flash",
@@ -2524,7 +2524,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/gemini-3.7-flash",
@@ -2541,7 +2541,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/gemini-3.6-flash",
@@ -2558,7 +2558,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/gemini-3.6-flash",
@@ -2575,7 +2575,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/gemini-3.5-flash",
@@ -2592,7 +2592,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/gemini-3.5-flash",
@@ -2609,7 +2609,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/gpt-5.6-sol",
@@ -2626,7 +2626,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/gpt-5.6-sol",
@@ -2643,7 +2643,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/gpt-5.6-terra",
@@ -2660,7 +2660,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/gpt-5.6-terra",
@@ -2677,7 +2677,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "gh/gpt-5.6-luna",
@@ -2694,7 +2694,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.847Z"
   },
   {
     "id": "github/gpt-5.6-luna",
@@ -2711,7 +2711,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/gpt-5.5",
@@ -2728,7 +2728,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/gpt-5.5",
@@ -2745,7 +2745,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/gpt-5.4",
@@ -2762,7 +2762,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/gpt-5.4",
@@ -2779,7 +2779,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/gpt-5.4-mini",
@@ -2796,7 +2796,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/gpt-5.4-mini",
@@ -2813,7 +2813,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/gpt-5.4-nano",
@@ -2830,7 +2830,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/gpt-5.4-nano",
@@ -2847,7 +2847,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/gpt-5.3-codex",
@@ -2865,7 +2865,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/gpt-5.3-codex",
@@ -2883,7 +2883,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/gpt-5-mini",
@@ -2900,7 +2900,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/gpt-5-mini",
@@ -2917,7 +2917,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/gpt-4o-2024-11-20",
@@ -2934,7 +2934,7 @@
     "reasoning": false,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/gpt-4o-2024-11-20",
@@ -2951,7 +2951,7 @@
     "reasoning": false,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/gpt-4o-mini",
@@ -2968,7 +2968,7 @@
     "reasoning": false,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/gpt-4o-mini",
@@ -2985,7 +2985,7 @@
     "reasoning": false,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.047Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/kimi-k2.7-code",
@@ -3003,7 +3003,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/kimi-k2.7-code",
@@ -3021,7 +3021,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/mai-code-1-flash",
@@ -3040,7 +3040,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/mai-code-1-flash",
@@ -3059,7 +3059,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/mai-code-1.1-flash",
@@ -3078,7 +3078,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/mai-code-1.1-flash",
@@ -3097,7 +3097,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/mai-code-1-flash-picker",
@@ -3116,7 +3116,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/mai-code-1-flash-picker",
@@ -3135,7 +3135,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/grok-4.6",
@@ -3152,7 +3152,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/grok-4.6",
@@ -3169,7 +3169,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/grok-4.5",
@@ -3186,7 +3186,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/grok-4.5",
@@ -3203,7 +3203,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/oswe-vscode-prime",
@@ -3221,7 +3221,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/oswe-vscode-prime",
@@ -3239,7 +3239,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-fable-5-low",
@@ -3256,7 +3256,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-fable-5-medium",
@@ -3273,7 +3273,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-fable-5-high",
@@ -3290,7 +3290,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-fable-5-xhigh",
@@ -3307,7 +3307,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-fable-5-low",
@@ -3324,7 +3324,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-fable-5-medium",
@@ -3341,7 +3341,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-fable-5-high",
@@ -3358,7 +3358,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-fable-5-xhigh",
@@ -3375,7 +3375,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-5-low",
@@ -3393,7 +3393,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-5-medium",
@@ -3411,7 +3411,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-5-high",
@@ -3429,7 +3429,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-5-xhigh",
@@ -3447,7 +3447,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-5-low",
@@ -3465,7 +3465,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-5-medium",
@@ -3483,7 +3483,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-5-high",
@@ -3501,7 +3501,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-5-xhigh",
@@ -3519,7 +3519,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.8-fast-low",
@@ -3538,7 +3538,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.8-fast-medium",
@@ -3557,7 +3557,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.8-fast-high",
@@ -3576,7 +3576,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.8-fast-xhigh",
@@ -3595,7 +3595,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.8-fast-low",
@@ -3614,7 +3614,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.8-fast-medium",
@@ -3633,7 +3633,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.8-fast-high",
@@ -3652,7 +3652,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.8-fast-xhigh",
@@ -3671,7 +3671,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.8-low",
@@ -3689,7 +3689,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.8-medium",
@@ -3707,7 +3707,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.8-high",
@@ -3725,7 +3725,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.8-xhigh",
@@ -3743,7 +3743,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.8-low",
@@ -3761,7 +3761,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.8-medium",
@@ -3779,7 +3779,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.8-high",
@@ -3797,7 +3797,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.8-xhigh",
@@ -3815,7 +3815,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.7-low",
@@ -3833,7 +3833,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.7-medium",
@@ -3851,7 +3851,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.7-high",
@@ -3869,7 +3869,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.7-xhigh",
@@ -3887,7 +3887,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.7-low",
@@ -3905,7 +3905,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.7-medium",
@@ -3923,7 +3923,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.7-high",
@@ -3941,7 +3941,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.7-xhigh",
@@ -3959,7 +3959,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.6-low",
@@ -3977,7 +3977,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.6-medium",
@@ -3995,7 +3995,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "gh/claude-opus-4.6-high",
@@ -4013,7 +4013,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.6-low",
@@ -4031,7 +4031,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.6-medium",
@@ -4049,7 +4049,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.848Z"
   },
   {
     "id": "github/claude-opus-4.6-high",
@@ -4067,7 +4067,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-sonnet-4.6-low",
@@ -4084,7 +4084,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-sonnet-4.6-medium",
@@ -4101,7 +4101,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-sonnet-4.6-high",
@@ -4118,7 +4118,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-sonnet-4.6-low",
@@ -4135,7 +4135,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-sonnet-4.6-medium",
@@ -4152,7 +4152,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-sonnet-4.6-high",
@@ -4169,7 +4169,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-sonnet-5-low",
@@ -4186,7 +4186,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-sonnet-5-medium",
@@ -4203,7 +4203,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-sonnet-5-high",
@@ -4220,7 +4220,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-sonnet-5-xhigh",
@@ -4237,7 +4237,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-sonnet-5-low",
@@ -4254,7 +4254,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-sonnet-5-medium",
@@ -4271,7 +4271,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-sonnet-5-high",
@@ -4288,7 +4288,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-sonnet-5-xhigh",
@@ -4305,7 +4305,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-sonnet-4.5-low",
@@ -4322,7 +4322,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-sonnet-4.5-medium",
@@ -4339,7 +4339,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-sonnet-4.5-high",
@@ -4356,7 +4356,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-sonnet-4.5-low",
@@ -4373,7 +4373,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-sonnet-4.5-medium",
@@ -4390,7 +4390,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-sonnet-4.5-high",
@@ -4407,7 +4407,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-haiku-4.5-low",
@@ -4424,7 +4424,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-haiku-4.5-medium",
@@ -4441,7 +4441,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-haiku-4.5-high",
@@ -4458,7 +4458,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-haiku-4.5-low",
@@ -4475,7 +4475,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-haiku-4.5-medium",
@@ -4492,7 +4492,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-haiku-4.5-high",
@@ -4509,7 +4509,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/gh/claude-opus-5",
@@ -4527,7 +4527,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/github/claude-opus-5",
@@ -4545,7 +4545,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.8-fast",
@@ -4564,7 +4564,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/github/claude-opus-4.8-fast",
@@ -4583,7 +4583,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.8",
@@ -4601,7 +4601,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/github/claude-opus-4.8",
@@ -4619,7 +4619,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.7",
@@ -4637,7 +4637,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/github/claude-opus-4.7",
@@ -4655,7 +4655,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.6",
@@ -4673,7 +4673,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/github/claude-opus-4.6",
@@ -4691,7 +4691,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/gh/claude-sonnet-4.6",
@@ -4708,7 +4708,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/github/claude-sonnet-4.6",
@@ -4725,7 +4725,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/gh/claude-sonnet-5",
@@ -4742,7 +4742,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/github/claude-sonnet-5",
@@ -4759,7 +4759,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/gh/claude-sonnet-4.5",
@@ -4776,7 +4776,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/github/claude-sonnet-4.5",
@@ -4793,7 +4793,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/gh/claude-haiku-4.5",
@@ -4810,7 +4810,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "no-think/github/claude-haiku-4.5",
@@ -4827,7 +4827,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-fable-5-max",
@@ -4845,7 +4845,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-fable-5-max",
@@ -4863,7 +4863,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-opus-5-max",
@@ -4881,7 +4881,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-opus-5-max",
@@ -4899,7 +4899,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-opus-4.8-fast-max",
@@ -4918,7 +4918,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-opus-4.8-fast-max",
@@ -4937,7 +4937,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-opus-4.8-max",
@@ -4955,7 +4955,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-opus-4.8-max",
@@ -4973,7 +4973,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-opus-4.7-max",
@@ -4991,7 +4991,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-opus-4.7-max",
@@ -5009,7 +5009,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-opus-4.6-max",
@@ -5027,7 +5027,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-opus-4.6-max",
@@ -5045,7 +5045,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-opus-4.5-low",
@@ -5063,7 +5063,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-opus-4.5-medium",
@@ -5081,7 +5081,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/claude-opus-4.5-high",
@@ -5099,7 +5099,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-opus-4.5-low",
@@ -5117,7 +5117,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-opus-4.5-medium",
@@ -5135,7 +5135,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/claude-opus-4.5-high",
@@ -5153,7 +5153,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/gpt-5.6-sol-low",
@@ -5170,7 +5170,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/gpt-5.6-sol-medium",
@@ -5187,7 +5187,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/gpt-5.6-sol-high",
@@ -5204,7 +5204,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/gpt-5.6-sol-xhigh",
@@ -5221,7 +5221,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/gpt-5.6-sol-max",
@@ -5239,7 +5239,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/gpt-5.6-sol-low",
@@ -5256,7 +5256,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/gpt-5.6-sol-medium",
@@ -5273,7 +5273,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/gpt-5.6-sol-high",
@@ -5290,7 +5290,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/gpt-5.6-sol-xhigh",
@@ -5307,7 +5307,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/gpt-5.6-sol-max",
@@ -5325,7 +5325,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/gpt-5.6-terra-low",
@@ -5342,7 +5342,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/gpt-5.6-terra-medium",
@@ -5359,7 +5359,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/gpt-5.6-terra-high",
@@ -5376,7 +5376,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/gpt-5.6-terra-xhigh",
@@ -5393,7 +5393,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "gh/gpt-5.6-terra-max",
@@ -5411,7 +5411,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.849Z"
   },
   {
     "id": "github/gpt-5.6-terra-low",
@@ -5428,7 +5428,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "github/gpt-5.6-terra-medium",
@@ -5445,7 +5445,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "github/gpt-5.6-terra-high",
@@ -5462,7 +5462,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "github/gpt-5.6-terra-xhigh",
@@ -5479,7 +5479,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "github/gpt-5.6-terra-max",
@@ -5497,7 +5497,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "gh/gpt-5.6-luna-low",
@@ -5514,7 +5514,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "gh/gpt-5.6-luna-medium",
@@ -5531,7 +5531,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "gh/gpt-5.6-luna-high",
@@ -5548,7 +5548,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "gh/gpt-5.6-luna-xhigh",
@@ -5565,7 +5565,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "gh/gpt-5.6-luna-max",
@@ -5583,7 +5583,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "github/gpt-5.6-luna-low",
@@ -5600,7 +5600,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "github/gpt-5.6-luna-medium",
@@ -5617,7 +5617,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "github/gpt-5.6-luna-high",
@@ -5634,7 +5634,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "github/gpt-5.6-luna-xhigh",
@@ -5651,7 +5651,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "github/gpt-5.6-luna-max",
@@ -5669,7 +5669,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-5-low",
@@ -5687,7 +5687,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-5-medium",
@@ -5705,7 +5705,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-5-high",
@@ -5723,7 +5723,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-5-xhigh",
@@ -5741,7 +5741,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-5-max",
@@ -5759,7 +5759,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-5-low",
@@ -5777,7 +5777,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-5-medium",
@@ -5795,7 +5795,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-5-high",
@@ -5813,7 +5813,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-5-xhigh",
@@ -5831,7 +5831,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-5-max",
@@ -5849,7 +5849,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.8-fast-low",
@@ -5868,7 +5868,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.8-fast-medium",
@@ -5887,7 +5887,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.8-fast-high",
@@ -5906,7 +5906,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.8-fast-xhigh",
@@ -5925,7 +5925,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.8-fast-max",
@@ -5944,7 +5944,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.8-fast-low",
@@ -5963,7 +5963,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.8-fast-medium",
@@ -5982,7 +5982,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.8-fast-high",
@@ -6001,7 +6001,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.8-fast-xhigh",
@@ -6020,7 +6020,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.8-fast-max",
@@ -6039,7 +6039,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.8-low",
@@ -6057,7 +6057,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.8-medium",
@@ -6075,7 +6075,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.8-high",
@@ -6093,7 +6093,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.8-xhigh",
@@ -6111,7 +6111,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.8-max",
@@ -6129,7 +6129,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.8-low",
@@ -6147,7 +6147,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.8-medium",
@@ -6165,7 +6165,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.8-high",
@@ -6183,7 +6183,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.8-xhigh",
@@ -6201,7 +6201,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.8-max",
@@ -6219,7 +6219,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.7-low",
@@ -6237,7 +6237,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.7-medium",
@@ -6255,7 +6255,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.7-high",
@@ -6273,7 +6273,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.7-xhigh",
@@ -6291,7 +6291,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.7-max",
@@ -6309,7 +6309,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.7-low",
@@ -6327,7 +6327,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.7-medium",
@@ -6345,7 +6345,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.7-high",
@@ -6363,7 +6363,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.7-xhigh",
@@ -6381,7 +6381,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.7-max",
@@ -6399,7 +6399,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.6-low",
@@ -6417,7 +6417,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.6-medium",
@@ -6435,7 +6435,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.6-high",
@@ -6453,7 +6453,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/gh/claude-opus-4.6-max",
@@ -6471,7 +6471,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.6-low",
@@ -6489,7 +6489,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.6-medium",
@@ -6507,7 +6507,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.6-high",
@@ -6525,7 +6525,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "no-think/github/claude-opus-4.6-max",
@@ -6543,7 +6543,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/dots-studio/dots-3-note-preview:free",
@@ -6560,7 +6560,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/liquid/lfm-2.5-2.6b:free",
@@ -6577,7 +6577,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/nvidia/nemotron-3.5-lightning:free",
@@ -6594,7 +6594,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/poolside/laguna-s-2.1:free",
@@ -6611,7 +6611,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/poolside/laguna-xs-2.1:free",
@@ -6628,7 +6628,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/cohere/north-mini-code:free",
@@ -6645,7 +6645,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/z-ai/glm-5.2:free",
@@ -6662,7 +6662,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/nvidia/nemotron-3.5-content-safety:free",
@@ -6679,7 +6679,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -6696,7 +6696,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
@@ -6713,7 +6713,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/google/gemma-4-26b-a4b-it:free",
@@ -6730,7 +6730,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/google/gemma-4-31b-it:free",
@@ -6747,7 +6747,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/google/lyria-3-pro-preview",
@@ -6764,7 +6764,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/google/lyria-3-clip-preview",
@@ -6781,7 +6781,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/nvidia/nemotron-3-super-120b-a12b:free",
@@ -6799,7 +6799,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/openrouter/free",
@@ -6816,7 +6816,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/nvidia/nemotron-3-nano-30b-a3b:free",
@@ -6833,7 +6833,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/nvidia/nemotron-nano-12b-v2-vl:free",
@@ -6850,7 +6850,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/nvidia/nemotron-nano-9b-v2:free",
@@ -6867,7 +6867,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/openai/gpt-oss-20b:free",
@@ -6884,7 +6884,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/z-ai/glm-5.3-flash",
@@ -6901,7 +6901,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/openai/text-embedding-3-small",
@@ -6918,7 +6918,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/openai/text-embedding-3-large",
@@ -6936,7 +6936,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/qwen/qwen3-embedding-8b",
@@ -6953,7 +6953,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/qwen/qwen3-embedding-4b",
@@ -6970,7 +6970,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/baai/bge-m3",
@@ -6987,7 +6987,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/mistralai/mistral-embed-2312",
@@ -7004,7 +7004,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/google/gemini-embedding-001",
@@ -7021,7 +7021,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/google/gemini-embedding-2",
@@ -7038,7 +7038,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/google/gemini-embedding-2-preview",
@@ -7055,7 +7055,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/openai/gpt-5.4-image-2",
@@ -7072,7 +7072,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/openai/gpt-5-image-mini",
@@ -7089,7 +7089,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/google/gemini-3.1-flash-image-preview",
@@ -7106,7 +7106,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/google/gemini-3-pro-image-preview",
@@ -7123,7 +7123,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/black-forest-labs/flux.2-max",
@@ -7141,7 +7141,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/black-forest-labs/flux.2-pro",
@@ -7158,7 +7158,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/black-forest-labs/flux.2-flex",
@@ -7175,7 +7175,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/openai/gpt-image-2.5-sunburst",
@@ -7192,7 +7192,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/openai/gpt-image-2.5-flare",
@@ -7209,7 +7209,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/microsoft/mai-image-2.6",
@@ -7226,7 +7226,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/microsoft/mai-image-2.6-flash",
@@ -7243,7 +7243,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.850Z"
   },
   {
     "id": "openrouter/cohere/rerank-4-pro",
@@ -7260,7 +7260,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/cohere/rerank-4-fast",
@@ -7277,7 +7277,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/cohere/rerank-v3.5",
@@ -7294,7 +7294,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/deepgram/nova-3",
@@ -7311,7 +7311,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/microsoft/mai-transcribe-1.5",
@@ -7328,7 +7328,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/nvidia/parakeet-tdt-0.6b-v3",
@@ -7345,7 +7345,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.048Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/mistralai/voxtral-mini-transcribe",
@@ -7362,7 +7362,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/qwen/qwen3-asr-flash-2026-02-10",
@@ -7379,7 +7379,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/google/chirp-3",
@@ -7396,7 +7396,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/openai/gpt-4o-mini-transcribe",
@@ -7413,7 +7413,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/openai/whisper-large-v3",
@@ -7431,7 +7431,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/openai/whisper-large-v3-turbo",
@@ -7449,7 +7449,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/openai/whisper-1",
@@ -7466,7 +7466,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/openai/gpt-4o-transcribe",
@@ -7483,7 +7483,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/z-ai/glm-5.2:free-xhigh",
@@ -7500,7 +7500,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/z-ai/glm-5.2:free-high",
@@ -7517,7 +7517,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free-high",
@@ -7534,7 +7534,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free-medium",
@@ -7551,7 +7551,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/nvidia/nemotron-3-super-120b-a12b:free-medium",
@@ -7569,7 +7569,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/nvidia/nemotron-3-super-120b-a12b:free-low",
@@ -7587,7 +7587,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/openai/gpt-oss-20b:free-high",
@@ -7604,7 +7604,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/openai/gpt-oss-20b:free-medium",
@@ -7621,7 +7621,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "openrouter/openai/gpt-oss-20b:free-low",
@@ -7638,7 +7638,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/kilo-auto/free",
@@ -7655,7 +7655,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/kilo-auto/free",
@@ -7672,7 +7672,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/stepfun/step-3.7-flash:free",
@@ -7689,7 +7689,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/stepfun/step-3.7-flash:free",
@@ -7706,7 +7706,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/tencent/hy3:free",
@@ -7723,7 +7723,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/tencent/hy3:free",
@@ -7740,7 +7740,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/poolside/laguna-s-2.1:free",
@@ -7757,7 +7757,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/poolside/laguna-s-2.1:free",
@@ -7774,7 +7774,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/dots-studio/dots-3-note-preview:free",
@@ -7791,7 +7791,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/dots-studio/dots-3-note-preview:free",
@@ -7808,7 +7808,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/liquid/lfm-2.5-2.6b:free",
@@ -7825,7 +7825,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/liquid/lfm-2.5-2.6b:free",
@@ -7842,7 +7842,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/nvidia/nemotron-3.5-lightning:free",
@@ -7859,7 +7859,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/nvidia/nemotron-3.5-lightning:free",
@@ -7876,7 +7876,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/openrouter/auto-beta",
@@ -7893,7 +7893,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/openrouter/auto-beta",
@@ -7910,7 +7910,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/poolside/laguna-xs-2.1:free",
@@ -7927,7 +7927,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/poolside/laguna-xs-2.1:free",
@@ -7944,7 +7944,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/cohere/north-mini-code:free",
@@ -7963,7 +7963,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/cohere/north-mini-code:free",
@@ -7982,7 +7982,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/nvidia/nemotron-3.5-content-safety:free",
@@ -7999,7 +7999,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/nvidia/nemotron-3.5-content-safety:free",
@@ -8016,7 +8016,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -8033,7 +8033,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -8050,7 +8050,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
@@ -8067,7 +8067,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
@@ -8084,7 +8084,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/google/lyria-3-pro-preview",
@@ -8101,7 +8101,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/google/lyria-3-pro-preview",
@@ -8118,7 +8118,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/google/lyria-3-clip-preview",
@@ -8135,7 +8135,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/google/lyria-3-clip-preview",
@@ -8152,7 +8152,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/nvidia/nemotron-3-super-120b-a12b:free",
@@ -8170,7 +8170,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/nvidia/nemotron-3-super-120b-a12b:free",
@@ -8188,7 +8188,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kg/openrouter/free",
@@ -8205,7 +8205,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "kilo-gateway/openrouter/free",
@@ -8222,7 +8222,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "groq/openai/gpt-oss-120b",
@@ -8240,7 +8240,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "groq/openai/gpt-oss-20b",
@@ -8257,7 +8257,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "groq/whisper-large-v3",
@@ -8275,7 +8275,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "groq/whisper-large-v3-turbo",
@@ -8293,7 +8293,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "groq/distil-whisper-large-v3-en",
@@ -8311,7 +8311,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "mistral/codestral-latest",
@@ -8330,7 +8330,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "metered",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "mistral/mistral-small-latest",
@@ -8347,7 +8347,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "mistral/mistral-medium-3-5",
@@ -8364,7 +8364,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "mistral/mistral-embed",
@@ -8381,7 +8381,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "mistral/mistral-moderation-latest",
@@ -8398,7 +8398,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "unknown",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/google/gemma-4-31b-it",
@@ -8415,7 +8415,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/nvidia/nemotron-3-super-120b-a12b",
@@ -8433,7 +8433,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/openai/gpt-oss-120b",
@@ -8451,7 +8451,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/openai/gpt-oss-20b",
@@ -8468,7 +8468,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/z-ai/glm-5.2",
@@ -8485,7 +8485,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/nv-embedqa-e5-v5",
@@ -8502,7 +8502,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/black-forest-labs/flux.1-dev",
@@ -8519,7 +8519,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/black-forest-labs/flux.1-schnell",
@@ -8536,7 +8536,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/black-forest-labs/flux.1-kontext-dev",
@@ -8553,7 +8553,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/black-forest-labs/flux.2-klein-4b",
@@ -8570,7 +8570,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/nv-rerankqa-mistral-4b-v3",
@@ -8587,7 +8587,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/parakeet-ctc-1.1b-asr",
@@ -8604,7 +8604,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/openai/whisper-large-v3",
@@ -8622,7 +8622,7 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/fastpitch",
@@ -8639,7 +8639,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "nvidia/tacotron2",
@@ -8656,7 +8656,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "ollamacloud/deepseek-v4-pro:0813",
@@ -8673,7 +8673,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "ollama-cloud/deepseek-v4-pro:0813",
@@ -8690,7 +8690,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "ollamacloud/glm-5.3-flash",
@@ -8707,7 +8707,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "ollama-cloud/glm-5.3-flash",
@@ -8724,7 +8724,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "ollamacloud/kimi-k2.7-code",
@@ -8742,7 +8742,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "ollama-cloud/kimi-k2.7-code",
@@ -8760,7 +8760,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.851Z"
   },
   {
     "id": "ollamacloud/mistral-large-3:675b",
@@ -8778,7 +8778,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/mistral-large-3:675b",
@@ -8796,7 +8796,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/qwen3.5:397b",
@@ -8813,7 +8813,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/qwen3.5:397b",
@@ -8830,7 +8830,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.3",
@@ -8847,7 +8847,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.049Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.3",
@@ -8864,7 +8864,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/gpt-oss:20b",
@@ -8881,7 +8881,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/gpt-oss:20b",
@@ -8898,7 +8898,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/gemma4:31b",
@@ -8915,7 +8915,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/gemma4:31b",
@@ -8932,7 +8932,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/deepseek-v4-flash:0731",
@@ -8949,7 +8949,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/deepseek-v4-flash:0731",
@@ -8966,7 +8966,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/nemotron-3-nano:30b",
@@ -8983,7 +8983,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/nemotron-3-nano:30b",
@@ -9000,7 +9000,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.2",
@@ -9017,7 +9017,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.2",
@@ -9034,7 +9034,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/kimi-k2.6",
@@ -9051,7 +9051,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/kimi-k2.6",
@@ -9068,7 +9068,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/minimax-m2.7",
@@ -9087,7 +9087,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/minimax-m2.7",
@@ -9106,7 +9106,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/minimax-m3",
@@ -9125,7 +9125,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/minimax-m3",
@@ -9144,7 +9144,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/kimi-k3",
@@ -9161,7 +9161,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/kimi-k3",
@@ -9178,7 +9178,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/gpt-oss:120b",
@@ -9196,7 +9196,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/gpt-oss:120b",
@@ -9214,7 +9214,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/nemotron-3-super",
@@ -9231,7 +9231,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/nemotron-3-super",
@@ -9248,7 +9248,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/nemotron-3-ultra",
@@ -9265,7 +9265,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/nemotron-3-ultra",
@@ -9282,7 +9282,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.1",
@@ -9299,7 +9299,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.1",
@@ -9316,7 +9316,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.050Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/gpt-oss:20b-low",
@@ -9333,7 +9333,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/gpt-oss:20b-medium",
@@ -9350,7 +9350,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/gpt-oss:20b-high",
@@ -9367,7 +9367,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/gpt-oss:20b-low",
@@ -9384,7 +9384,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/gpt-oss:20b-medium",
@@ -9401,7 +9401,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/gpt-oss:20b-high",
@@ -9418,7 +9418,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.2-none",
@@ -9435,7 +9435,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.2-low",
@@ -9452,7 +9452,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.2-medium",
@@ -9469,7 +9469,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.2-high",
@@ -9486,7 +9486,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.2-max",
@@ -9504,7 +9504,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.2-none",
@@ -9521,7 +9521,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.2-low",
@@ -9538,7 +9538,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.2-medium",
@@ -9555,7 +9555,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.2-high",
@@ -9572,7 +9572,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.2-max",
@@ -9590,7 +9590,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/gpt-oss:120b-low",
@@ -9608,7 +9608,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/gpt-oss:120b-medium",
@@ -9626,7 +9626,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/gpt-oss:120b-high",
@@ -9644,7 +9644,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/gpt-oss:120b-low",
@@ -9662,7 +9662,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/gpt-oss:120b-medium",
@@ -9680,7 +9680,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/gpt-oss:120b-high",
@@ -9698,7 +9698,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.1-none",
@@ -9715,7 +9715,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.1-low",
@@ -9732,7 +9732,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.1-medium",
@@ -9749,7 +9749,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.1-high",
@@ -9766,7 +9766,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollamacloud/glm-5.1-max",
@@ -9784,7 +9784,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.1-none",
@@ -9801,7 +9801,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.1-low",
@@ -9818,7 +9818,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.1-medium",
@@ -9835,7 +9835,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.1-high",
@@ -9852,7 +9852,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "ollama-cloud/glm-5.1-max",
@@ -9870,7 +9870,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cf/@cf/mistral/mistral-7b-instruct-v0.2-lora",
@@ -9887,7 +9887,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cloudflare-ai/@cf/mistral/mistral-7b-instruct-v0.2-lora",
@@ -9904,7 +9904,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cf/@cf/qwen/qwen2.5-coder-32b-instruct",
@@ -9922,7 +9922,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cloudflare-ai/@cf/qwen/qwen2.5-coder-32b-instruct",
@@ -9940,7 +9940,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cf/@cf/deepseek-ai/deepseek-r1-distill-qwen-32b",
@@ -9957,7 +9957,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cloudflare-ai/@cf/deepseek-ai/deepseek-r1-distill-qwen-32b",
@@ -9975,7 +9975,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cf/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
@@ -9994,7 +9994,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cloudflare-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
@@ -10012,7 +10012,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cf/@cf/meta/llama-3.2-3b-instruct",
@@ -10029,7 +10029,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cloudflare-ai/@cf/meta/llama-3.2-3b-instruct",
@@ -10046,7 +10046,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cf/@cf/qwen/qwq-32b",
@@ -10063,7 +10063,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cloudflare-ai/@cf/qwen/qwq-32b",
@@ -10080,7 +10080,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cf/@cf/zai-org/glm-4.7-flash",
@@ -10097,7 +10097,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cloudflare-ai/@cf/zai-org/glm-4.7-flash",
@@ -10114,7 +10114,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cf/@cf/moonshotai/kimi-k2.6",
@@ -10131,7 +10131,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cloudflare-ai/@cf/moonshotai/kimi-k2.6",
@@ -10148,7 +10148,7 @@
     "reasoning": true,
     "vision": true,
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cf/@cf/google/gemma-4-26b-a4b-it",
@@ -10165,7 +10165,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cloudflare-ai/@cf/google/gemma-4-26b-a4b-it",
@@ -10182,7 +10182,7 @@
     "reasoning": true,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   },
   {
     "id": "cloudflare-ai/@cf/black-forest-labs/flux-1-schnell",
@@ -10199,6 +10199,6 @@
     "reasoning": false,
     "vision": "unknown",
     "pricing": "free",
-    "last_scanned": "2026-11-07T16:37:11.051Z"
+    "last_scanned": "2026-11-07T19:34:18.853Z"
   }
 ]

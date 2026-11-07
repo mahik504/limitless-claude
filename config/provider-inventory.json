@@ -7,7 +7,7 @@
     "free_or_paid": "provider_free_quota",
     "quota_class": "provider_free_quota",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.998Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
@@ -18,7 +18,7 @@
     "free_or_paid": "paid-token",
     "quota_class": "paid-token",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.998Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
@@ -29,7 +29,7 @@
     "free_or_paid": "subscription-entitled",
     "quota_class": "subscription-entitled",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.998Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
@@ -40,7 +40,7 @@
     "free_or_paid": "unknown",
     "quota_class": "unknown",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.998Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
@@ -51,7 +51,7 @@
     "free_or_paid": "provider_free_quota",
     "quota_class": "provider_free_quota",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
@@ -62,7 +62,7 @@
     "free_or_paid": "provider_free_quota",
     "quota_class": "provider_free_quota",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
@@ -73,7 +73,7 @@
     "free_or_paid": "unknown",
     "quota_class": "unknown",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
@@ -84,7 +84,7 @@
     "free_or_paid": "provider_free_quota",
     "quota_class": "provider_free_quota",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
@@ -95,7 +95,7 @@
     "free_or_paid": "subscription-entitled",
     "quota_class": "subscription-entitled",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
@@ -106,7 +106,7 @@
     "free_or_paid": "provider_free_quota",
     "quota_class": "provider_free_quota",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
@@ -117,7 +117,7 @@
     "free_or_paid": "provider_free_quota",
     "quota_class": "provider_free_quota",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
@@ -128,7 +128,7 @@
     "free_or_paid": "paid-token",
     "quota_class": "paid-token",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   },
   {
@@ -139,7 +139,7 @@
     "free_or_paid": "subscription-entitled",
     "quota_class": "subscription-entitled",
     "tool_support": "unverified",
-    "last_scanned": "2026-11-07T16:37:10.999Z",
+    "last_scanned": "2026-11-07T19:34:18.401Z",
     "notes": "Metadata inferred from local database row and classifier taxonomy."
   }
 ]

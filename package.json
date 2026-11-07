@@ -4,6 +4,9 @@
   "private": true,
   "description": "Limitless Claude 7.0 - Intelligent Multi-Provider Coding Router for Claude Code, Cursor, Superdesign, and Antigravity. Features dynamic capability evaluation, zero-marginal-cost priority waterfall, automated circuit breakers, active deprecation traps detection, and multi-profile switching.",
   "license": "MIT",
+  "bin": {
+    "limitless": "./bin/limitless.js"
+  },
   "engines": {
     "node": ">=22"
   },

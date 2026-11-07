@@ -259,7 +259,16 @@ function backupDatabase(db, dbPath, backupPath) {
   return true;
 }
 
+function getDatabase(options = { readonly: true }) {
+  const os = require("os");
+  const omnirouteDir = process.env.OMNIROUTE_DIR || path.join(os.homedir(), ".omniroute");
+  const dbPath = path.join(omnirouteDir, "storage.sqlite");
+  if (!fs.existsSync(dbPath)) return null;
+  return openDatabase(dbPath, options);
+}
+
 module.exports = {
   openDatabase,
-  backupDatabase
+  backupDatabase,
+  getDatabase
 };

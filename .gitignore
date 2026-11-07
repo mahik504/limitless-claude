@@ -10,3 +10,8 @@ node_modules/
 Thumbs.db
 omniroute-daemon.bat
 config/tier-configuration.json
+
+backups/
+*.bak
+.active-profile
+

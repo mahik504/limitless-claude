@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /**
- * Limitless Claude 7.0 - Atomic Rollback CLI
- * 
- * Lists and restores database and configuration snapshots atomically.
- * 
+ * Limitless Claude 8.0 - Atomic Rollback CLI
+ *
+ * Lists, creates, and restores database and configuration snapshots atomically.
+ *
  * Usage:
+ *   node scripts/rollback.js --create <tag>
  *   node scripts/rollback.js --list
  *   node scripts/rollback.js --snapshot <snapshot-id> [--dry-run]
  */
@@ -14,12 +15,13 @@ const { logger } = require("../src/utils/logger");
 
 function printHelp() {
   console.log(`
-Limitless Claude 7.0 - Atomic Rollback Tool
+Limitless Claude 8.0 - Atomic Rollback Tool
 
 Usage:
   node scripts/rollback.js [options]
 
 Options:
+  --create <tag>         Create a new WAL-safe snapshot with the given tag
   --list                 List all available snapshots with timestamps and files
   --snapshot <id>        Snapshot ID to restore from
   --latest               Restore from the most recent snapshot
@@ -34,12 +36,17 @@ async function main() {
   let isLatest = false;
   let isList = false;
   let isDryRun = false;
+  let isCreate = false;
+  let createTag = "manual";
 
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
     if (a === "--help" || a === "-h") {
       printHelp();
       process.exit(0);
+    } else if (a === "--create") {
+      isCreate = true;
+      createTag = args[++i] || "manual";
     } else if (a === "--list") {
       isList = true;
     } else if (a === "--snapshot") {
@@ -51,11 +58,26 @@ async function main() {
     }
   }
 
+  // Create a new snapshot
+  if (isCreate) {
+    try {
+      const id = defaultConfigManager.createSnapshot(createTag);
+      console.log("\n=======================================================");
+      console.log(` [SUCCESS] Snapshot created: ${id} (tag: ${createTag})`);
+      console.log("=======================================================\n");
+      process.exitCode = 0;
+    } catch (err) {
+      logger.error(`Snapshot creation failed: ${err.message}`);
+      process.exitCode = 1;
+    }
+    return;
+  }
+
   const snapshots = defaultConfigManager.listSnapshots();
 
   if (isList || (!snapshotId && !isLatest)) {
     console.log("\n=======================================================");
-    console.log("       LIMITLESS CLAUDE 7.0 - BACKUP SNAPSHOTS");
+    console.log("       LIMITLESS CLAUDE 8.0 - BACKUP SNAPSHOTS");
     console.log("=======================================================\n");
 
     if (snapshots.length === 0) {

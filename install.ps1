@@ -1,10 +1,10 @@
-# Limitless Claude 8.1 - Automated Windows Installer
+# Limitless Claude 8.4 - Automated Windows Installer
 # Usage: irm https://raw.githubusercontent.com/mahik504/limitless-claude/master/install.ps1 | iex
 
 $ErrorActionPreference = "Stop"
 
 Write-Host "================================================================================" -ForegroundColor Cyan
-Write-Host "           LIMITLESS CLAUDE 8.1 - AUTOMATED WINDOWS INSTALLER" -ForegroundColor Cyan
+Write-Host "           LIMITLESS CLAUDE 8.4 - AUTOMATED WINDOWS INSTALLER" -ForegroundColor Cyan
 Write-Host "================================================================================" -ForegroundColor Cyan
 
 # 1. Check Node.js
@@ -91,7 +91,7 @@ try {
 }
 
 Write-Host "`n================================================================================" -ForegroundColor Cyan
-Write-Host "  Limitless Claude 8.1 Installation Complete!" -ForegroundColor Green
+Write-Host "  Limitless Claude 8.4 Installation Complete!" -ForegroundColor Green
 Write-Host "  Commands available from any terminal:" -ForegroundColor White
 Write-Host "    limitless doctor      # System & gateway diagnostics" -ForegroundColor Gray
 Write-Host "    limitless verify      # Live HTTP 200 connectivity check" -ForegroundColor Gray

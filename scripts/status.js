@@ -28,11 +28,14 @@ if (fs.existsSync(dbPath)) {
   } catch (_) {}
 }
 
+const versionPath = path.resolve(__dirname, "../VERSION");
+const currentVersion = fs.existsSync(versionPath) ? fs.readFileSync(versionPath, "utf8").trim() : "8.3.0";
+
 console.log(`
 ================================================================================
-                    LIMITLESS CLAUDE 8.1 RUNTIME STATUS
+                    LIMITLESS CLAUDE ${currentVersion} RUNTIME STATUS
 ================================================================================
-  Version           : 8.1.0
+  Version           : ${currentVersion}
   Active Profile    : ${activeProfile.toUpperCase()}
   Local Gateway     : http://127.0.0.1:20128
   Catalogued Models : ${modelCount} models

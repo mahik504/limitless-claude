@@ -753,17 +753,13 @@ Options:
       console.log("Configured Claude Code settings in ~/.claude/settings.json.");
     } catch (err) {}
 
-    // Windows user environment variables
+    // Windows user environment variables (URLs only; secrets strictly stored in settings.json to prevent CLI process logging leaks)
     if (os.platform() === 'win32') {
       try {
         const { execSync } = require("child_process");
         execSync(`setx ANTHROPIC_BASE_URL "${baseUrl}"`, { stdio: "ignore" });
-        if (apiKey) {
-          execSync(`setx ANTHROPIC_AUTH_TOKEN "${apiKey}"`, { stdio: "ignore" });
-          execSync(`setx OMNIROUTE_API_KEY "${apiKey}"`, { stdio: "ignore" });
-        }
         execSync(`setx OMNIROUTE_BASE_URL "${baseUrl}"`, { stdio: "ignore" });
-        console.log("Persisted ANTHROPIC_BASE_URL to Windows user environment.");
+        console.log("Persisted ANTHROPIC_BASE_URL and OMNIROUTE_BASE_URL to Windows user environment.");
       } catch (_) {}
     }
 

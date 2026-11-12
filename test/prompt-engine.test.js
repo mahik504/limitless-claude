@@ -77,4 +77,35 @@ test.describe("Limitless Claude 8.0 - Original 5-Layer Prompt Engine Suite", () 
     fs.rmSync(tempDir, { recursive: true, force: true });
   });
 
+  test.it("Workload Suite - should cleanly load all 20 specialized capability profiles", () => {
+    const workloads = [
+      "chat",
+      "agentic-coding",
+      "reasoning",
+      "architecture",
+      "debugging",
+      "research",
+      "automation",
+      "review",
+      "repo-investigation",
+      "frontend",
+      "backend",
+      "security",
+      "data-engineering",
+      "aiml-development",
+      "long-horizon",
+      "tool-reliability",
+      "multi-agent",
+      "failure-recovery",
+      "verification-testing",
+      "cost-aware"
+    ];
+
+    for (const w of workloads) {
+      const content = engine.loadCapabilityProfile(w);
+      assert.ok(content.length > 50, `Workload profile ${w} must be populated (got ${content.length} bytes)`);
+      assert.ok(content.includes("# "), `Workload profile ${w} must contain markdown heading`);
+    }
+  });
+
 });

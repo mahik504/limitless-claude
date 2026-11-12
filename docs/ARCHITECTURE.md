@@ -1,109 +1,174 @@
-# Limitless Claude 7.0 - Intelligent Multi-Provider Routing Architecture
-
-Limitless Claude 7.0 is an intelligent multi-provider coding router that bridges **Claude Code CLI**, modern AI code editors (**Cursor IDE**, **Antigravity IDE**, **VS Code**, **JetBrains**), and autonomous design agents (**Superdesign / Open Design**, **Google Stitch MCP**) to **OmniRoute**.
-
-This document describes the request lifecycle, component boundaries, failure recovery state machines, billing intelligence, and multi-client protocol adapters.
+# Limitless Claude 8.3 — Complete Architecture Specification
+**Architecture Pin**: Limitless Claude 8.3.0  
+**Target Infrastructure**: OmniRouter (127.0.0.1:20128)  
+**Classification**: Production Architecture & System Contract  
+**Document Revision**: November 2026  
 
 ---
 
-## 1. Request Lifecycle & Routing Pipeline
+## 1. System Vision & The Policy Plane Delineation
+
+Limitless Claude is the **Intelligent Developer Control Plane and Policy Companion** built around the Claude development experience. Rather than building a redundant model proxy from scratch, Limitless Claude establishes a clean architectural division of labor between the **transport/gateway plane** (OmniRoute) and the **developer policy/workflow plane** (Limitless Claude).
+
+```mermaid
+graph TD
+    subgraph DeveloperClients["Supported Developer Clients"]
+        CLI["Claude Code CLI (v2.1.310 / v2.1.322)"]
+        VSCode["VS Code (anthropic.claude-code extension)"]
+        Cursor["Cursor IDE (claude-code / custom terminal)"]
+        AGY["Antigravity IDE (MCP + Integrated Terminal)"]
+        Desktop["Claude Desktop (MCP Bridge & Configured Tiers)"]
+    end
+
+    subgraph LimitlessPolicyPlane["Limitless Claude 8.3 (Developer Policy Plane)"]
+        CLI_Engine["Universal CLI (bin/limitless.js)"]
+        Doctor["16-Point Diagnostic Doctor (scripts/doctor.js)"]
+        PromptEngine["5-Layer Prompt Engine (20 Workloads)"]
+        TaskPins["Task-to-Model Pinning Engine"]
+        UndoEngine["Cline-Style Granular File Undo (file-checkpoint.js)"]
+        BillingGuard["Tri-Layer Billing Classifier & Fail-Closed Guard"]
+        OrchestraAdapter["Mode B Orchestra Adapter (Decoupled Sync)"]
+    end
+
+    subgraph OmniRouteGateway["OmniRoute Core Gateway (127.0.0.1:20128)"]
+        RouterEngine["Combos & Model Router Engine"]
+        CircuitBreakers["FSM Circuit Breakers (CLOSED / OPEN / HALF_OPEN)"]
+        ProtocolTranslator["Anthropic Messages ↔ OpenAI Completions"]
+        ConnectionPool["Provider Connections & Multi-Account Scheduler"]
+        SQLiteDB[("storage.sqlite (140 Tables, WAL Mode)")]
+    end
+
+    subgraph UpstreamProviders["Configured Upstream Inference Endpoints"]
+        Kiro["Kiro AI (Claude 3.5/4.5, GLM-5, Qwen Coder)"]
+        Antigravity["Antigravity Pro (2 Dedicated Accounts)"]
+        GitHub["GitHub Models (GPT-4o, Mini)"]
+        Mistral["Mistral AI (Codestral Latest)"]
+        Cloudflare["Cloudflare Workers AI (Zero-Cost Llama/DeepSeek)"]
+        OpenRouter["OpenRouter ($10 Credit / 1000 req/day Tier)"]
+        LocalOllama["Local Ollama Engine (127.0.0.1:11434 - Standby)"]
+    end
+
+    DeveloperClients -->|Anthropic Messages API: ANTHROPIC_BASE_URL| OmniRouteGateway
+    LimitlessPolicyPlane -->|Configures & Governs| DeveloperClients
+    LimitlessPolicyPlane -->|Audits, Backs up & Syncs Combos| SQLiteDB
+    OmniRouteGateway -->|Dispatches Inference| UpstreamProviders
+    OrchestraAdapter -.->|Optional Mode B Contract| LimitlessPolicyPlane
+```
+
+---
+
+## 2. Delineation of Responsibilities
+
+To avoid competing control planes or circular dependencies, system responsibilities are strictly bounded:
+
+| Component | Strict Ownership & Responsibilities | Prohibited Responsibilities |
+| :--- | :--- | :--- |
+| **Limitless Claude** | • Model capability classification & tier strategy<br>• 5-Layer Prompt Engine (20 workloads)<br>• Granular pre-edit file checkpoints & instant undo<br>• Task-to-model overrides (`limitless pin`)<br>• Automated 16-point diagnostics (`limitless doctor`)<br>• IDE extension environment configuration<br>• Scoped launcher & profile management | • Never acts as an in-line HTTP proxy server<br>• Never modifies upstream provider accounts<br>• Never stores unencrypted secrets<br>• Never replaces working client harnesses |
+| **OmniRoute** | • High-performance HTTP server listening on port 20128<br>• Bidirectional streaming translation (Anthropic ↔ OpenAI)<br>• Upstream connection pools & rate limit tracking<br>• Combo model waterfall resolution & fallback execution<br>• SQLite storage, encryption, and semantic caching | • Does not generate client IDE settings files<br>• Does not manage developer filesystem undo snapshots<br>• Does not synthesize multi-layer system prompts |
+| **Client Harnesses** | • Local terminal / GUI pair programming interactions<br>• Tool call requests (Bash, Edit, Glob, View)<br>• Rendering real-time markdown streaming tokens<br>• Enforcing workspace file system security boundaries | • Must not bypass local gateway configuration<br>• Must not alter system prompts without policy review |
+| **Upstream Providers**| • Token generation, reasoning blocks, and raw inference | • No visibility into local developer workstation state |
+
+---
+
+## 3. End-to-End Request Lifecycle & Streaming Flow
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Dev as Developer / Autonomous Agent
-    participant Client as Client (Claude Code / Cursor / Superdesign)
-    participant ACM as Agent Client Protocol Adapter
-    participant Router as Routing Policy & Waterfall
-    participant CB as Circuit Breaker (CLOSED/HALF_OPEN)
-    participant FBE as Active Fallback & Deprecation Engine
-    participant Gateway as OmniRoute Gateway (127.0.0.1:20128)
-    participant Upstream as Upstream Provider (Kiro/CF/Mistral/GitHub)
+    actor Dev as Developer
+    participant Client as Claude Code CLI / IDE Extension
+    participant Gateway as OmniRoute Gateway (:20128)
+    participant Policy as Limitless Combo Engine
+    participant CB as Circuit Breaker FSM
+    participant Upstream1 as Primary Upstream (e.g. Kiro/Mistral)
+    participant Upstream2 as Fallback Upstream (e.g. Cloudflare/GitHub)
 
-    Dev->>Client: Initiates coding task (e.g. `claude`, `superdesign generate`)
-    Client->>ACM: Dispatches request (Messages API or Chat Completions)
-    ACM->>Router: Identifies client format and maps target tier (haiku/sonnet/opus/fable)
-    Router->>CB: Verifies circuit health for candidate models
-    Router->>Gateway: Dispatches payload to top healthy candidate
-    Gateway->>Upstream: Executes inference call
-    alt Upstream Responds Validly
-        Upstream-->>Gateway: HTTP 200 with tokens/tool calls
-        Gateway-->>FBE: Verifies content for deprecation notice
-        FBE-->>Router: Model verified healthy, resets circuit breaker
-        Router-->>Client: Returns streaming tokens & tool events
-    else Upstream Returns Deprecation Notice or Error
-        Upstream-->>Gateway: HTTP 200 with "no longer supported" OR HTTP 429/5xx
-        Gateway-->>FBE: Traps deprecation or error
-        FBE->>CB: Trips circuit breaker to OPEN, sets backoff
-        FBE->>Router: Triggers sub-second failover to candidate #2
-        Router->>Gateway: Dispatches payload to healthy fallback
-        Gateway->>Upstream: Retries inference with alternate provider
-        Upstream-->>Client: Completes request seamlessly
+    Dev->>Client: Enters coding prompt (e.g. "Implement user authentication")
+    Note over Client: Client reads ANTHROPIC_BASE_URL & ANTHROPIC_AUTH_TOKEN
+    Client->>Gateway: POST /v1/messages (model: "claude-sonnet-5", stream: true)
+    Gateway->>Policy: Resolves model alias via model_combo_mappings
+    Policy-->>Gateway: Maps to combo/limitless-sonnet (Ordered candidate list)
+    Gateway->>CB: Inspects circuit health for Candidate #1
+    alt Circuit Breaker is CLOSED (Healthy)
+        Gateway->>Upstream1: Forwards streaming inference request
+        alt Upstream1 Responds with HTTP 200 SSE
+            Upstream1-->>Gateway: Real-time SSE chunks (content_block_delta)
+            Gateway-->>Client: Normalized Anthropic SSE streaming chunks
+            Client-->>Dev: Displays real-time streaming code in terminal
+        else Upstream1 Returns HTTP 429 Rate Limit / 5xx Outage
+            Upstream1-->>Gateway: HTTP 429 Too Many Requests
+            Gateway->>CB: Records failure; trips breaker toward OPEN
+            Note over Gateway: Sub-second seamless failover triggered
+            Gateway->>Upstream2: Dispatches request to Candidate #2
+            Upstream2-->>Gateway: HTTP 200 OK with streaming tokens
+            Gateway-->>Client: Normalized Anthropic SSE stream continues
+            Client-->>Dev: Request completes seamlessly without user intervention
+        end
+    else Circuit Breaker is OPEN (Unhealthy)
+        Note over Gateway: Candidate #1 bypassed immediately; dispatches to Candidate #2
+        Gateway->>Upstream2: Forwards streaming inference request
+        Upstream2-->>Gateway: HTTP 200 OK
+        Gateway-->>Client: Returns streaming tokens
     end
 ```
 
 ---
 
-## 2. Core Subsystems
+## 4. The 6 Core Model Tiers & Workload Specialization
 
-### A. Billing & Quota Classifier (`src/core/billing-classifier.js`)
-Classifies every upstream model into verifiable billing classes:
-1. `zero-marginal-cost`: Verified free endpoints (`cloudflare-ai`, `kilo-gateway`, openrouter `:free` models, Groq).
-2. `subscription-entitled`: Paid seat covers inference with zero per-token billing (`github`, `kiro`, `opencode-go`, `antigravity`).
-3. `paid-token`: Commercial pay-per-token models (`mistral/codestral-latest`, paid OpenRouter models).
-4. `pay-as-you-go`: Metered router tiers (`opencode-zen`).
-5. `local`: Self-hosted loopback endpoints (`ollama`, `vllm`, `llama-cpp`).
+Limitless Claude configures **6 production-approved routing tiers**, each engineered for empirical workload requirements:
 
-**Safety Guard:** Enforcing `--exclude-paid` or `LIMITLESS_EXCLUDE_PAID=true` guarantees that chargeable models are omitted from all combos.
-
----
-
-### B. Capability Evaluator (`src/core/capability-evaluator.js`)
-Evaluates candidate models across 7 granular capability profiles:
-- **`FAST`**: Atomic diffs, syntax validation, sub-second execution (<1s SLA).
-- **`BALANCED`**: Standard feature implementation, unit tests, refactoring.
-- **`REASONING`**: Complex architectural planning, flaw hunting, dependency mapping.
-- **`FRONTEND`**: React 19, Tailwind CSS v4, component state machines, visual polish.
-- **`3D`**: Three.js, React Three Fiber, WebGL shaders, 60fps frame budgets.
-- **`BACKEND`**: PostgreSQL schemas, Supabase RLS migrations, REST/GraphQL APIs.
-- **`REVIEW`**: Independent hostile adversarial review, security analysis, anti-slop audit.
-
----
-
-### C. Circuit Breakers & Dynamic Routing (`src/core/routing-policy.js`)
-Maintains a finite state machine per provider and model:
-- **`CLOSED`**: Healthy. All requests are routed normally.
-- **`OPEN`**: Tripped after 3 consecutive failures, HTTP 401/403 auth errors, or deprecation notice. Blocks traffic for an exponential cooldown period (base: 30s, max: 5m).
-- **`HALF_OPEN`**: Cooldown elapsed. Allows a single probe request. If successful, resets to `CLOSED`; if failed, re-trips to `OPEN` with doubled backoff.
-
----
-
-### D. Active Fallback & Deprecation Engine (`src/core/fallback-engine.js`)
-Solves upstream protocol traps such as Google Cloud Code PA deprecation messages where upstream returns HTTP 200 with:
-`"This version of Antigravity is no longer supported. Please upgrade Antigravity to the latest version..."`
-The Fallback Engine inspects response text, detects deprecation signatures, marks the model `DEGRADED`, trips its circuit breaker immediately, and reroutes to the next provider.
-
----
-
-### E. Agent Client Compatibility Layer (`src/core/agent-client.js`)
-Maps header conventions, authentication mechanisms, and system prompt positions across:
-- **Claude Code CLI** (`@anthropic-ai/claude-code`)
-- **Claude Code VS Code / Cursor Extension**
-- **Superdesign / Open Design CLI** (`@superdesign/cli`)
-- **OpenCode CLI / Extension**
-- **Antigravity IDE & CLI**
-- **Cursor AI Editor**
+```
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                         LIMITLESS CLAUDE 6-TIER ROUTING MATRIX                   │
+├─────────────────────┬───────────────────────────┬────────────────────────────────┤
+│ Tier Name           │ Target Workload Profile   │ Primary Model & Fallback Order │
+├─────────────────────┼───────────────────────────┼────────────────────────────────┤
+│ 1. Limitless Haiku  │ Fast syntax edits, micro- │ 1. kiro/claude-haiku-4.5       │
+│    (Fast Syntax)    │ patches, AST linting,     │ 2. cloudflare-ai/llama-3.3-70b │
+│                     │ classification, sub-1s    │ 3. github/gpt-4o-mini          │
+│                     │ response time requirement │ 4. groq/openai/gpt-oss-20b     │
+├─────────────────────┼───────────────────────────┼────────────────────────────────┤
+│ 2. Limitless Sonnet │ Deep reasoning, system    │ 1. kiro/claude-sonnet-4.5      │
+│    (Planning &      │ design, architecture,     │ 2. github/gpt-4o-2024-11-20    │
+│     Reasoning)      │ technical problem solving,│ 3. kiro/glm-5                  │
+│                     │ code analysis before edit │ 4. cloudflare-ai/deepseek-r1   │
+├─────────────────────┼───────────────────────────┼────────────────────────────────┤
+│ 3. Limitless Opus   │ End-to-end coding agent,  │ 1. mistral/codestral-latest    │
+│    (Agentic Coding) │ multi-file modifications, │ 2. kiro/claude-sonnet-4.5      │
+│                     │ complex refactoring, test │ 3. xkiro/codestral-2508        │
+│                     │ generation & execution    │ 4. kiro/qwen3-coder-next       │
+├─────────────────────┼───────────────────────────┼────────────────────────────────┤
+│ 4. Limitless Fable  │ Premium intelligence, high│ 1. kiro/claude-sonnet-4.5      │
+│    (Frontier Fleet) │ context analysis, formal  │ 2. github/gpt-4o-2024-11-20    │
+│                     │ verification, synthesis   │ 3. xkiro/mistral-large-2512    │
+│                     │ of complex technical docs │ 4. openrouter/nemotron-3:free  │
+├─────────────────────┼───────────────────────────┼────────────────────────────────┤
+│ 5. Desktop Chat     │ General conversational    │ 1. kiro/claude-sonnet-4.5      │
+│    (Desktop General)│ chat in Claude Desktop,   │ 2. github/gpt-4o-2024-11-20    │
+│                     │ knowledge work, summaries │ 3. openrouter/nemotron-3:free  │
+├─────────────────────┼───────────────────────────┼────────────────────────────────┤
+│ 6. Desktop Cowork   │ Agentic tool execution,   │ 1. kiro/claude-sonnet-4.5      │
+│    (Desktop Agent)  │ automation, file actions  │ 2. github/gpt-4o-2024-11-20    │
+│                     │ in desktop workflows      │ 3. kiro/glm-5                  │
+└─────────────────────┴───────────────────────────┴────────────────────────────────┘
+```
 
 ---
 
-### F. Configuration & Snapshot Manager (`src/core/config-manager.js`)
-Provides:
-- 6 active provider profiles: `limitless`, `native`, `opencode-go`, `opencode-zen`, `openrouter`, `antigravity`.
-- Conflict detection across environment variables (`ANTHROPIC_BASE_URL`) and port 20128 bindings.
-- Scoped process launchers (`npm run launcher`).
-- Atomic snapshots and disaster-recovery rollbacks (`npm run rollback`).
+## 5. Granular File Undo & State Protection Engine
+
+To counteract the **Error-Compound Effect** documented in academic research (where an agent takes a wrong turn and progressively corrupts repository context), Limitless Claude embeds a local file checkpoint manager (`src/core/file-checkpoint.js`):
+
+- **Automatic Checkpointing**: Before applying edits, snapshots of affected files are hashed (SHA-256) and copied to `.checkpoints/`.
+- **Instant Atomic Reversion**: Running `limitless undo` reverts modified files immediately to the exact pre-edit state.
+- **Dry-Run Inspection**: Running `limitless undo --dry-run` displays file diffs and modification timestamps without altering disk state.
 
 ---
 
-### G. Telemetry & Observability (`src/core/telemetry.js`)
-Aggregates live call logs, p50/p95 latency percentiles, token usage, estimated costs, and provider connection health with strict end-masking and secret redaction.
+## 6. Orchestra Workflow Interoperability (Mode A vs. Mode B)
+
+Limitless Claude is engineered to be **100% standalone** (Mode A), requiring zero external orchestration tools. However, when the user's optional **Orchestra Workflow** repository is present on disk, Limitless Claude activates **Mode B Interoperability**:
+
+- **Mode A (Standalone)**: Operates independently with 20 modular prompt capabilities, built-in task pinning, and local SQLite governance.
+- **Mode B (Orchestra Connected)**: Detects `C:\projects\orchestra-workflow`, synchronizes contract skills (`ow-sync.mjs`), forwards task capability recommendations, and bridges local MCP tools (`orchestra-brain`) without circular runtime imports.

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Limitless Claude 8.1 - Automated Unix Installer (macOS & Linux)
+# Limitless Claude 8.4 - Automated Unix Installer (macOS & Linux)
 # Usage: curl -fsSL https://raw.githubusercontent.com/mahik504/limitless-claude/master/install.sh | bash
 
 set -e
 
 echo "================================================================================"
-echo "           LIMITLESS CLAUDE 8.1 - AUTOMATED UNIX INSTALLER"
+echo "           LIMITLESS CLAUDE 8.4 - AUTOMATED UNIX INSTALLER"
 echo "================================================================================"
 
 # 1. Check Node.js
@@ -69,7 +69,7 @@ node bin/limitless.js init
 
 echo ""
 echo "================================================================================"
-echo "  Limitless Claude 8.1 Installation Complete!"
+echo "  Limitless Claude 8.4 Installation Complete!"
 echo "  Commands available from any terminal:"
 echo "    limitless doctor      # System & gateway diagnostics"
 echo "    limitless verify      # Live HTTP 200 connectivity check"

@@ -49,15 +49,52 @@ class PromptEngine {
   loadCapabilityProfile(profileName = "balanced") {
     const normalized = String(profileName).toLowerCase().replace(/[^a-z0-9_-]/g, "");
     const mapping = {
+      // Core 20 Workload Profiles
+      chat: "chat.md",
+      "agentic-coding": "agentic-coding.md",
+      agentic: "agentic-coding.md",
+      coding: "agentic-coding.md",
+      reasoning: "reasoning.md",
+      "deep-reasoning": "reasoning.md",
+      architecture: "architecture.md",
+      "system-design": "architecture.md",
+      debugging: "debugging.md",
+      debug: "debugging.md",
+      research: "research.md",
+      automation: "automation.md",
+      workflow: "automation.md",
+      review: "review.md",
+      qa: "review.md",
+      "repo-investigation": "repo-investigation.md",
+      investigation: "repo-investigation.md",
+      recon: "repo-investigation.md",
+      frontend: "frontend.md",
+      backend: "backend.md",
+      security: "security.md",
+      "data-engineering": "data-engineering.md",
+      data: "data-engineering.md",
+      "aiml-development": "aiml-development.md",
+      aiml: "aiml-development.md",
+      ml: "aiml-development.md",
+      "long-horizon": "long-horizon.md",
+      "long-running": "long-horizon.md",
+      "tool-reliability": "tool-reliability.md",
+      "tool-calling": "tool-reliability.md",
+      "multi-agent": "multi-agent.md",
+      "failure-recovery": "failure-recovery.md",
+      resilience: "failure-recovery.md",
+      "verification-testing": "verification-testing.md",
+      testing: "verification-testing.md",
+      "cost-aware": "cost-aware.md",
+      cost: "cost-aware.md",
+
+      // Foundational Profiles
       fast: "fast.md",
       balanced: "balanced.md",
-      reasoning: "reasoning.md",
-      frontend: "frontend.md",
       "3d": "3d.md",
       threed: "3d.md",
-      backend: "backend.md",
-      review: "review.md",
-      documentation: "documentation.md"
+      documentation: "documentation.md",
+      docs: "documentation.md"
     };
 
     const fileName = mapping[normalized] || "balanced.md";

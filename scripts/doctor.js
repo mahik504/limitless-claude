@@ -19,11 +19,13 @@ const { findTargetApiKey } = require("../src/omniroute/permissions");
 const { defaultClassifier } = require("../src/core/billing-classifier");
 const { defaultCapabilityEvaluator } = require("../src/core/capability-evaluator");
 const { defaultCapacityCalculator } = require("../src/core/capacity-calculator");
+const { maskKey } = require("../src/utils/redact");
+const pkg = require("../package.json");
 
 async function runDoctor() {
   console.log(`
 ================================================================================
-          LIMITLESS CLAUDE 8.3 — SYSTEM & GATEWAY DIAGNOSTIC DOCTOR
+          LIMITLESS CLAUDE ${pkg.version} — SYSTEM & GATEWAY DIAGNOSTIC DOCTOR
 ================================================================================
 `);
 
@@ -91,10 +93,20 @@ async function runDoctor() {
   // 5. Active API Key
   if (db) {
     try {
-      const keyRow = findTargetApiKey(db);
+      const preferredKey = process.env.OMNIROUTE_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN || process.env.ANTHROPIC_API_KEY || (() => {
+        try {
+          const sPath = path.join(os.homedir(), ".claude", "settings.json");
+          if (fs.existsSync(sPath)) {
+            const s = JSON.parse(fs.readFileSync(sPath, "utf8"));
+            return s.env?.ANTHROPIC_AUTH_TOKEN || s.env?.ANTHROPIC_API_KEY || s.ANTHROPIC_API_KEY || null;
+          }
+        } catch (_) {}
+        return null;
+      })();
+      const keyRow = findTargetApiKey(db, preferredKey);
       if (keyRow && keyRow.key) {
         apiKey = keyRow.key;
-        const masked = `${apiKey.slice(0, 7)}...${apiKey.slice(-6)}`;
+        const masked = maskKey(apiKey, 6);
         report("OmniRoute API Key Authorization", "PASS", `Active key: ${masked}`);
       } else {
         report("OmniRoute API Key Authorization", "WARN", "No active API key found in database");
@@ -114,7 +126,7 @@ async function runDoctor() {
   try {
     const t0 = Date.now();
     const headers = apiKey ? { "Authorization": `Bearer ${apiKey}` } : {};
-    const res = await fetch(`${gatewayUrl}/v1/models`, { headers, signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${gatewayUrl}/v1/models`, { headers, signal: AbortSignal.timeout(10000) });
     latencyMs = Date.now() - t0;
     if (res.ok) {
       gatewayOnline = true;

@@ -94,7 +94,17 @@ class PromptEngine {
       "3d": "3d.md",
       threed: "3d.md",
       documentation: "documentation.md",
-      docs: "documentation.md"
+      docs: "documentation.md",
+
+      // Pedagogical & Conversational Profiles (Tutor & Convoz)
+      tutor: "tutor.md",
+      tutoring: "tutor.md",
+      mentoring: "tutor.md",
+      education: "tutor.md",
+      convoz: "convoz.md",
+      convo: "convoz.md",
+      conversation: "convoz.md",
+      dialogue: "convoz.md"
     };
 
     const fileName = mapping[normalized] || "balanced.md";

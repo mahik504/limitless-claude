@@ -108,4 +108,17 @@ test.describe("Limitless Claude 8.0 - Original 5-Layer Prompt Engine Suite", () 
     }
   });
 
+  test.it("Pedagogical & Conversational Profiles - should load tutor and convoz profiles", () => {
+    const tutorContent = engine.loadCapabilityProfile("tutor");
+    assert.ok(tutorContent.includes("Socratic Tutor"), "Tutor profile must contain Socratic Tutor header");
+    assert.ok(tutorContent.includes("Socratic Pedagogy"), "Tutor profile must emphasize Socratic pedagogy");
+
+    const convozContent = engine.loadCapabilityProfile("convoz");
+    assert.ok(convozContent.includes("Convoz"), "Convoz profile must contain Convoz header");
+    assert.ok(convozContent.includes("Conversational Leadership"), "Convoz profile must emphasize conversational leadership");
+
+    // Aliases
+    assert.equal(engine.loadCapabilityProfile("tutoring"), tutorContent);
+    assert.equal(engine.loadCapabilityProfile("convo"), convozContent);
+  });
 });

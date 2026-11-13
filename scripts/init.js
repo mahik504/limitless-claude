@@ -24,7 +24,7 @@ const { defaultConfigManager } = require("../src/core/config-manager");
 
 console.log(`
 ================================================================================
-          LIMITLESS CLAUDE 8.1 — ZERO-CONFIG INITIALIZATION WIZARD
+          LIMITLESS CLAUDE 8.5.0 — ZERO-CONFIG INITIALIZATION WIZARD
 ================================================================================
 `);
 

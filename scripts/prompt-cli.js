@@ -17,7 +17,7 @@ const command = args[0] || "list";
 if (command === "list") {
   console.log(`
 ================================================================================
-              LIMITLESS CLAUDE 8.0 — PROMPT PROFILES & ADAPTERS
+              LIMITLESS CLAUDE 8.5.0 — PROMPT PROFILES & ADAPTERS
 ================================================================================
 
   LAYER 1: Universal Engineering Constitution
@@ -79,7 +79,7 @@ ${composed.fullPrompt}
 if (command === "test") {
   console.log(`
 ================================================================================
-            LIMITLESS CLAUDE 8.0 — PROMPT LABORATORY FIXTURE TEST
+            LIMITLESS CLAUDE 8.5.0 — PROMPT LABORATORY FIXTURE TEST
 ================================================================================
 `);
   const mockExecutor = (fixture) => {

@@ -16,7 +16,7 @@ const { defaultFileCheckpointManager } = require("../src/core/file-checkpoint");
 function printHelp() {
   console.log(`
 ================================================================================
-           LIMITLESS CLAUDE 8.1.0 — FILE CHECKPOINT & UNDO CLI
+           LIMITLESS CLAUDE 8.5.0 — FILE CHECKPOINT & UNDO CLI
 ================================================================================
 
 Usage:

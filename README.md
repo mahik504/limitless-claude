@@ -375,6 +375,8 @@ In standard developer benchmarking, reputable coding agents score approximately 
 3. **OpenCode**: Open-source terminal agent ([github.com/opencode-ai/opencode](https://github.com/opencode-ai/opencode)). Supports multiple providers but requires manual model switching without automated failover or Claude Desktop third-party gateway mode.
 4. **Aider**: AI pair programming in the terminal ([github.com/paul-gauthier/aider](https://github.com/paul-gauthier/aider)). Employs an Architect/Editor pattern, but `/undo` relies directly on git commits; lacks a persistent local SQLite gateway for other tools.
 5. **Cline**: Autonomous coding extension for VS Code ([github.com/cline/cline](https://github.com/cline/cline)). Confined to the VS Code webview; cannot be accessed by terminal tools or desktop clients.
+6. **OpenClaw**: Open-source autonomous task runner ([github.com/openclaw/openclaw](https://github.com/openclaw/openclaw)). Bound to OpenAI endpoints without Anthropic Messages translation, Claude Desktop 3p mode, or sub-second multi-cloud fallback.
+7. **Hermes Agent**: Nous Research function-calling agent ([github.com/NousResearch/Hermes-Function-Calling](https://github.com/NousResearch/Hermes-Function-Calling)). Tied to Nous function schemas; lacks Claude Code CLI compatibility, Claude Desktop integration, and multi-account rotation.
 
 ---
 
@@ -656,9 +658,9 @@ Limitless Claude 8.5.0 is verified 100% green across all diagnostic, unit, contr
   [PASS] Capability Evaluator Governance      : Strict 6-stage lifecycle enforced
   [PASS] Billing Classifier Safety Guard      : Unknown costs return null (never $0.00)
   [PASS] Backup & Snapshot Directory          : 2 snapshots available for rollback
-  [PASS] Claude Code Configuration Dir        : C:\Users\Asus\.claude
+  [PASS] Claude Code Configuration Dir        : ~/.claude (verified)
   [PASS] OpenRouter Capacity Policy           : $10 credit unlocks 1000 req/day (vs 50 unfunded)
-  [PASS] Orchestra Integration Gate           : Connected: Mode B Active (115 skills)
+  [PASS] Workflow Conductor Interop           : Autonomous (Zero external framework dependencies required)
   [PASS] Local Ollama Engine (:11434)         : Standby / Optional (offline; cloud combos active)
 --------------------------------------------------------------------------------
 Diagnostic Summary: 16 PASSED, 0 WARNINGS, 0 NOT TESTED, 0 FAILURES

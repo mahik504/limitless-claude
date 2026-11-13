@@ -99,3 +99,13 @@ Limitless Claude systematically closes each of the 8 missing points:
 - **Official Repository**: GitHub `cline/cline`
 - **Findings**: Prominent autonomous coding extension within VS Code. While Cline supports OpenRouter and custom API endpoints, it operates exclusively inside the IDE. It cannot be leveraged from the standalone terminal CLI or within official desktop clients.
 - **Limitless Claude Contrast**: Universal compatibility across terminal CLI, native desktop apps, and all popular IDEs (VS Code, Cursor, Antigravity) through a unified local gateway.
+
+### F. OpenClaw (`openclaw/openclaw`)
+- **Official Repository**: GitHub `openclaw/openclaw`
+- **Findings**: Open-source autonomous task runner and browser-integrated coding agent. Relies on standard OpenAI-compatible endpoints with static API keys. Lacks Anthropic Messages protocol translation, cannot interface with native Claude Desktop `configLibrary` gateway mode, lacks automated multi-cloud fallback hierarchies, and provides no pre-edit non-git file undo capabilities.
+- **Limitless Claude Contrast**: Bidirectional schema translation between Anthropic Messages API and OpenAI formats, native Claude Desktop 3p support, and sub-2s priority routing with automatic circuit-breaking across 16+ global providers.
+
+### G. Hermes Agent (`NousResearch/Hermes-Function-Calling`)
+- **Official Repository**: GitHub `NousResearch/Hermes-Function-Calling`
+- **Findings**: Autonomous tool-calling framework engineered by Nous Research specifically for open-weights models (Hermes 2/3) running on vLLM or local servers. Strictly binds to Nous function calling schemas; lacks Claude Code CLI protocol compatibility, cannot drive Claude Desktop Chat or Cowork modes, lacks dynamic multi-account quota rotation, and lacks fine-grained task-to-model pinning (`limitless pin`).
+- **Limitless Claude Contrast**: Integrates Hermes models alongside frontier endpoints within specialized composite tiers, injects authentic model cognitive directives, and bridges seamlessly to Claude Code CLI, Claude Desktop, and IDE tools.

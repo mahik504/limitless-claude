@@ -18,7 +18,7 @@ const report = defaultCapacityCalculator.getCapacityReport();
 
 console.log(`
 ================================================================================
-       LIMITLESS CLAUDE 8.0 — BUDGET & TOKEN CAPACITY INTELLIGENCE
+       LIMITLESS CLAUDE 8.5.0 — BUDGET & TOKEN CAPACITY INTELLIGENCE
 ================================================================================
 
   SPENDING CONTROLS:

@@ -1,7 +1,7 @@
 {
   "name": "limitless-claude",
   "version": "8.5.0",
-  "description": "Limitless Claude 8.5 - Production Control Plane & High-Performance Routing Ecosystem for OmniRoute & Claude Desktop. Zero vendor lock-in, priority failovers, official system cognitive directives, 119 Orchestra skills, and sub-second multi-turn responsiveness.",
+  "description": "Limitless Claude 8.5.0 - Autonomous Multi-Provider Coding Agent Runtime. Native Claude Desktop 3p Gateway, Sub-2s Priority Routing, 6 Specialized Model Tiers, OpenRouter $10 Multiplier, Task Pinning & Undo.",
   "license": "MIT",
   "author": "mahik504",
   "repository": {
@@ -15,7 +15,8 @@
     "coding-agent",
     "developer-tools",
     "llm-router",
-    "orchestra",
+    "multi-provider",
+    "priority-routing",
     "tui",
     "ollama",
     "cline",

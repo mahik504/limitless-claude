@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * Limitless Claude - Live Combo & Model Alias Verifier
+ * Limitless Claude 8.5.0 - Live Combo & Model Alias Verifier
  * 
- * Verifies that all 4 tiers (Haiku, Sonnet, Opus, Fable) and their model aliases
+ * Verifies that all 6 tiers (Haiku, Sonnet, Opus, Fable, Chat, Cowork) and their model aliases
  * respond correctly with zero rate limits via OmniRoute's Anthropic Messages endpoint
  * (POST /v1/messages).
  *
@@ -151,10 +151,10 @@ async function main() {
   console.log('');
 
   const tests = [
-    { model: 'claude-haiku-4-5', label: 'Haiku Alias (Fast Syntax)' },
-    { model: 'claude-sonnet-5', label: 'Sonnet Alias (Reasoning & Architecture)' },
-    { model: 'claude-opus-4-8', label: 'Opus Alias (Coding Reservoir)' },
-    { model: 'claude-fable-5-1', label: 'Fable Alias (High-Context Fleet)' },
+    { model: 'claude-haiku-5-5', label: 'Haiku Alias (Fast Syntax)' },
+    { model: 'claude-sonnet-5-5', label: 'Sonnet Alias (Reasoning & Architecture)' },
+    { model: 'claude-opus-5-5', label: 'Opus Alias (Coding Reservoir)' },
+    { model: 'claude-fable-5-2', label: 'Fable Alias (High-Context Fleet)' },
     { model: 'claude-desktop-chat', label: 'Desktop Chat Alias (Prose & QA)' },
     { model: 'claude-desktop-cowork', label: 'Desktop Cowork Alias (Tool Execution)' },
     { model: 'combo/limitless-haiku', label: 'Direct Combo: limitless-haiku' },

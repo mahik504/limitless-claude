@@ -73,7 +73,7 @@ function renderScreen(data) {
     : `${YELLOW}○ STANDBY${RESET} ${DIM}(offline)${RESET}`;
 
   console.log(`┌──────────────────────────────────────────────────────────────────────────────┐`);
-  console.log(`│ ${BOLD}LIMITLESS CLAUDE 8.2 — RUNTIME CONTROL & OBSERVABILITY TUI${RESET}       ${DIM}${time}${RESET} │`);
+  console.log(`│ ${BOLD}LIMITLESS CLAUDE 8.5.0 — RUNTIME CONTROL & OBSERVABILITY TUI${RESET}       ${DIM}${time}${RESET} │`);
   console.log(`├──────────────────────────────────────────────────────────────────────────────┤`);
   console.log(`│ Active Profile : ${profileBadge.padEnd(40)} Gateway : ${gwBadge.padEnd(35)} │`);
   console.log(`│ Local Ollama   : ${ollamaBadge.padEnd(76)} │`);
@@ -82,7 +82,7 @@ function renderScreen(data) {
   console.log(`│  • ${MAGENTA}Limitless Opus 5.5${RESET}   : Full agentic loops, Next.js 19, R3F 3D, complex refactors │`);
   console.log(`│  • ${BLUE}Limitless Sonnet 5.5${RESET} : Architectural analysis, deep reasoning, code review   │`);
   console.log(`│  • ${CYAN}Limitless Haiku 5.5${RESET}  : Ultra-fast syntax checks, atomic diffs, lightweight tools │`);
-  console.log(`│  • ${YELLOW}Limitless Fable 5.1${RESET}  : Mythos frontier synthesis, cross-repo architectural lead│`);
+  console.log(`│  • ${YELLOW}Limitless Fable 5.2${RESET}  : Mythos frontier synthesis, cross-repo architectural lead│`);
   console.log(`├──────────────────────────────────────────────────────────────────────────────┤`);
   console.log(`│ ${BOLD}TOKEN TELEMETRY & COST AVOIDANCE${RESET}                                             │`);
   console.log(`│  Total Calls     : ${BOLD}${String(telemetry.totalCalls).padEnd(10)}${RESET} │ Total Tokens   : ${BOLD}${String((telemetry.totalTokens / 1_000_000).toFixed(2) + "M").padEnd(10)}${RESET}     │`);

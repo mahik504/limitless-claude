@@ -20,7 +20,7 @@ const DEFAULT_PROMPTS_ROOT = path.resolve(__dirname, "../../prompts");
 class PromptEngine {
   constructor(options = {}) {
     this.promptsRoot = options.promptsRoot || DEFAULT_PROMPTS_ROOT;
-    this.version = "8.3.0";
+    this.version = "8.5.0";
     this.maxContextBytes = options.maxContextBytes || 50000;
   }
 

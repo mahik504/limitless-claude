@@ -98,6 +98,20 @@ test.describe("Limitless Claude Setup Integrity", () => {
     assert.ok(Array.isArray(opusData.models), "Opus data.models MUST be an array");
     assert.ok(opusData.system_message, "Opus system_message MUST be embedded in data JSON");
 
+    const chatRow = db.prepare("SELECT data FROM combos WHERE id = 'combo/desktop-chat'").get();
+    assert.ok(chatRow, "combo/desktop-chat should exist in database");
+    const chatData = JSON.parse(chatRow.data);
+    assert.strictEqual(chatData.strategy, "priority", "Desktop chat should use priority routing");
+    assert.ok(Array.isArray(chatData.models), "Desktop chat data.models MUST be an array");
+    assert.ok(chatData.system_message, "Desktop chat system_message MUST be embedded in data JSON");
+
+    const coworkRow = db.prepare("SELECT data FROM combos WHERE id = 'combo/desktop-cowork'").get();
+    assert.ok(coworkRow, "combo/desktop-cowork should exist in database");
+    const coworkData = JSON.parse(coworkRow.data);
+    assert.strictEqual(coworkData.strategy, "priority", "Desktop cowork should use priority routing");
+    assert.ok(Array.isArray(coworkData.models), "Desktop cowork data.models MUST be an array");
+    assert.ok(coworkData.system_message, "Desktop cowork system_message MUST be embedded in data JSON");
+
     db.close();
   });
 
@@ -156,6 +170,8 @@ test.describe("Limitless Claude Setup Integrity", () => {
     assert.strictEqual(byId["mapping/limitless-default"].combo_id, "combo/limitless-opus");
     assert.strictEqual(byId["mapping/limitless-opus1m"].pattern, "*opus[1m]*");
     assert.strictEqual(byId["mapping/limitless-sonnet1m"].pattern, "*sonnet[1m]*");
+    assert.strictEqual(byId["mapping/desktop-chat"].combo_id, "combo/desktop-chat");
+    assert.strictEqual(byId["mapping/desktop-cowork"].combo_id, "combo/desktop-cowork");
 
     db.close();
   });

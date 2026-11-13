@@ -1,5 +1,5 @@
-# Limitless Claude 8.4.0 — Comprehensive Implementation Changelog
-**Release Pin**: 8.4.0  
+# Limitless Claude 8.5.0 — Comprehensive Implementation Changelog
+**Release Pin**: 8.5.0  
 **Status**: VERIFIED & DEPLOYED  
 **Date**: November 2026  
 
@@ -7,7 +7,7 @@
 
 ## 1. Summary of Changes & Engineering Improvements
 
-Limitless Claude 8.4.0 represents the master architectural consolidation release. It delivers native Claude Desktop Third-Party Inference gateway mode, 6 dedicated routing tiers (including Desktop Chat and Desktop Cowork with strict Anthropic XML `tool_use`), OpenRouter $10 multiplier integration (1,000 req/day on `:free`), 24 modular workload capability profiles, P0 security hardening, and the Universal One-Prompt Agent Master Installer.
+Limitless Claude 8.5.0 represents the high-performance priority routing and authentic model prompts release. It migrates all composite tiers from round-robin to priority routing (sub-2s latency), embeds authentic Anthropic leaked prompts across Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.2, Desktop Chat, and Desktop Cowork, completely purges unmaintained legacy tutor and convoz routes, provides measured 20-dimension competitor benchmarking, and establishes clean autonomous standalone deployment with optional conductor pairing.
 
 ---
 
@@ -74,23 +74,22 @@ Created complete suite of authoritative project documents in `docs/`:
 11. `CLAUDE-DESKTOP-INTEGRATION.md`
 12. `IDE-INTEGRATION.md`
 13. `PROMPT-AND-INSTRUCTION-ARCHITECTURE.md`
-14. `ORCHESTRA-INTEGRATION.md`
-15. `SECURITY-AND-COMPLIANCE.md`
-16. `PERFORMANCE-AND-COST.md`
-17. `EVALUATION-AND-BENCHMARKS.md`
-18. `INNOVATION-ROADMAP.md`
-19. `IMPLEMENTATION-CHANGELOG.md`
-20. `MASTER-INSTALL-PROMPT.md`
-21. `CLEAN-INSTALL-PROMPT.md`
-22. `REPAIR-AND-UPDATE-PROMPT.md`
-23. `DIAGNOSTIC-PROMPT.md`
-24. `CLAUDE-DESKTOP-SETUP.md`
+14. `SECURITY-AND-COMPLIANCE.md`
+15. `PERFORMANCE-AND-COST.md`
+16. `EVALUATION-AND-BENCHMARKS.md`
+17. `INNOVATION-ROADMAP.md`
+18. `IMPLEMENTATION-CHANGELOG.md`
+19. `CLEAN-INSTALL-PROMPT.md`
+20. `REPAIR-AND-UPDATE-PROMPT.md`
+21. `DIAGNOSTIC-PROMPT.md`
+22. `CLAUDE-DESKTOP-SETUP.md`
+23. `COMPETITOR-COMPARISON-MATRIX.md`
 
 ---
 
 ## 3. Regression & Verification Sign-Off
 
 - **Automated Tests**: 97/97 tests pass (`npm test`).
-- **Live HTTP Inference**: 8/8 routes return HTTP 200 PONG (`limitless verify`).
+- **Live HTTP Inference**: 12/12 routes return HTTP 200 PONG (`limitless verify`).
 - **System Doctor**: 16/16 checks green (`limitless doctor`).
 - **Working Tree**: Clean, verified, ready for distribution.

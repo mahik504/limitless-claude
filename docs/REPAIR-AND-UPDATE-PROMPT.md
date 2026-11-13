@@ -27,7 +27,7 @@ Follow this systematic repair protocol:
 ### STEP 3: DATABASE BACKUP & RESTORATION
 1. Create a WAL-safe backup of `~/.omniroute/storage.sqlite`:
    ```bash
-   node -e "const { backupDatabase, openDatabase } = require('./src/omniroute/db'); const db = openDatabase('C:/Users/Asus/.omniroute/storage.sqlite'); backupDatabase(db, 'C:/Users/Asus/.omniroute/storage.sqlite', 'C:/Users/Asus/.omniroute/storage.sqlite.bak'); db.close();"
+   node -e "const path = require('path'); const os = require('os'); const { backupDatabase, openDatabase } = require('./src/omniroute/db'); const dbPath = path.join(os.homedir(), '.omniroute', 'storage.sqlite'); const db = openDatabase(dbPath); backupDatabase(db, dbPath, dbPath + '.bak'); db.close();"
    ```
 
 ### STEP 4: REBUILD COMPOSITE TIERS WITH PRIORITY ROUTING
@@ -77,7 +77,7 @@ Get-Process -Name node | Where-Object { $_.CommandLine -like "*omniroute*" } | S
 ⭐️ **Tip 2: Verifying OmniRoute Token Access**  
 If requests return HTTP 401 Unauthorized, re-check your active API key in `storage.sqlite`:
 ```bash
-node -e "const { openDatabase } = require('./src/omniroute/db'); const db = openDatabase('C:/Users/Asus/.omniroute/storage.sqlite'); console.log(db.prepare('SELECT id, key, status FROM api_keys WHERE status = 1').all()); db.close();"
+node -e "const path = require('path'); const os = require('os'); const { openDatabase } = require('./src/omniroute/db'); const db = openDatabase(path.join(os.homedir(), '.omniroute', 'storage.sqlite')); console.log(db.prepare('SELECT id, name, key, is_active FROM api_keys WHERE is_active = 1').all()); db.close();"
 ```
 
 🔹 **Tip 3: The OpenRouter $10 Multiplier**  

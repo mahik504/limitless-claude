@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Limitless Claude 8.0.0 - Universal Global CLI
+ * Limitless Claude 8.5.0 - Universal Global CLI
  * 
  * Allows running Limitless Claude commands from ANY working directory:
  *   limitless init
@@ -69,7 +69,7 @@ Core Operations:
   init               Zero-config initialization wizard & pre-setup validation
   doctor             Run 16-point system, gateway, and database diagnostics
   status             View active profile, gateway endpoint, and routing tiers
-  verify             Test live HTTP 200 connectivity across all 4 tiers
+  verify             Test live HTTP 200 connectivity across all 6 tiers
   setup              Sync live OmniRoute models into intelligent composite tiers
   launcher           Launch Claude Code under scoped profile (no registry pollution)
   tui                Interactive real-time Terminal UI with live telemetry & latency

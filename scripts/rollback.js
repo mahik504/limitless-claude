@@ -77,7 +77,7 @@ async function main() {
 
   if (isList || (!snapshotId && !isLatest)) {
     console.log("\n=======================================================");
-    console.log("       LIMITLESS CLAUDE 8.0 - BACKUP SNAPSHOTS");
+    console.log("       LIMITLESS CLAUDE 8.5.0 - BACKUP SNAPSHOTS");
     console.log("=======================================================\n");
 
     if (snapshots.length === 0) {

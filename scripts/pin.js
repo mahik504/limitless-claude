@@ -14,7 +14,7 @@ const { defaultTaskPinManager, VALID_TASKS } = require("../src/core/task-pins");
 function printHelp() {
   console.log(`
 ================================================================================
-           LIMITLESS CLAUDE 8.1.0 — TASK PINNING MANAGER
+           LIMITLESS CLAUDE 8.5.0 — TASK PINNING MANAGER
 ================================================================================
 
 Usage:

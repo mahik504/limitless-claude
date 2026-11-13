@@ -83,7 +83,7 @@ async function runAcceptance() {
   const isVerbose = process.argv.includes("--verbose") || process.argv.includes("-v");
 
   console.log("================================================================================");
-  console.log("          LIMITLESS CLAUDE 8.3.0 — END-TO-END ACCEPTANCE SUITE");
+  console.log("          LIMITLESS CLAUDE 8.5.0 — END-TO-END ACCEPTANCE SUITE");
   console.log("================================================================================");
 
   let apiKey = null;

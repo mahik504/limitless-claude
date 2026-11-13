@@ -21,7 +21,7 @@ function printStats(isJson = false) {
   }
 
   console.log("================================================================================");
-  console.log("             LIMITLESS CLAUDE 8.3 — REAL-TIME TOKEN & SAVINGS TELEMETRY");
+  console.log("             LIMITLESS CLAUDE 8.5.0 — REAL-TIME TOKEN & SAVINGS TELEMETRY");
   console.log("================================================================================");
 
   if (!data.available) {

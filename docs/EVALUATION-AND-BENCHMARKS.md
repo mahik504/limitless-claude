@@ -90,7 +90,7 @@ Results: 8/8 passed (0 failed)
 *Executed via `limitless doctor`*:
 ```
 ================================================================================
-          LIMITLESS CLAUDE 8.3 — SYSTEM & GATEWAY DIAGNOSTIC DOCTOR
+          LIMITLESS CLAUDE 8.5.0 — SYSTEM & GATEWAY DIAGNOSTIC DOCTOR
 ================================================================================
   [PASS]         Node.js Runtime Version              : v24.19.0 (>= 22 required)
   [PASS]         Platform Architecture                : win32 (x64), 32 cores

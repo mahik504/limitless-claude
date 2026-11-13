@@ -28,7 +28,7 @@ function printStatus() {
 
   console.log("================================================================================");
   const bannerVersion = details.detected ? details.version : "not detected";
-  console.log(`            LIMITLESS CLAUDE 8.2 — ORCHESTRA ${bannerVersion} WORKFLOW STATUS`);
+  console.log(`            LIMITLESS CLAUDE 8.5.0 — ORCHESTRA ${bannerVersion} WORKFLOW STATUS`);
   console.log("================================================================================");
 
   if (!details.detected) {

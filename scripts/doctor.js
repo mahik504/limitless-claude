@@ -227,13 +227,13 @@ async function runDoctor() {
   const capacity = defaultCapacityCalculator.getCapacityReport();
   report("OpenRouter Capacity Policy", "PASS", `$10 credit unlocks ${capacity.fundedTier.dailyRequests} req/day (vs ${capacity.unfundedTier.dailyRequests} unfunded)`);
 
-  // 15. Orchestration & Interop Environment
+  // 15. Autonomous Architecture & Conductor Interop
   const { defaultOrchestraAdapter } = require("../src/integrations/orchestra");
   const orchDetails = defaultOrchestraAdapter.getDetails();
   if (orchDetails.detected) {
-    report("Orchestra Integration Gate", "PASS", `Connected: ${orchDetails.path} (v${orchDetails.version}, ${orchDetails.skillsCount} skills, Mode B Active)`);
+    report("Workflow Conductor Interop", "PASS", `Autonomous (Optional Conductor: v${orchDetails.version} detected)`);
   } else {
-    report("Standalone Architecture Gate", "PASS", "Zero external framework dependencies required (Mode A Active)");
+    report("Standalone Architecture Gate", "PASS", "Autonomous (Zero external framework dependencies required)");
   }
 
   // 16. Local Ollama Auto-Discovery Engine

@@ -59,17 +59,19 @@ Limitless Claude v8.5.0 is the **High-Performance Priority Routing & Desktop Int
 
 1. **Multi-Turn Priority Routing Architecture 🔥**:
    - Fixed the root cause of 4-5 minute conversation freezes by migrating all 6 combos from round-robin to strict priority routing (`strategy: "priority"`).
-   - Fast primary models (`kiro/claude-sonnet-4.5`, `kiro/claude-haiku-4.5`, `github/gpt-4o-2024-11-20`, `mistral/codestral-latest`) are pinned at priority index 0.
+   - Fast primary models (`github/gpt-4o-2024-11-20`, `mistral/codestral-latest`, `github/gpt-4o-mini`) are pinned at priority index 0 to eliminate identity leakage, while `kiro/claude-sonnet-4.5` and `kiro/claude-haiku-4.5` serve as responsive fallback endpoints.
    - Purged slow or broken endpoints (`kiro/deepseek-3.2` with 150s timeouts, `xkiro/mistralai/mistral-large-2512` with HTTP 403, and `gemma-4-31b-it` with 110s timeouts) from combos and dynamic classification.
    - Multi-turn conversation turns now respond in 1.4s to 3.5s per turn with zero freezing.
 
-2. **Claude Desktop 119 Skills & Manifest Synchronization 🔥**:
+2. **Claude Desktop 119 Skills & MCP Integration 🔥**:
    - Enabled `skillScanningEnabled: true` in Claude Desktop configuration (`AppData/Local/Claude-3p/configLibrary/<UUID>.json`), eliminating `appShippedOnly` skill blocking.
    - Copied 119 Orchestra Workflow skills into the Desktop skills directory and indexed full metadata in `manifest.json`.
    - Registered `claude-desktop` as a valid sync host in `C:\projects\orchestra-workflow\registries\host-dirs.json`.
+   - Configured both `orchestra-workflow` and `orchestra-brain` filesystem MCP servers in `claude_desktop_config.json`, enabling Claude Desktop to read and execute Orchestra workflows and memory vaults directly.
 
 3. **Official Anthropic System Prompts & Identity Guardrails 💀**:
    - Injected official Anthropic Claude cognitive directives, artifacts rules, and Orchestra 5.5.0 instructions into Claude Desktop `organizationInstructions` and OmniRoute combo system messages.
+   - Embedded `system_message` inside the combo `data` JSON blob for OmniRoute database repository compatibility, ensuring official Anthropic system prompts take effect on every request and completely eliminating persona leakage ("I'm Kiro").
    - Prevents model persona leakage ("created by Mistral", "I'm Kiro") and enforces Zero-Stub production code standards.
 
 4. **Clean UTF-8 Environment 💀**:

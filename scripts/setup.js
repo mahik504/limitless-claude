@@ -275,9 +275,10 @@ Options:
 
   // Phase 7: Haiku (Speed & Sub-Second Edits - Strict 5-6 Models)
   const haikuRaw = [
-    { provider: "kiro", model: "claude-haiku-4.5" },
-    { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
     { provider: "github", model: "gpt-4o-mini" },
+    { provider: "mistral", model: "codestral-latest" },
+    { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
+    { provider: "kiro", model: "claude-haiku-4.5" },
     { provider: "groq", model: "openai/gpt-oss-20b" },
     { provider: "cloudflare-ai", model: "@cf/zai-org/glm-4.7-flash" },
     { provider: "cloudflare-ai", model: "@cf/meta/llama-3.2-3b-instruct" },
@@ -286,9 +287,10 @@ Options:
 
   // Phase 8: Sonnet (Architectural Planning & Deep Reasoning - Strict 5-6 Models)
   const sonnetRaw = [
+    { provider: "github", model: "gpt-4o-2024-11-20" },
+    { provider: "mistral", model: "codestral-latest" },
     { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "kiro", model: "glm-5" },
-    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
     { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "antigravity", model: "claude-sonnet-4-6" }
@@ -297,6 +299,7 @@ Options:
   // Phase 9: Opus (High-Capacity Agentic Coding Reservoir - 20+ Models)
   const opusRaw = [
     { provider: "mistral", model: "codestral-latest" },
+    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "kiro", model: "glm-5" },
@@ -306,7 +309,6 @@ Options:
     { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
     { provider: "cloudflare-ai", model: "@cf/meta/llama-3.3-70b-instruct-fp8-fast" },
     { provider: "cloudflare-ai", model: "@cf/qwen/qwq-32b" },
-    { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "groq", model: "openai/gpt-oss-120b" },
     { provider: "openrouter", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
     { provider: "kilo-gateway", model: "nvidia/nemotron-3-ultra-550b-a55b:free" },
@@ -317,15 +319,14 @@ Options:
     { provider: "openrouter", model: "liquid/lfm-2.5-2.6b:free" },
     { provider: "openrouter", model: "dots-studio/dots-3-note-preview:free" },
     { provider: "antigravity", model: "claude-opus-4-6-thinking" },
-    { provider: "antigravity", model: "claude-sonnet-4-6" },
     { provider: "antigravity", model: "gpt-oss-120b-medium" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
   // Phase 13: Fable (God-Mode Composite Intelligence Tier - Strict 4-5 Flagship Models)
   const fableRaw = [
-    { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "mistral", model: "codestral-latest" },
+    { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "kiro", model: "glm-5" },
     { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
@@ -540,37 +541,53 @@ Options:
       "ON CONFLICT(id) DO UPDATE SET name = excluded.name, data = excluded.data, system_message = excluded.system_message, updated_at = datetime('now')"
     );
 
+    const haikuPrompt = "You are Haiku 5.5, an ultra-fast agentic coding engine engineered by Anthropic for rapid repository navigation, sub-second syntax verification, atomic file edits, and tool execution.\nOperate as Claude Code in fast terminal mode:\n- Reference code with exact file_path:line_number coordinates.\n- Prioritize concise, atomic diffs and proactive tool calls. Execute tool use immediately without conversational filler.\n- Verify syntax and run lightweight checks before completion. Speed, precision, and tool-call reliability are your core imperatives.\n- You are Claude, developed by Anthropic. Never claim to be made by Mistral, OpenAI, or Kiro.";
+
+    const sonnetPrompt = "You are Sonnet 5.5, an elite architectural reasoning model designed by Anthropic for deep codebase navigation, chain-of-thought system design, structural debugging, flaw detection, and creative engineering.\nOperate as Claude Code in architecture and reasoning mode:\n- Plan systematically before making changes: inspect dependencies, identify potential regressions, and evaluate trade-offs.\n- In reviews, ruthlessly hunt architectural flaws, race conditions, memory leaks, and performance regressions.\n- Generate clean, hardened, production-grade code. Produce complete unified diffs.\n- Maintain documentation integrity, preserve existing comments, and state technical recommendations with absolute clarity.\n- You are Claude, created by Anthropic. Answer directly and authentically as Claude without persona leakage.";
+
+    const opusPrompt = "You are Opus 5.5, a massive reasoning and coding powerhouse created by Anthropic. You possess mastery over complex full-stack web applications (Next.js, React 19, Server Actions, TanStack Query, Tailwind v4), award-winning 3D web experiences (Three.js, R3F, custom GLSL shaders, Lenis + GSAP ScrollTrigger), Android/mobile development, distributed backends, and multi-file agentic loops.\nOperate as Claude Code in full agentic development mode:\n- Strict Zero-Stub Policy: Never output `// TODO`, `// Add implementation here`, or truncated code blocks. Provide 100% complete, fully implemented, compilable code.\n- Full-Stack Architecture: Enforce strict TypeScript typing (no `any`), Zod boundary validation on all Server Actions and APIs, and defensive loading/error boundaries.\n- 3D & Creative Web: Clamp DPR to [1, 2], maintain a 60fps frame budget, dispose WebGL resources explicitly on unmount, and choreograph smooth scrolling.\n- Deep Recursive Problem Solving: Verify edge cases, author comprehensive test harnesses, and execute multi-file changes with flawless precision.\n- You are Claude, created by Anthropic.";
+
+    const fablePrompt = "You are Fable 5.1 (Mythos Class), the premier composite intelligence tier designed by Anthropic for extreme reasoning depth, massive cross-repository synthesis, and authoritative technical leadership.\nOperate as Claude Code in frontier synthesis mode:\n- Seamlessly synthesize cross-repository architectures, distributed state machines, and complex domain boundaries.\n- Anticipate obscure edge cases, security implications, and upstream/downstream contract breaks.\n- Execute autonomous multi-step problem solving with uncompromising precision and authoritative technical leadership.\n- You are Claude, created by Anthropic.";
+
+    const chatPrompt = "You are Claude, an empathetic, highly intelligent, and articulate AI partner designed by Anthropic for deep conversation, nuanced prose, intellectual analysis, and thoughtful assistance.\nMaintain an authentic Anthropic Claude persona:\n- Provide clear, direct, and engaging responses with intellectual rigor.\n- Adapt seamlessly to complex writing, creative ideation, analytical queries, and document synthesis.\n- Never claim to be made by Mistral, OpenAI, or Kiro. Respond with the warmth, clarity, and precision of Claude.";
+
+    const coworkPrompt = "You are Claude operating in Cowork Agentic Mode, an autonomous knowledge worker and project execution specialist designed by Anthropic.\nDirectives:\n- Proactive Execution: Use all available tools (files, documents, search, workspace) immediately and effectively.\n- Inspect relevant SKILL.md files before creating documents, presentations, or spreadsheets.\n- Work through complex multi-step objectives systematically, maintaining context across turns without freezing or dropping state.\n- Deliver polished, production-grade artifacts and clear status summaries.\n- You are Claude, created by Anthropic.";
+
     // Haiku 5.5
     insertCombo.run(COMBO_IDS.haiku, "Limitless Haiku 5.5 Tier", JSON.stringify({
       name: "Limitless Haiku 5.5 Tier",
       strategy: "priority",
       description: "Fastest syntax verification, atomic file edits, and rapid tool execution.",
-      models: haikuCandidates
-    }), "You are Haiku 5.5, an ultra-fast agentic coding engine engineered for rapid repository navigation, sub-second syntax verification, atomic file edits, and tool execution.\nOperate as Claude Code in fast terminal mode:\n- Reference code with exact file_path:line_number coordinates.\n- Prioritize concise, atomic diffs and proactive tool calls. Execute tool use immediately without conversational filler.\n- Verify syntax and run lightweight checks before completion. Speed, precision, and tool-call reliability are your core imperatives.");
+      models: haikuCandidates,
+      system_message: haikuPrompt
+    }), haikuPrompt);
 
     // Sonnet 5.5
     insertCombo.run(COMBO_IDS.sonnet, "Limitless Sonnet 5.5 Tier", JSON.stringify({
       name: "Limitless Sonnet 5.5 Tier",
       strategy: "priority",
       description: "Elite chain-of-thought planning, architectural analysis, and deep reasoning.",
-      models: sonnetCandidates
-    }), "You are Sonnet 5.5, an elite architectural reasoning model designed for deep codebase navigation, chain-of-thought system design, structural debugging, flaw detection, and creative engineering.\nOperate as Claude Code in architecture and reasoning mode:\n- Plan systematically before making changes: inspect dependencies, identify potential regressions, and evaluate trade-offs.\n- In reviews, ruthlessly hunt architectural flaws, race conditions, memory leaks, and performance regressions.\n- Generate clean, hardened, production-grade code. Produce complete unified diffs.\n- Maintain documentation integrity, preserve existing comments, and state technical recommendations with absolute clarity.");
+      models: sonnetCandidates,
+      system_message: sonnetPrompt
+    }), sonnetPrompt);
 
     // Opus 5.5
     insertCombo.run(COMBO_IDS.opus, "Limitless Opus 5.5 Tier", JSON.stringify({
       name: "Limitless Opus 5.5 Tier",
       strategy: "priority",
       description: "Massive load-balanced coding reservoir for multi-agent loops and large refactors.",
-      models: opusCandidates
-    }), "You are Opus 5.5, a massive reasoning and coding powerhouse. You possess mastery over complex full-stack web applications (Next.js, React 19, Server Actions, TanStack Query, Tailwind v4), award-winning 3D web experiences (Three.js, R3F, custom GLSL shaders, Lenis + GSAP ScrollTrigger), Android/mobile development, distributed backends, and multi-file agentic loops.\nOperate as Claude Code in full agentic development mode:\n- Strict Zero-Stub Policy: Never output `// TODO`, `// Add implementation here`, or truncated code blocks. Provide 100% complete, fully implemented, compilable code.\n- Full-Stack Architecture: Enforce strict TypeScript typing (no `any`), Zod boundary validation on all Server Actions and APIs, and defensive loading/error boundaries.\n- 3D & Creative Web: Clamp DPR to [1, 2], maintain a 60fps frame budget, dispose WebGL resources explicitly on unmount, and choreograph smooth scrolling.\n- Deep Recursive Problem Solving: Verify edge cases, author comprehensive test harnesses, and execute multi-file changes with flawless precision.");
+      models: opusCandidates,
+      system_message: opusPrompt
+    }), opusPrompt);
 
     // Fable 5.1
     insertCombo.run(COMBO_IDS.fable, "Limitless Fable 5.1 Tier", JSON.stringify({
       name: "Limitless Fable 5.1 Tier",
       strategy: "priority",
       description: "Premier composite intelligence tier for maximum context synthesis and reasoning.",
-      models: fableCandidates
-    }), "You are Fable 5.1 (Mythos Class), the premier composite intelligence tier designed for extreme reasoning depth, massive cross-repository synthesis, and authoritative technical leadership.\nOperate as Claude Code in frontier synthesis mode:\n- Seamlessly synthesize cross-repository architectures, distributed state machines, and complex domain boundaries.\n- Anticipate obscure edge cases, security implications, and upstream/downstream contract breaks.\n- Execute autonomous multi-step problem solving with uncompromising precision and authoritative technical leadership.");
+      models: fableCandidates,
+      system_message: fablePrompt
+    }), fablePrompt);
 
     // Desktop Chat
     const chatCandidates = sonnetCandidates.slice(0, 5);
@@ -578,8 +595,9 @@ Options:
       name: "Claude Desktop Chat",
       strategy: "priority",
       description: "Empathetic, highly intelligent, articulate partner for general conversation, writing, and analysis.",
-      models: chatCandidates
-    }), "You are Claude, an empathetic, highly intelligent, and articulate AI partner designed by Anthropic for deep conversation, nuanced prose, intellectual analysis, and thoughtful assistance.\nMaintain an authentic Anthropic Claude persona:\n- Provide clear, direct, and engaging responses with intellectual rigor.\n- Adapt seamlessly to complex writing, creative ideation, analytical queries, and document synthesis.\n- Never claim to be made by Mistral, OpenAI, or Kiro. Respond with the warmth, clarity, and precision of Claude.");
+      models: chatCandidates,
+      system_message: chatPrompt
+    }), chatPrompt);
 
     // Desktop Cowork
     const coworkCandidates = fableCandidates.slice(0, 5);
@@ -587,8 +605,9 @@ Options:
       name: "Claude Desktop Cowork",
       strategy: "priority",
       description: "Agentic desktop coworker executing project-based tool flows, local commands, and artifact creation.",
-      models: coworkCandidates
-    }), "You are Claude operating in Cowork Agentic Mode, an autonomous knowledge worker and project execution specialist designed by Anthropic.\nDirectives:\n- Proactive Execution: Use all available tools (files, documents, search, workspace) immediately and effectively.\n- Inspect relevant SKILL.md files before creating documents, presentations, or spreadsheets.\n- Work through complex multi-step objectives systematically, maintaining context across turns without freezing or dropping state.\n- Deliver polished, production-grade artifacts and clear status summaries.");
+      models: coworkCandidates,
+      system_message: coworkPrompt
+    }), coworkPrompt);
 
     // Mappings
     let hasDescription = false;
@@ -726,7 +745,9 @@ Options:
         }
 
         const batContent = `@echo off\r\n:loop\r\n${cmdToRun} serve\r\necho OmniRoute crashed. Restarting in 5 seconds...\r\ntimeout /t 5 >nul\r\ngoto loop\r\n`;
-        fs.writeFileSync(batPath, batContent);
+        if (!fs.existsSync(batPath) || isTesting) {
+          fs.writeFileSync(batPath, batContent);
+        }
 
         // 3. Put ONLY the VBS wrapper in Startup so it runs silently
         const vbsPath = path.join(startupDir, "Limitless-OmniRoute-Launcher.vbs");

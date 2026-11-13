@@ -11,21 +11,24 @@ Limitless Claude 8.5.0 is the **High-Performance Priority Routing & Desktop Inte
   - In earlier versions, combos were configured with `round-robin` strategy. On every follow-up message in a multi-turn conversation, requests rotated across candidate endpoints regardless of latency.
   - When the counter hit `kiro/deepseek-3.2` (136s-150s latency), `xkiro/mistralai/mistral-large-2512` (HTTP 403), or `nvidia/google/gemma-4-31b-it` (110s timeout), sequential fallback cascading accumulated over 260 seconds, freezing the client UI while requests timed out (HTTP 499).
   - **The Fix**: Upgraded all 6 tiers (`haiku`, `sonnet`, `opus`, `fable`, `desktop-chat`, `desktop-cowork`) to `strategy: "priority"`.
-  - Pinned fast primary models (`kiro/claude-sonnet-4.5` with 2.9s latency, `kiro/claude-haiku-4.5` with 1.3s latency, `github/gpt-4o-2024-11-20` with 1.6s latency, and `mistral/codestral-latest` with 0.7s latency) at priority index 0.
+  - Pinned fast primary models (`github/gpt-4o-2024-11-20` with 1.6s latency, `mistral/codestral-latest` with 0.8s latency, and `github/gpt-4o-mini` with 1.3s latency) at priority index 0 to eliminate persona leakage, with `kiro/claude-sonnet-4.5` and `kiro/claude-haiku-4.5` serving as responsive fallback endpoints.
   - Completely purged `kiro/deepseek-3.2` and broken models from primary tiers and dynamic discovery.
   - Multi-turn conversations now respond consistently in 1.4s to 3.5s per turn with zero freezing.
 
-### 2. Claude Desktop Third-Party Gateway & 119 Skills Integration 🔥
+### 2. Claude Desktop Third-Party Gateway, 119 Skills & MCP Integration 🔥
 - **Enabled Local Skill Scanning**:
   - Fixed `skillScanningEnabled: true` in Claude Desktop configuration (`AppData/Local/Claude-3p/configLibrary/<UUID>.json`). By default, Claude Desktop ran in `appShippedOnly` mode, blocking member and external skills.
 - **Synchronized 119 Orchestra Workflow Skills**:
   - Copied all 119 canonical skills from `C:\projects\orchestra-workflow\skills` into the Desktop skills directory (`local-agent-mode-sessions\skills-plugin\...\skills`).
   - Updated `manifest.json` with indexed metadata (IDs, names, triggers, and descriptions) for all 119 skills, making them immediately visible and usable in Claude Desktop's UI.
   - Registered `claude-desktop` as a recognized sync host in `C:\projects\orchestra-workflow\registries\host-dirs.json`.
+- **Registered Orchestra Workflow & Brain MCP Servers**:
+  - Configured both `orchestra-workflow` (pointing to `C:\projects\orchestra-workflow`) and `orchestra-brain` (pointing to `C:\projects\orchestra-brain`) in `claude_desktop_config.json`, enabling Claude Desktop to directly read, execute, and inspect Orchestra workflows and project memories.
 
 ### 3. Official Anthropic Persona & Orchestra 5.5.0 System Instructions 💀
 - **Identity & Cognitive Directives**:
   - Embedded official Anthropic Claude persona directives, artifact handling rules, and tone guidelines from official system prompts into Claude Desktop `organizationInstructions` and OmniRoute combo system messages.
+  - Resolved the OmniRoute SQLite repository `data` JSON parsing bug by embedding `system_message` directly inside `row.data` as well as the SQL column for all 6 tiers, ensuring system instructions take effect on every request.
   - Models maintain an authentic Claude identity across Claude Desktop Chat, Claude Desktop Cowork, and Claude Code CLI, eliminating identity leaks ("created by Mistral", "I'm Kiro").
   - Enforces the Orchestra 5.5.0 control plane: unconditional `SKILL.md` inspection before writing code, strict Zero-Stub engineering (`// TODO` strictly forbidden), and empirical verification before declaring completion.
 

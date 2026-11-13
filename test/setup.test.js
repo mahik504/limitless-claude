@@ -90,11 +90,13 @@ test.describe("Limitless Claude Setup Integrity", () => {
     assert.strictEqual(data.strategy, "priority", "Haiku should use priority routing");
     assert.ok(Array.isArray(data.models), "Haiku data.models MUST be an array");
     assert.ok(data.models.length > 0, "Haiku data.models should have at least one fallback");
+    assert.ok(data.system_message, "Haiku system_message MUST be embedded in data JSON");
 
     const opusRow = db.prepare("SELECT data FROM combos WHERE id = 'combo/limitless-opus'").get();
     const opusData = JSON.parse(opusRow.data);
     assert.strictEqual(opusData.strategy, "priority", "Opus should use priority routing");
     assert.ok(Array.isArray(opusData.models), "Opus data.models MUST be an array");
+    assert.ok(opusData.system_message, "Opus system_message MUST be embedded in data JSON");
 
     db.close();
   });

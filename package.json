@@ -1,7 +1,7 @@
 {
   "name": "limitless-claude",
-  "version": "8.4.0",
-  "description": "Limitless Claude 8.3 — Intelligent Developer Control Plane & Policy Companion for OmniRoute. Hardened security, live tri-layer financial accounting, fail-closed zero-cost billing, local Ollama auto-discovery, Orchestra workflow interop, task pinning, atomic undo, and 5-layer prompt engine.",
+  "version": "8.5.0",
+  "description": "Limitless Claude 8.5 - Production Control Plane & High-Performance Routing Ecosystem for OmniRoute & Claude Desktop. Zero vendor lock-in, priority failovers, official system cognitive directives, 119 Orchestra skills, and sub-second multi-turn responsiveness.",
   "license": "MIT",
   "author": "mahik504",
   "repository": {

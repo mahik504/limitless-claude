@@ -1,6 +1,6 @@
-# Limitless Claude 8.4
+# Limitless Claude 8.5 🔥💀
 
-[![Version](https://img.shields.io/badge/version-8.4.0-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-8.5.0-blue.svg)](package.json)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)](package.json)
 [![CI](https://github.com/mahik504/limitless-claude/actions/workflows/test.yml/badge.svg)](https://github.com/mahik504/limitless-claude/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -15,7 +15,8 @@
 ## Table of Contents
 
 1. [Our Vision & Mission](#our-vision--mission)
-2. [What's New in v8.4.0](#whats-new-in-v840)
+2. [What's New in v8.5.0](#whats-new-in-v850)
+3. [What's New in v8.4.0](#whats-new-in-v840)
 3. [How Limitless Claude Works](#how-limitless-claude-works)
 4. [Master Architectural Design Diagrams](#master-architectural-design-diagrams)
    - [System Topology Architecture](#1-system-topology-architecture)
@@ -49,6 +50,39 @@ Modern AI-assisted engineering has hit a paradox: while the tooling (Claude Code
 - **Economic Sanity**: Never pay $15/M tokens to fix a missing semicolon. Sub-second models handle mechanical refactoring, while frontier intelligence is preserved for architectural design.
 - **Fail-Safe Reliability**: When an upstream provider returns an HTTP 429 rate limit or goes offline, your agent session does not crash. OmniRoute and Limitless Claude cascade to the next healthy model in under 500ms.
 - **Uncompromising Security**: Zero secret leakage. No raw API tokens exposed in Windows event logs, shell histories, or process tables.
+
+---
+
+## What's New in v8.5.0 🔥💀
+
+Limitless Claude v8.5.0 is the **High-Performance Priority Routing & Desktop Integration Release**:
+
+1. **Multi-Turn Priority Routing Architecture 🔥**:
+   - Fixed the root cause of 4-5 minute conversation freezes by migrating all 6 combos from round-robin to strict priority routing (`strategy: "priority"`).
+   - Fast primary models (`kiro/claude-sonnet-4.5`, `kiro/claude-haiku-4.5`, `github/gpt-4o-2024-11-20`, `mistral/codestral-latest`) are pinned at priority index 0.
+   - Purged slow or broken endpoints (`kiro/deepseek-3.2` with 150s timeouts, `xkiro/mistralai/mistral-large-2512` with HTTP 403, and `gemma-4-31b-it` with 110s timeouts) from combos and dynamic classification.
+   - Multi-turn conversation turns now respond in 1.4s to 3.5s per turn with zero freezing.
+
+2. **Claude Desktop 119 Skills & Manifest Synchronization 🔥**:
+   - Enabled `skillScanningEnabled: true` in Claude Desktop configuration (`AppData/Local/Claude-3p/configLibrary/<UUID>.json`), eliminating `appShippedOnly` skill blocking.
+   - Copied 119 Orchestra Workflow skills into the Desktop skills directory and indexed full metadata in `manifest.json`.
+   - Registered `claude-desktop` as a valid sync host in `C:\projects\orchestra-workflow\registries\host-dirs.json`.
+
+3. **Official Anthropic System Prompts & Identity Guardrails 💀**:
+   - Injected official Anthropic Claude cognitive directives, artifacts rules, and Orchestra 5.5.0 instructions into Claude Desktop `organizationInstructions` and OmniRoute combo system messages.
+   - Prevents model persona leakage ("created by Mistral", "I'm Kiro") and enforces Zero-Stub production code standards.
+
+4. **Clean UTF-8 Environment 💀**:
+   - Repaired UTF-16LE null-byte corruption in `~/.omniroute/.env`.
+
+5. **In-Depth Comparison: Limitless Claude vs. Raw Claude Code / Codex CLI 🔥💀**:
+   - Raw tools lock developers to a single proprietary provider with strict token limits and sudden 429 crashes. Limitless Claude offers 100% free multi-provider routing across 580+ models, sub-second priority failovers, 119 Orchestra skills, and unified compatibility across Claude Code CLI, Claude Desktop, and IDEs.
+
+6. **What We Provide For Free 🔥**:
+   - Complete free access to Claude Code CLI, Claude Desktop (Chat & Cowork), and IDE extensions through OmniRouter combos.
+
+7. **Honest Technical Acknowledgment & Disclaimer 💀**:
+   - Limitless Claude does not possess proprietary Anthropic server-side weights, but combines top frontier models with official cognitive directives to deliver the closest free equivalent with superior resilience.
 
 ---
 
@@ -296,17 +330,17 @@ graph LR
 
 | Capability / Metric | Native Claude Code | OpenAI Codex CLI | Google Gemini CLI | Hermes Agent | Aider | Cline / Roo | LiteLLM Proxy | LIMITLESS CLAUDE 8.4 |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Multi-Provider Cascading** | ❌ None | ❌ None | ❌ None | ⚠️ Basic | ⚠️ Manual | ⚠️ Per-Task | ✅ Yes | **✅ Sub-second Automatic** |
-| **Claude Desktop Support** | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | ⚠️ Manual | **✅ Native 3p Gateway** |
-| **Sub-Model Task Pinning** | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | **✅ `limitless pin`** |
-| **Granular File Checkpoints** | ⚠️ Git only | ⚠️ Git only | ❌ None | ❌ None | ✅ Git-based | ✅ Checkpoints | ❌ None | **✅ `limitless undo`** |
-| **5-Layer AST Prompt Engine** | ❌ Monolith | ❌ Static | ❌ Static | ⚠️ Prompts | ⚠️ Static | ⚠️ System | ❌ None | **✅ 24 Modular Profiles** |
-| **RTK Token Killer Hooks** | ❌ None | ❌ None | ❌ None | ❌ None | ⚠️ Repomap | ❌ None | ❌ None | **✅ Slashing 90% logs** |
-| **Zero-Exposure Redaction** | ❌ Plaintext | ❌ Plaintext | ❌ Plaintext | ❌ None | ❌ Plaintext | ⚠️ Partial | ⚠️ Partial | **✅ AST & Process Safe** |
-| **Anthropic Cost Telemetry** | ❌ Billing | ❌ None | ❌ None | ❌ None | ⚠️ Run est. | ⚠️ Run est. | ⚠️ DB only | **✅ 3-Layer Accounting** |
-| **OpenRouter $10 Multiplier** | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | **✅ 1,000 req/day `:free`**|
-| **Multi-Account Rotation** | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | ⚠️ Random | **✅ Sticky Session Affinity**|
-| **External Harness Interop** | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None | **✅ Mode A / Mode B** |
+| **Multi-Provider Cascading** | [None] | [None] | [None] | [Basic] | [Manual] | [Per-Task] | [Yes] | **🔥 Sub-second Automatic** |
+| **Claude Desktop Support** | [None] | [None] | [None] | [None] | [None] | [None] | [Manual] | **🔥 Native 3p Gateway** |
+| **Sub-Model Task Pinning** | [None] | [None] | [None] | [None] | [None] | [None] | [None] | **🔥 `limitless pin`** |
+| **Granular File Checkpoints** | [Git only] | [Git only] | [None] | [None] | [Git-based] | [Checkpoints] | [None] | **🔥 `limitless undo`** |
+| **5-Layer AST Prompt Engine** | [Monolith] | [Static] | [Static] | [Prompts] | [Static] | [System] | [None] | **🔥 24 Modular Profiles** |
+| **RTK Token Killer Hooks** | [None] | [None] | [None] | [None] | [Repomap] | [None] | [None] | **🔥 Slashing 90% logs** |
+| **Zero-Exposure Redaction** | [Plaintext] | [Plaintext] | [Plaintext] | [None] | [Plaintext] | [Partial] | [Partial] | **🔥 AST & Process Safe** |
+| **Anthropic Cost Telemetry** | [Billing] | [None] | [None] | [None] | [Run est.] | [Run est.] | [DB only] | **🔥 3-Layer Accounting** |
+| **OpenRouter $10 Multiplier** | [None] | [None] | [None] | [None] | [None] | [None] | [None] | **🔥 1,000 req/day `:free`**|
+| **Multi-Account Rotation** | [None] | [None] | [None] | [None] | [None] | [None] | [Random] | **🔥 Sticky Session Affinity**|
+| **External Harness Interop** | [None] | [None] | [None] | [None] | [None] | [None] | [None] | **🔥 Mode A / Mode B** |
 
 ---
 

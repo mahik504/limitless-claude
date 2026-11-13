@@ -8,7 +8,9 @@ const COMBO_IDS = {
   opus: "combo/limitless-opus",
   sonnet: "combo/limitless-sonnet",
   haiku: "combo/limitless-haiku",
-  fable: "combo/limitless-fable"
+  fable: "combo/limitless-fable",
+  chat: "combo/desktop-chat",
+  cowork: "combo/desktop-cowork"
 };
 
 const MAPPING_IDS = {
@@ -20,7 +22,9 @@ const MAPPING_IDS = {
   opusplan: "mapping/limitless-opusplan",
   default: "mapping/limitless-default",
   sonnet1m: "mapping/limitless-sonnet1m",
-  opus1m: "mapping/limitless-opus1m"
+  opus1m: "mapping/limitless-opus1m",
+  chat: "mapping/desktop-chat",
+  cowork: "mapping/desktop-cowork"
 };
 
 function findModel(liveModels, provider, modelName) {
@@ -287,7 +291,6 @@ Options:
     { provider: "github", model: "gpt-4o-2024-11-20" },
     { provider: "cloudflare-ai", model: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b" },
     { provider: "kiro", model: "qwen3-coder-next" },
-    { provider: "kiro", model: "deepseek-3.2" },
     { provider: "antigravity", model: "claude-sonnet-4-6" }
   ].filter(c => findModel(liveModels, c.provider, c.model));
 
@@ -297,7 +300,6 @@ Options:
     { provider: "kiro", model: "claude-sonnet-4.5" },
     { provider: "kiro", model: "qwen3-coder-next" },
     { provider: "kiro", model: "glm-5" },
-    { provider: "kiro", model: "deepseek-3.2" },
     { provider: "antigravity", model: "claude-sonnet-4-6" },
     { provider: "kiro", model: "minimax-m2.1" },
     { provider: "cloudflare-ai", model: "@cf/qwen/qwen2.5-coder-32b-instruct" },
@@ -354,6 +356,9 @@ Options:
     if (assignedKeys.has(key)) continue;
 
     const id = fullId.toLowerCase();
+
+    // Disregard known slow or failing endpoints to maintain sub-second response times
+    if (/deepseek-3\.2|mistral-large-2512|gemma-4-31b-it/i.test(id)) continue;
 
     // 1. Haiku: Low latency, lightweight, sub-second rapid editing
     if (/flash|instant|mini|haiku|lightning|fast|small|lite|nano|turbo|20b|8b|7b/i.test(id) &&
@@ -519,13 +524,14 @@ Options:
   // Database Transaction to ensure atomicity
   const applySetup = db.transaction(() => {
     // Clean old exact matches
-    const delCombos = db.prepare("DELETE FROM combos WHERE id IN (?, ?, ?, ?)");
-    delCombos.run(COMBO_IDS.opus, COMBO_IDS.sonnet, COMBO_IDS.haiku, COMBO_IDS.fable);
+    const delCombos = db.prepare("DELETE FROM combos WHERE id IN (?, ?, ?, ?, ?, ?)");
+    delCombos.run(COMBO_IDS.opus, COMBO_IDS.sonnet, COMBO_IDS.haiku, COMBO_IDS.fable, COMBO_IDS.chat, COMBO_IDS.cowork);
 
-    const delMappings = db.prepare("DELETE FROM model_combo_mappings WHERE id IN (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    const delMappings = db.prepare("DELETE FROM model_combo_mappings WHERE id IN (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     delMappings.run(
       MAPPING_IDS.opus, MAPPING_IDS.sonnet, MAPPING_IDS.haiku, MAPPING_IDS.fable,
-      MAPPING_IDS.best, MAPPING_IDS.opusplan, MAPPING_IDS.default, MAPPING_IDS.sonnet1m, MAPPING_IDS.opus1m
+      MAPPING_IDS.best, MAPPING_IDS.opusplan, MAPPING_IDS.default, MAPPING_IDS.sonnet1m, MAPPING_IDS.opus1m,
+      MAPPING_IDS.chat, MAPPING_IDS.cowork
     );
 
     const insertCombo = db.prepare(
@@ -537,7 +543,7 @@ Options:
     // Haiku 5.5
     insertCombo.run(COMBO_IDS.haiku, "Limitless Haiku 5.5 Tier", JSON.stringify({
       name: "Limitless Haiku 5.5 Tier",
-      strategy: "round-robin",
+      strategy: "priority",
       description: "Fastest syntax verification, atomic file edits, and rapid tool execution.",
       models: haikuCandidates
     }), "You are Haiku 5.5, an ultra-fast agentic coding engine engineered for rapid repository navigation, sub-second syntax verification, atomic file edits, and tool execution.\nOperate as Claude Code in fast terminal mode:\n- Reference code with exact file_path:line_number coordinates.\n- Prioritize concise, atomic diffs and proactive tool calls. Execute tool use immediately without conversational filler.\n- Verify syntax and run lightweight checks before completion. Speed, precision, and tool-call reliability are your core imperatives.");
@@ -545,7 +551,7 @@ Options:
     // Sonnet 5.5
     insertCombo.run(COMBO_IDS.sonnet, "Limitless Sonnet 5.5 Tier", JSON.stringify({
       name: "Limitless Sonnet 5.5 Tier",
-      strategy: "round-robin",
+      strategy: "priority",
       description: "Elite chain-of-thought planning, architectural analysis, and deep reasoning.",
       models: sonnetCandidates
     }), "You are Sonnet 5.5, an elite architectural reasoning model designed for deep codebase navigation, chain-of-thought system design, structural debugging, flaw detection, and creative engineering.\nOperate as Claude Code in architecture and reasoning mode:\n- Plan systematically before making changes: inspect dependencies, identify potential regressions, and evaluate trade-offs.\n- In reviews, ruthlessly hunt architectural flaws, race conditions, memory leaks, and performance regressions.\n- Generate clean, hardened, production-grade code. Produce complete unified diffs.\n- Maintain documentation integrity, preserve existing comments, and state technical recommendations with absolute clarity.");
@@ -553,7 +559,7 @@ Options:
     // Opus 5.5
     insertCombo.run(COMBO_IDS.opus, "Limitless Opus 5.5 Tier", JSON.stringify({
       name: "Limitless Opus 5.5 Tier",
-      strategy: "round-robin",
+      strategy: "priority",
       description: "Massive load-balanced coding reservoir for multi-agent loops and large refactors.",
       models: opusCandidates
     }), "You are Opus 5.5, a massive reasoning and coding powerhouse. You possess mastery over complex full-stack web applications (Next.js, React 19, Server Actions, TanStack Query, Tailwind v4), award-winning 3D web experiences (Three.js, R3F, custom GLSL shaders, Lenis + GSAP ScrollTrigger), Android/mobile development, distributed backends, and multi-file agentic loops.\nOperate as Claude Code in full agentic development mode:\n- Strict Zero-Stub Policy: Never output `// TODO`, `// Add implementation here`, or truncated code blocks. Provide 100% complete, fully implemented, compilable code.\n- Full-Stack Architecture: Enforce strict TypeScript typing (no `any`), Zod boundary validation on all Server Actions and APIs, and defensive loading/error boundaries.\n- 3D & Creative Web: Clamp DPR to [1, 2], maintain a 60fps frame budget, dispose WebGL resources explicitly on unmount, and choreograph smooth scrolling.\n- Deep Recursive Problem Solving: Verify edge cases, author comprehensive test harnesses, and execute multi-file changes with flawless precision.");
@@ -561,10 +567,28 @@ Options:
     // Fable 5.1
     insertCombo.run(COMBO_IDS.fable, "Limitless Fable 5.1 Tier", JSON.stringify({
       name: "Limitless Fable 5.1 Tier",
-      strategy: "round-robin",
+      strategy: "priority",
       description: "Premier composite intelligence tier for maximum context synthesis and reasoning.",
       models: fableCandidates
     }), "You are Fable 5.1 (Mythos Class), the premier composite intelligence tier designed for extreme reasoning depth, massive cross-repository synthesis, and authoritative technical leadership.\nOperate as Claude Code in frontier synthesis mode:\n- Seamlessly synthesize cross-repository architectures, distributed state machines, and complex domain boundaries.\n- Anticipate obscure edge cases, security implications, and upstream/downstream contract breaks.\n- Execute autonomous multi-step problem solving with uncompromising precision and authoritative technical leadership.");
+
+    // Desktop Chat
+    const chatCandidates = sonnetCandidates.slice(0, 5);
+    insertCombo.run(COMBO_IDS.chat, "Claude Desktop Chat", JSON.stringify({
+      name: "Claude Desktop Chat",
+      strategy: "priority",
+      description: "Empathetic, highly intelligent, articulate partner for general conversation, writing, and analysis.",
+      models: chatCandidates
+    }), "You are Claude, an empathetic, highly intelligent, and articulate AI partner designed by Anthropic for deep conversation, nuanced prose, intellectual analysis, and thoughtful assistance.\nMaintain an authentic Anthropic Claude persona:\n- Provide clear, direct, and engaging responses with intellectual rigor.\n- Adapt seamlessly to complex writing, creative ideation, analytical queries, and document synthesis.\n- Never claim to be made by Mistral, OpenAI, or Kiro. Respond with the warmth, clarity, and precision of Claude.");
+
+    // Desktop Cowork
+    const coworkCandidates = fableCandidates.slice(0, 5);
+    insertCombo.run(COMBO_IDS.cowork, "Claude Desktop Cowork", JSON.stringify({
+      name: "Claude Desktop Cowork",
+      strategy: "priority",
+      description: "Agentic desktop coworker executing project-based tool flows, local commands, and artifact creation.",
+      models: coworkCandidates
+    }), "You are Claude operating in Cowork Agentic Mode, an autonomous knowledge worker and project execution specialist designed by Anthropic.\nDirectives:\n- Proactive Execution: Use all available tools (files, documents, search, workspace) immediately and effectively.\n- Inspect relevant SKILL.md files before creating documents, presentations, or spreadsheets.\n- Work through complex multi-step objectives systematically, maintaining context across turns without freezing or dropping state.\n- Deliver polished, production-grade artifacts and clear status summaries.");
 
     // Mappings
     let hasDescription = false;
@@ -589,6 +613,8 @@ Options:
     insertMap.run(...mapArgs(MAPPING_IDS.default, "*default*", COMBO_IDS.opus, 8, "Default route (Opus)"));
     insertMap.run(...mapArgs(MAPPING_IDS.sonnet1m, "*sonnet[1m]*", COMBO_IDS.sonnet, 11, "Sonnet 1M context"));
     insertMap.run(...mapArgs(MAPPING_IDS.opus1m, "*opus[1m]*", COMBO_IDS.opus, 11, "Opus 1M context"));
+    insertMap.run(...mapArgs(MAPPING_IDS.chat, "*desktop-chat*", COMBO_IDS.chat, 15, "Desktop chat route"));
+    insertMap.run(...mapArgs(MAPPING_IDS.cowork, "*desktop-cowork*", COMBO_IDS.cowork, 15, "Desktop cowork route"));
 
     // Safe API Key Permission Check / Update
     if (apiKey) {

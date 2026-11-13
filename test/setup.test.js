@@ -87,13 +87,13 @@ test.describe("Limitless Claude Setup Integrity", () => {
     assert.ok(row, "combo/limitless-haiku should exist in database");
 
     const data = JSON.parse(row.data);
-    assert.strictEqual(data.strategy, "round-robin", "Haiku should use round-robin routing");
+    assert.strictEqual(data.strategy, "priority", "Haiku should use priority routing");
     assert.ok(Array.isArray(data.models), "Haiku data.models MUST be an array");
     assert.ok(data.models.length > 0, "Haiku data.models should have at least one fallback");
 
     const opusRow = db.prepare("SELECT data FROM combos WHERE id = 'combo/limitless-opus'").get();
     const opusData = JSON.parse(opusRow.data);
-    assert.strictEqual(opusData.strategy, "round-robin", "Opus should use round-robin routing");
+    assert.strictEqual(opusData.strategy, "priority", "Opus should use priority routing");
     assert.ok(Array.isArray(opusData.models), "Opus data.models MUST be an array");
 
     db.close();

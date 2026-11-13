@@ -72,9 +72,9 @@ Limitless Claude routes requests through a resilient cascade of leading models (
   [PASS] Capability Evaluator Governance      : Strict 6-stage lifecycle enforced
   [PASS] Billing Classifier Safety Guard      : Unknown costs return null (never $0.00)
   [PASS] Backup & Snapshot Directory          : 2 snapshots available for rollback
-  [PASS] Claude Code Configuration Dir        : C:\Users\Asus\.claude
+  [PASS] Claude Code Configuration Dir        : ~/.claude (verified)
   [PASS] OpenRouter Capacity Policy           : $10 credit unlocks 1000 req/day (vs 50 unfunded)
-  [PASS] Orchestra Integration Gate           : Connected: Mode B Active (115 skills)
+  [PASS] Workflow Conductor Interop           : Autonomous (Zero external framework dependencies required)
   [PASS] Local Ollama Engine (:11434)         : Standby / Optional (offline; cloud combos active)
 --------------------------------------------------------------------------------
 Diagnostic Summary: 16 PASSED, 0 WARNINGS, 0 NOT TESTED, 0 FAILURES

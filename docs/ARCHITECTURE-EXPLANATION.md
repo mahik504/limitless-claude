@@ -1,6 +1,6 @@
-# Limitless Claude 8.3 — Architecture Specification
+# Limitless Claude 8.4 — Architecture Specification
 
-> Version 8.3.0 · Multi-Provider Coding Agent Runtime & Developer Control Plane  
+> Version 8.4.0 · Multi-Provider Coding Agent Runtime & Developer Control Plane  
 > Gateway: `http://127.0.0.1:20128` · Engine: Node.js >= 22 (ESM & CJS)
 
 ---

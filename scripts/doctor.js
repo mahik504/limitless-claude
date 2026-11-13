@@ -173,17 +173,21 @@ async function runDoctor() {
       const hasSonnet = comboNames.some(n => n.includes("sonnet"));
       const hasOpus = comboNames.some(n => n.includes("opus"));
       const hasFable = comboNames.some(n => n.includes("fable"));
+      const hasChat = comboNames.some(n => n.includes("chat"));
+      const hasCowork = comboNames.some(n => n.includes("cowork"));
 
-      if (hasHaiku && hasSonnet && hasOpus && hasFable) {
-        report("Composite Routing Tiers (4 Tiers)", "PASS", `All 4 tiers registered (Haiku, Sonnet, Opus, Fable)`);
+      if (hasHaiku && hasSonnet && hasOpus && hasFable && hasChat && hasCowork) {
+        report("Composite Routing Tiers (6 Tiers)", "PASS", `All 6 tiers registered (Haiku, Sonnet, Opus, Fable, Chat, Cowork)`);
+      } else if (hasHaiku && hasSonnet && hasOpus && hasFable) {
+        report("Composite Routing Tiers (4 Tiers)", "PASS", `Core 4 tiers registered (Haiku, Sonnet, Opus, Fable)`);
       } else {
-        report("Composite Routing Tiers (4 Tiers)", "WARN", `Some tiers missing; run \`limitless setup\``);
+        report("Composite Routing Tiers", "WARN", `Some tiers missing; run \`limitless setup\``);
       }
     } catch (e) {
-      report("Composite Routing Tiers (4 Tiers)", "FAIL", e.message);
+      report("Composite Routing Tiers", "FAIL", e.message);
     }
   } else {
-    report("Composite Routing Tiers (4 Tiers)", "NOT_TESTED", "Skipped: database offline or not present");
+    report("Composite Routing Tiers", "NOT_TESTED", "Skipped: database offline or not present");
   }
 
   // 10. Capability Evaluator Lifecycle

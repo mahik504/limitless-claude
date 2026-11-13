@@ -155,10 +155,14 @@ async function main() {
     { model: 'claude-sonnet-5', label: 'Sonnet Alias (Reasoning & Architecture)' },
     { model: 'claude-opus-4-8', label: 'Opus Alias (Coding Reservoir)' },
     { model: 'claude-fable-5-1', label: 'Fable Alias (High-Context Fleet)' },
+    { model: 'claude-desktop-chat', label: 'Desktop Chat Alias (Prose & QA)' },
+    { model: 'claude-desktop-cowork', label: 'Desktop Cowork Alias (Tool Execution)' },
     { model: 'combo/limitless-haiku', label: 'Direct Combo: limitless-haiku' },
     { model: 'combo/limitless-sonnet', label: 'Direct Combo: limitless-sonnet' },
     { model: 'combo/limitless-opus', label: 'Direct Combo: limitless-opus' },
-    { model: 'combo/limitless-fable', label: 'Direct Combo: limitless-fable' }
+    { model: 'combo/limitless-fable', label: 'Direct Combo: limitless-fable' },
+    { model: 'combo/desktop-chat', label: 'Direct Combo: desktop-chat' },
+    { model: 'combo/desktop-cowork', label: 'Direct Combo: desktop-cowork' }
   ];
 
   let passed = 0;

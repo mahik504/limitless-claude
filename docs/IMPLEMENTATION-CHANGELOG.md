@@ -1,5 +1,5 @@
-# Limitless Claude 8.3.0 — Comprehensive Implementation Changelog
-**Release Pin**: 8.3.0  
+# Limitless Claude 8.4.0 — Comprehensive Implementation Changelog
+**Release Pin**: 8.4.0  
 **Status**: VERIFIED & DEPLOYED  
 **Date**: November 2026  
 
@@ -7,7 +7,7 @@
 
 ## 1. Summary of Changes & Engineering Improvements
 
-Limitless Claude 8.3.0 represents a major architectural overhaul, forensic alignment, and hardening release. It transitions Limitless Claude from a basic model router configuration into a complete, multi-provider AI compatibility, policy governance, and model routing ecosystem.
+Limitless Claude 8.4.0 represents the master architectural consolidation release. It delivers native Claude Desktop Third-Party Inference gateway mode, 6 dedicated routing tiers (including Desktop Chat and Desktop Cowork with strict Anthropic XML `tool_use`), OpenRouter $10 multiplier integration (1,000 req/day on `:free`), 24 modular workload capability profiles, P0 security hardening, and the Universal One-Prompt Agent Master Installer.
 
 ---
 

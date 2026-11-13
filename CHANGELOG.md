@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [8.4.0] - 2026-11-13
+
+### Added
+- **Claude Desktop Third-Party Gateway Integration**: Full native support for Claude Desktop Third-Party Inference mode (`Claude-3p/configLibrary`), mapping 6 compliant `claude-*` routes, bypassing frontend `jo(e)` validator constraints, and disabling aggressive model auto-discovery (`modelDiscoveryEnabled: false`) to prevent UI freezing.
+- **Dedicated Desktop Combos**: Implemented `combo/desktop-chat` (optimized for creative prose, high-speed conversation, and general QA via DeepSeek V3, Kimi 2.5, Llama 3.3 70B) and `combo/desktop-cowork` (strictly isolated to models with verified Anthropic XML `tool_use` schema compatibility for agentic MCP tool execution).
+- **Universal One-Prompt Agent Master Installer**: Created `docs/MASTER-INSTALL-PROMPT.md` allowing developers to copy-paste a single instruction block into any AI agent (Antigravity, Cursor, Claude Code) to autonomously orchestrate Node, OmniRoute, Claude Code, Claude Desktop, SQLite combos, and 16-point diagnostic validation.
+- **OpenRouter $10 Multiplier Engine**: Formally integrated verified capacity rules unlocking **1,000 requests/day** on all `:free` models upon maintaining a $10 credit balance, without deducting from the capital deposit pool.
+- **24 Modular Workload Capability Profiles**: Expanded `prompts/capabilities/` to 24 specialized profiles covering Agentic Coding, Architecture, Reasoning, Debugging, Defensive Security, Tool Reliability, 3D/WebGL, ML Pipelines, and Verification Testing.
+- **Persistent Gateway Watchdog**: Re-engineered `omniroute-daemon.bat` with dynamic port collision detection, universal PATH binary resolution (pnpm, npm global, npx), and automatic 3-second crash recovery loops.
+- **12-Target Live Combo Verification**: Enhanced `scripts/verify-combos.js` to test all 6 route aliases and all 6 direct combos with sub-3s latency validation.
+
+### Security
+- **P0 Windows Command-Line Secret Protection**: Completely eliminated raw API key arguments passed via Windows `setx` in `scripts/setup.js`. Non-sensitive endpoints (`ANTHROPIC_BASE_URL`, `OMNIROUTE_BASE_URL`) remain persisted, while authentication tokens are strictly stored in `~/.claude/settings.json` with file ACLs, preventing exposure in Sysmon and Windows Event Log (Event ID 4688).
+- **Automated AST & Regex Token Redaction**: Standardized token masking across all outputs using `src/utils/redact.js`.
+
+### Changed
+- **6-Tier Diagnostic Gate**: Upgraded `scripts/doctor.js` to inspect and verify all 6 active routing tiers (Haiku, Sonnet, Opus, Fable, Chat, Cowork) with clean 16/16 diagnostic verification.
+- **Orchestra Workflow Parity**: Synchronized with Orchestra Workflow v5.5.0, maintaining strict Mode A (100% standalone) vs Mode B (115 specialized skills) architectural boundary.
+
+---
+
 ## [8.3.0] - 2026-11-08
 
 ### Security

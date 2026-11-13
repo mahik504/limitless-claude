@@ -51,11 +51,11 @@ limitless orchestra status
 *Live Output from Audited Workstation*:
 ```
 ================================================================================
-            LIMITLESS CLAUDE 8.3 — ORCHESTRA 5.0.0 WORKFLOW STATUS
+            LIMITLESS CLAUDE 8.4 — ORCHESTRA 5.5.0 WORKFLOW STATUS
 ================================================================================
   [ACTIVE] Orchestra Control Plane Connected (Mode B Active)
   • Workspace Root       : C:\projects\orchestra-workflow
-  • Orchestra Version    : 5.0.0
+  • Orchestra Version    : 5.5.0
   • Discovered Skills    : 115 skills registered in control plane
 --------------------------------------------------------------------------------
   HOST INTEGRATION AUDIT:

@@ -1,5 +1,5 @@
-# Limitless Claude 8.3 — Complete Architecture Specification
-**Architecture Pin**: Limitless Claude 8.3.0  
+# Limitless Claude 8.4 — Complete Architecture Specification
+**Architecture Pin**: Limitless Claude 8.4.0  
 **Target Infrastructure**: OmniRouter (127.0.0.1:20128)  
 **Classification**: Production Architecture & System Contract  
 **Document Revision**: November 2026  
